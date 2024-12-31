@@ -1,3 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
+
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+html,
+body {
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	font-family:
+		'Poppins',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		'Open Sans',
+		'Helvetica Neue',
+		sans-serif;
+	font-weight: 500;
+}
+
+*:focus {
+	outline: none;
+	@apply transition-all duration-300 ring-2 ring-primary-5;
+}
+
+.content {
+	@apply p-24;
+}
+
+.display-lg {
+	@apply md:text-8xl text-6xl leading-[1.1] font-bold;
+}
+
+.display-md {
+	@apply md:text-7xl text-5xl leading-[1.0] font-bold;
+}
+
+.display-sm {
+	@apply md:text-5xl text-3xl font-bold;
+}
+
+.display-lg.bold,
+.display-md.bold,
+.display-sm.bold {
+	@apply font-extrabold;
+}
+
+.heading-2xl {
+	@apply text-4xl;
+}
+
+.heading-xl {
+	@apply text-3xl;
+}
+
+.heading-lg {
+	@apply text-2xl;
+}
+
+.heading-md {
+	@apply text-xl;
+}
+
+.heading-sm {
+	@apply text-lg;
+}
+
+.heading-xs {
+	@apply text-base;
+}
+
+.heading-2xl.bold,
+.heading-xl.bold,
+.heading-lg.bold,
+.heading-md.bold,
+.heading-sm.bold,
+.heading-xs.bold {
+	@apply font-bold;
+}
+
+.center {
+	@apply -translate-x-1/2 -translate-y-1/2;
+}
+
+@keyframes slide-in {
+	0% {
+		transform: translateX(5vw);
+		opacity: 0;
+	}
+	100% {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slide-up {
+	0% {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slide-up-big {
+	0% {
+		transform: translateY(60px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slide-up-small {
+	0% {
+		transform: translateY(10px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
