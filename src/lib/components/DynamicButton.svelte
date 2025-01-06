@@ -1,71 +1,115 @@
 <script lang="ts">
-	export let href: string | null = null;
-	export let tabindex: number | null = null;
-	export let selectNone: boolean = false;
-	export let submit = false;
-	export let reset = false;
-	export let disabled = false;
+  let {
+    href = "",
+    tabindex,
+    selectNone = false,
+    submit = false,
+    reset = false,
+    disabled = false,
 
-	let className = '';
-	export { className as class };
+    children,
+
+    ...props
+  }: {
+      href?: string;
+      tabindex?: number;
+      selectNone?: boolean;
+      submit?: boolean;
+      reset?: boolean;
+      disabled?: boolean;
+
+      class?: string;
+
+      children?: () => any;
+
+      onclick?: (e: MouseEvent) => void;
+  } = $props();
+
+  const dispatch = {
+    onclick: (e: MouseEvent) => {
+      if (submit) {
+        e.preventDefault();
+      }
+
+      if (props.onclick) {
+        props.onclick(e);
+      }
+    }
+  };
 </script>
 
 {#if submit}
 	<button
 		type="submit"
-		on:click
-		tabindex
+		onclick={dispatch.onclick}
+		tabindex={tabindex ?? 0}
 		{disabled}
-		class={`${selectNone ? 'hover:cursor-default ' : ''}${className} group`}
+		class={`${selectNone ? 'hover:cursor-default ' : ''}${props.class ?? ''} group`}
 	>
-		<slot />
+    {@render children?.()}
 	</button>
 {:else if reset}
 	<button
 		type="reset"
-		on:click
-		tabindex
+    onclick={dispatch.onclick}
+		tabindex={tabindex ?? 0}
 		{disabled}
-		class={`${selectNone ? 'hover:cursor-default ' : ''}${className} group`}
+		class={`${selectNone ? 'hover:cursor-default ' : ''}${props.class ?? ''} group`}
 	>
-		<slot />
+    {@render children?.()}
 	</button>
 {:else if href}
-	<a {href} {disabled} {tabindex} on:click on:blur class={className + '  group'}>
-		<slot />
+	<a {href} {disabled} {tabindex} onclick={dispatch.onclick} class={props.class ?? '' + '  group'}>
+		{@render children?.()}
 	</a>
 {:else}
 	<button
-		on:click
-		tabindex
+		onclick={dispatch.onclick}
+		tabindex={tabindex ?? 0}
 		{disabled}
-		class={`${selectNone ? 'hover:cursor-default ' : ''}${className} group`}
+		class={`${selectNone ? 'hover:cursor-default ' : ''}${props.class ?? ''} group`}
 	>
-		<slot />
+		{@render children?.()}
 	</button>
 {/if}
 
 <style>
 	.button {
 		/*@apply disabled:brightness-90 active:brightness-[120%] whitespace-nowrap hover:scale-[1.05] focus:scale-[1.05] active:shadow-none active:scale-100 hover:shadow-xl hover:brightness-[105%] flex gap-2 items-center font-semibold transition-all ease-in-out duration-500 focus:outline-none rounded-xl cursor-pointer px-5 py-2.5 text-xs border-2 bg-primary-5 border-primary-5 text-white;*/
-		@apply disabled:brightness-[.9] hover:brightness-110 active:brightness-95 flex gap-2.5 flex-nowrap whitespace-nowrap items-center font-medium border border-primary-5 text-surface-10 rounded-lg ring-0 transition-all hover:border-primary-5 focus:ring-2 focus:ring-primary-5 focus:ring-opacity-50 outline-none;
+		@apply disabled:brightness-[.9] hover:brightness-110 active:brightness-95 flex gap-2.5 flex-nowrap whitespace-nowrap items-center justify-center font-medium border border-primary-5 text-surface-10 rounded-lg ring-0 transition-all hover:border-primary-5 focus:ring-2 focus:ring-primary-5 focus:ring-opacity-50 outline-none;
 	}
 
 	.button.sm {
-		@apply px-3 py-1.5 text-xs hover:shadow-sm;
+		@apply px-3 py-1.5 text-xs;
 	}
 
 	.button.md {
-		@apply p-2.5 px-5 text-sm hover:shadow;
+		@apply p-2.5 px-5 text-sm;
 	}
 
 	.button.lg {
-		@apply px-8 py-3 text-base rounded-xl hover:shadow-lg;
+		@apply px-8 py-3 text-base rounded-xl;
 	}
 
 	.button.xl {
-		@apply px-8 py-4 text-base hover:shadow-lg;
+		@apply px-8 py-4 text-base rounded-2xl;
 	}
+
+  .button.sm.glowing {
+    @apply hover:shadow-sm;
+  }
+
+  .button.md.glowing {
+    @apply hover:shadow;
+  }
+
+  .button.lg.glowing {
+    @apply hover:shadow-lg;
+  }
+
+  .button.xl.glowing {
+    @apply hover:shadow-lg;
+  }
 
 	/* WHITE BUTTON */
 	.button.white {
