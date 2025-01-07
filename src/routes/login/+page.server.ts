@@ -1,31 +1,27 @@
-import { Actions } from '@sveltejs/kit';
+import { Actions, json, fail } from '@sveltejs/kit';
 import { RequestParser } from '$lib/formUtils';
 import { pb } from '$lib/pocketbase';
 
+import { HCAPTCHA_SECRET } from '$env/static/private';
+
 export const actions: Actions = {
 	login: async ({ locals, request }) => {
-    console.log('login', request.body);
-
+    console.log('request', request.body);
+    
     try {
-      const data = await RequestParser.parse(request);
-      console.log('data', data);
+      const data = await RequestParser.parse(request, HCAPTCHA_SECRET)
+      
+      const { email, password } = data;
 
-      const formData = new FormData();
-      formData.append('username', data.email);
-      formData.append('password', data.password);
-
-      const record = await pb.collection('files').create(formData);
-
+      const authData = await pb.collection('users').authWithPassword(email, password);
+      console.log('authData', authData);
 
     } catch (error) {
       console.error(error);
+
+      return fail(400, { message: error.message });
     }
 
-    return {
-      status: 200,
-      body: {
-        message: 'Login success'
-      }
-    }
+    return { redirect: '/dashboard' };
   }
 };

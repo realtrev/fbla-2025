@@ -9,16 +9,30 @@ export class FormUtils {
     const isFormData = data instanceof FormData;
 
     if (isFormData && trackProgress) {
-      return this.#submitFormWithProgress(url, data as FormData, trackProgress);
+      return await this.#submitFormWithProgress(url, data, trackProgress);
     }
 
-    return fetch(url, {
+    // convert to FormData if data is an object
+    if (!isFormData) {
+      const formData = new FormData();
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          formData.append(key, data[key]);
+        }
+      }
+      data = formData;
+    }
+
+    const response = await fetch(url, {
       method: 'POST',
-      body: isFormData ? data : JSON.stringify(data),
-      headers: isFormData ? {} : {
-        'Content-Type': 'application/json',
-      },
+      body: data,
     });
+
+    if (!response.ok) {
+      throw new Error(`Failed to submit form: ${response.statusText}`);
+    }
+
+    return await response.json();
   }
 
   static async #submitFormWithProgress(url: string, formData: FormData, trackProgress: (progress: number) => void): Promise<Response> {
@@ -37,7 +51,7 @@ export class FormUtils {
         if (xhr.status >= 200 && xhr.status < 300) {
           resolve(xhr.response);
         } else {
-          reject(xhr.statusText);
+          reject(new Error(xhr.statusText));
         }
       };
 
@@ -47,24 +61,89 @@ export class FormUtils {
       xhr.send(formData);
     });
   }
+
+  static async handleServerResponse(response) {
+    console.log(response);
+    const parsedData = JSON.parse(response.data);
+    console.log('Parsed Data:', parsedData);
+
+    // data looks like '[{"message":1},"data is not defined"]'
+    // result should be { message: "data is not defined" }
+    // see how the value of key in the object at index 0 corresponds to the index of the value in the array at that index
+    const result = {};
+
+    // recursively unwrap nested objects using the function unwrapObject
+    function unwrapObject(obj: Object | Array, table) {
+      // if obj is array
+      if (Array.isArray(obj)) {
+        const result = [];
+        for (let i = 0; i < obj.length; i++) {
+          if (typeof table[obj[i]] === 'object' || Array.isArray(table[obj[i]])) {
+            result[i] = unwrapObject(table[obj[i]], table);
+          } else {
+            result[i] = table[obj[i]];
+          }
+        }
+        return result;
+      }
+      
+      const result = {};
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          if (typeof table[obj[key]] === 'object' || Array.isArray(table[obj[key]])) {
+            result[key] = unwrapObject(table[obj[key]], table);
+          } else {
+            result[key] = table[obj[key]];
+          }
+        }
+      }
+      return result;
+    }
+
+    return {...response, data: unwrapObject(parsedData[0], parsedData)};
+  }
 }
 
 export class RequestParser {
-  static async parse(request: Request): Promise<Object> {
+  static async parse(request: Request, captchaSecret: string = null): Promise<Object> {
     const contentType = request.headers.get('content-type');
-
+    
     if (contentType.includes('multipart/form-data')) {
-      return await this.#parseFormData(request);
+      return await this.#parseFormData(request, captchaSecret);
     } else if (contentType.includes('application/json')) {
-      return await request.json();
+      const body = await request.json();
+      if (captchaSecret) {
+        if (!body.token) {
+          throw new Error('No token provided');
+        }
+        const valid = await this.verifyCaptcha(body.token, captchaSecret);
+        if (!valid) {
+          throw new Error('Invalid token');
+        }
+        return body;
+      }
+
+      return body;
     } else {
       return await this.#parseStream(request);
     }
   }
 
-  static async #parseFormData(request: Request): Promise<Object> {
+  static async #parseFormData(request: Request, captchaSecret: string = null): Promise<Object> {
     const formData = await request.formData();
     const result = {};
+
+    // check if formData includes a token
+    if (captchaSecret) {
+      const token = formData.get('token');
+      if (!token) {
+        throw new Error('No token provided');
+      }
+      const valid = await this.verifyCaptcha(token, captchaSecret);
+      if (!valid) {
+        throw new Error('Invalid token');
+      }
+    }
 
     for (const [key, value] of formData.entries()) {
       // Check for files
@@ -108,5 +187,16 @@ export class RequestParser {
     }
 
     return Buffer.concat(chunks);
+  }
+
+  static async verifyCaptcha(token: string, captchaSecret: string): Promise<boolean> {
+    const valid = await fetch('https://hcaptcha.com/siteverify', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: `response=${token}&secret=${captchaSecret}`
+		}).then((r) => r.json());
+    return valid.success;
   }
 }

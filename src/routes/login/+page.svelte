@@ -9,9 +9,10 @@
   import { submitForm } from '$lib/utils';
 	import { FormUtils } from '$lib/formUtils';
 	import HCaptcha from '$lib/components/HCaptcha.svelte';
+	import { goto } from '$app/navigation';
 
-  let email = $state("");
-  let password = $state("");
+  let email = $state("tgavdaly@gmail.com");
+  let password = $state("cooldude1001");
   let bio = $state("");
   let image: File | null = $state(null);
   let emailError = $state("");
@@ -21,6 +22,7 @@
   let loginStatus = $state(true);
 
   let page = $state(1);
+  let realPage = $state(1);
 
   function handlePage1Form(e: Event) {
     e.preventDefault();
@@ -47,26 +49,31 @@
   }
 
   function handleFormSubmission(token: string) {
-    console.log('Form submitted with token:', token);
+    page = 1;
 
-    const form = new FormData();
-    form.append('email', email);
-    form.append('password', password);
-    form.append('token', token);
+    FormUtils.submitForm('??/login', {
+      email,
+      password,
+      // token,
+    })
+    .then(async (response) => {
+      const result = await FormUtils.handleServerResponse(response);
+      console.log(result);
 
-    FormUtils.submitForm('??/login', form)
-      .then((response) => {
-        if (response.status == 200) {
-          // success
-          console.log('Success');
-        } else {
-          // error
-          console.log('Error');
-        }
-      })
-      .catch((error) => {
-        console.log('Error:', error);
-      });
+      if (result.data?.redirect) {
+        goto(result.data?.redirect);
+      }
+
+      if (result.type === 'failure') {
+        globalError = result.data?.message;
+      }
+
+      loginStatus = true;
+    })
+    .catch((error) => {
+      console.log('Error', error);
+      globalError = `Couldn't submit form`;
+    });
   }
 
   function formatEmail(e: InputEvent) {
@@ -78,14 +85,17 @@
 
 <div class="w-full h-screen flex flex-col justify-center bg-surface-8">
   <div id="form" class=" bg-white max-w-[42rem] grow h-screen">
-    <div class="w-full overflow-y-auto overflow-x-hidden flex flex-col items-center justify-center h-screen">
-      <Logo class="h-12" icon="accent" text="dark" />
-      {#if page == 1}
+    <div class="w-full overflow-y-auto overflow-x-hidden flex items-left justify-center h-screen">
+      {#if realPage == 1 && page == 1}
         <form
-        class="w-full shrink-0 px-32 flex flex-col items-center justify-center"
+        class="w-full shrink-0 px-32 flex flex-col items-center justify-center relative left-0"
         in:fade={{ delay: 300, duration: 300, easing: linear }}
         out:fade={{ duration: 300, easing: linear }}
+        on:outroend={() => {
+          realPage = page;
+        }}
         >
+          <Logo class="h-12" icon="accent" text="dark" />
           <h1 class="heading-xl font-normal w-full mt-6 leading-tight">Welcome back!</h1>
           <p class="text-surface-8 font-normal text-base w-full whitespace-nowrap mb-6 leading-tight">Sign in to your account</p>
           <TextInput
@@ -155,11 +165,14 @@
           </div>
       </form>
     {/if}
-    {#if page == 2}
+    {#if realPage == 2 && page == 2}
       <form
         class="w-full shrink-0 px-32 flex flex-col items-center justify-center"
         in:fade={{ delay: 300, duration: 300, easing: linear }}
         out:fade={{ duration: 300, easing: linear }}
+        on:outroend={() => {
+          realPage = page;
+        }}
       >
       
         <h1 class="heading-xl font-normal w-full mt-6 leading-tight">Just one more thing...</h1>

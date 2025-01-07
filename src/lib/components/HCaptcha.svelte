@@ -56,7 +56,6 @@
   const dispatch = {
     onerror: () => {},
     onverify: (newToken: string) => {
-      console.log('New token:', newToken);
       token = newToken;
 
       if (props.onverify) {
