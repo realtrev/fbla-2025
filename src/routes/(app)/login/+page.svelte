@@ -5,18 +5,14 @@
 	import { fade } from 'svelte/transition';
   import Logo from '$lib/components/Logo.svelte';
   import { CircleAlert } from 'lucide-svelte';
-  import TextArea from '$lib/components/TextArea.svelte';
   import { submitForm } from '$lib/utils';
 	import { FormUtils } from '$lib/formUtils';
 	import HCaptcha from '$lib/components/HCaptcha.svelte';
-	import { goto } from '$app/navigation';
+	import { currentUser, pb } from '$lib/pocketbase';
 
-  let email = $state("tgavdaly@gmail.com");
-  let password = $state("cooldude1001");
-  let bio = $state("");
-  let image: File | null = $state(null);
+  let email = $state("");
+  let password = $state("");
   let emailError = $state("");
-  let emailObj: TextInput | null = $state(null);
   let globalError = $state("");
 
   let loginStatus = $state(true);
@@ -26,6 +22,7 @@
 
   function handlePage1Form(e: Event) {
     e.preventDefault();
+    console.log('Form submitted');
     if (loginStatus == false) {
       return;
     }
@@ -54,18 +51,16 @@
     FormUtils.submitForm('??/login', {
       email,
       password,
-      // token,
+      token,
     })
-    .then(async (response) => {
-      const result = await FormUtils.handleServerResponse(response);
-      console.log(result);
+    .then(async (response: { type: string; status: Number; location?: string; data: Object }) => {
+      console.log(response);
 
-      if (result.data?.redirect) {
-        goto(result.data?.redirect);
-      }
+      pb.authStore.loadFromCookie(document.cookie);
+      currentUser.set(pb.authStore.record as User);
 
-      if (result.type === 'failure') {
-        globalError = result.data?.message;
+      if (response.type === "redirect" && response.location) {
+        window.location.href = response?.location;
       }
 
       loginStatus = true;
@@ -91,9 +86,10 @@
         class="w-full shrink-0 px-32 flex flex-col items-center justify-center relative left-0"
         in:fade={{ delay: 300, duration: 300, easing: linear }}
         out:fade={{ duration: 300, easing: linear }}
-        on:outroend={() => {
+        onoutroend={() => {
           realPage = page;
         }}
+        onsubmit={handlePage1Form}
         >
           <Logo class="h-12" icon="accent" text="dark" />
           <h1 class="heading-xl font-normal w-full mt-6 leading-tight">Welcome back!</h1>
@@ -148,7 +144,6 @@
               class="w-full mt-6 shadow-lg shadow-primary-5/25"
               size="xl"
               submit={true}
-              onsubmit={handlePage1Form}
             >
             </Button>
           </div>
@@ -170,7 +165,7 @@
         class="w-full shrink-0 px-32 flex flex-col items-center justify-center"
         in:fade={{ delay: 300, duration: 300, easing: linear }}
         out:fade={{ duration: 300, easing: linear }}
-        on:outroend={() => {
+        onoutroend={() => {
           realPage = page;
         }}
       >

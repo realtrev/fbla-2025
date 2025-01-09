@@ -1,5 +1,12 @@
+import * as devalue from 'devalue';
+
 export class FormUtils {
-  static async submitForm(url: string, data: Object | FormData, trackProgress: (progress: number) => void = () => {}): Promise<Response> {
+  static async submitForm(url: string, data: Object | FormData, trackProgress: (progress: number) => void = () => {}): Promise<{
+    type: string;
+    status: number;
+    data: any[];
+    location?: string;
+  }> {
     if (url.startsWith('?')) {
       const currentUrl = new URL(window.location.href);
       const relativePath = url.slice(1);
@@ -32,7 +39,12 @@ export class FormUtils {
       throw new Error(`Failed to submit form: ${response.statusText}`);
     }
 
-    return await response.json();
+    const body = await response.json();
+
+    return {
+      ...body,
+      data: body.data ? devalue.unflatten(JSON.parse(body.data)) : {},
+    }
   }
 
   static async #submitFormWithProgress(url: string, formData: FormData, trackProgress: (progress: number) => void): Promise<Response> {
@@ -60,47 +72,6 @@ export class FormUtils {
       };
       xhr.send(formData);
     });
-  }
-
-  static async handleServerResponse(response) {
-    console.log(response);
-    const parsedData = JSON.parse(response.data);
-    console.log('Parsed Data:', parsedData);
-
-    // data looks like '[{"message":1},"data is not defined"]'
-    // result should be { message: "data is not defined" }
-    // see how the value of key in the object at index 0 corresponds to the index of the value in the array at that index
-    const result = {};
-
-    // recursively unwrap nested objects using the function unwrapObject
-    function unwrapObject(obj: Object | Array, table) {
-      // if obj is array
-      if (Array.isArray(obj)) {
-        const result = [];
-        for (let i = 0; i < obj.length; i++) {
-          if (typeof table[obj[i]] === 'object' || Array.isArray(table[obj[i]])) {
-            result[i] = unwrapObject(table[obj[i]], table);
-          } else {
-            result[i] = table[obj[i]];
-          }
-        }
-        return result;
-      }
-      
-      const result = {};
-      for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-          if (typeof table[obj[key]] === 'object' || Array.isArray(table[obj[key]])) {
-            result[key] = unwrapObject(table[obj[key]], table);
-          } else {
-            result[key] = table[obj[key]];
-          }
-        }
-      }
-      return result;
-    }
-
-    return {...response, data: unwrapObject(parsedData[0], parsedData)};
   }
 }
 

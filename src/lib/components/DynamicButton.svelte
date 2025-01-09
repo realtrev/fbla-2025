@@ -23,18 +23,15 @@
       children?: () => any;
 
       onclick?: (e: MouseEvent) => void;
+      onsubmit?: (e: SubmitEvent) => void;
   } = $props();
 
   const dispatch = {
     onclick: (e: MouseEvent) => {
-      if (submit) {
-        e.preventDefault();
-      }
-
       if (props.onclick) {
         props.onclick(e);
       }
-    }
+    },
   };
 </script>
 

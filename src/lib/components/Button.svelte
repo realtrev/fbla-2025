@@ -40,14 +40,6 @@
 
   const dispatch = {
     onclick: (e: MouseEvent) => {
-      if (submit) {
-        e.preventDefault();
-        if (props.onsubmit) {
-          props.onsubmit(e);
-        }
-        return;
-      }
-
       if (props.onclick) {
         props.onclick(e);
       }
