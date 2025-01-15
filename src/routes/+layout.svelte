@@ -2,12 +2,13 @@
 	import { onMount, type Snippet } from 'svelte';
 	import '../app.css';
   import { pb, currentUser } from '$lib/pocketbase';
-	import type { User } from '$lib/types';
 	import { goto } from '$app/navigation';
+	import type { AuthRecord } from 'pocketbase';
+  import { LocalStore, cookiesAccepted } from '$lib/stores/localStorage';
 
   let { data, children }: {
     data: {
-      user: User;
+      user: AuthRecord;
     };
     children: Snippet;
   } = $props();
@@ -15,24 +16,25 @@
   currentUser.set(data?.user);
 
   onMount(() => {
-    console.log('layout mounted', JSON.stringify($currentUser));
+    LocalStore.loadAll();
 	  pb.authStore.loadFromCookie(document.cookie);
 
     if (!$currentUser) return;
 
     // request the latest user data
-    pb.collection('users').subscribe($currentUser.id, (e: {action: string; record: User}) => {
+    pb.collection('users').subscribe($currentUser.id, (e: {action: string; record: AuthRecord}) => {
       if (e.action === 'update') {
         currentUser.set(e.record);
       }
 
       if (e.action === 'delete') {
-        goto("/logout");
+        goto("/api/logout");
       }
     });
 
     pb.authStore.onChange((token, record) => {
       console.log('authStore.onChange', record);
+
       if (pb.authStore.isValid) {
         // delete current cookie
         document.cookie = pb.authStore.exportToCookie({ path: '/' });

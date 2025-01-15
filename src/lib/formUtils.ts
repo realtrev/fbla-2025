@@ -1,26 +1,20 @@
 import * as devalue from 'devalue';
+import type { Dictionary, FormResponse } from '../app';
 
 export class FormUtils {
-  static async submitForm(url: string, data: Object | FormData, trackProgress: (progress: number) => void = () => {}): Promise<{
-    type: string;
-    status: number;
-    data: any[];
-    location?: string;
-  }> {
+  static async submitForm(url: string, data: Dictionary<any> | FormData, trackProgress: (progress: number) => void = () => {}): Promise<FormResponse> {
     if (url.startsWith('?')) {
       const currentUrl = new URL(window.location.href);
       const relativePath = url.slice(1);
       url = new URL(relativePath, currentUrl.href).toString();
     }
 
-    const isFormData = data instanceof FormData;
-
-    if (isFormData && trackProgress) {
+    if (data instanceof FormData && trackProgress) {
       return await this.#submitFormWithProgress(url, data, trackProgress);
     }
 
     // convert to FormData if data is an object
-    if (!isFormData) {
+    if (!(data instanceof FormData)) {
       const formData = new FormData();
       for (const key in data) {
         if (data.hasOwnProperty(key)) {
@@ -32,7 +26,7 @@ export class FormUtils {
 
     const response = await fetch(url, {
       method: 'POST',
-      body: data,
+      body: data as FormData,
     });
 
     if (!response.ok) {
@@ -47,7 +41,7 @@ export class FormUtils {
     }
   }
 
-  static async #submitFormWithProgress(url: string, formData: FormData, trackProgress: (progress: number) => void): Promise<Response> {
+  static async #submitFormWithProgress(url: string, formData: FormData, trackProgress: (progress: number) => void): Promise<FormResponse> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url, true);
@@ -76,12 +70,14 @@ export class FormUtils {
 }
 
 export class RequestParser {
-  static async parse(request: Request, captchaSecret: string = null): Promise<Object> {
+  static async parse(request: Request, captchaSecret: string | null = null): Promise<Dictionary<any>> {
     const contentType = request.headers.get('content-type');
     
-    if (contentType.includes('multipart/form-data')) {
+    if (contentType?.includes('multipart/form-data')) {
       return await this.#parseFormData(request, captchaSecret);
-    } else if (contentType.includes('application/json')) {
+    }
+    
+    if (contentType?.includes('application/json')) {
       const body = await request.json();
       if (captchaSecret) {
         if (!body.token) {
@@ -95,14 +91,14 @@ export class RequestParser {
       }
 
       return body;
-    } else {
-      return await this.#parseStream(request);
     }
+
+    return {};
   }
 
-  static async #parseFormData(request: Request, captchaSecret: string = null): Promise<Object> {
+  static async #parseFormData(request: Request, captchaSecret: string | null = null): Promise<Dictionary<any>> {
     const formData = await request.formData();
-    const result = {};
+    const result: Dictionary<any> = {};
 
     // check if formData includes a token
     if (captchaSecret) {
@@ -110,7 +106,7 @@ export class RequestParser {
       if (!token) {
         throw new Error('No token provided');
       }
-      const valid = await this.verifyCaptcha(token, captchaSecret);
+      const valid = await this.verifyCaptcha(token as string, captchaSecret);
       if (!valid) {
         throw new Error('Invalid token');
       }
@@ -136,6 +132,10 @@ export class RequestParser {
   static async #parseStream(request: Request): Promise<string> {
     const bodyStream = request.body;
     let body = '';
+
+    if (!bodyStream) {
+      return '';
+    }
 
     for await (const chunk of bodyStream) {
       body += chunk.toString();

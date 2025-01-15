@@ -38,12 +38,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     cookies.delete('pb_auth', { path: '/' , sameSite: 'strict', httpOnly: false });
   }
 
-	locals.user = structuredClone(locals.pb.authStore.record);
+	locals.user = locals.pb.authStore.record;
   
   // check if url pathname is in guest or auth only routes
   // for example: /app is auth only and will otherwise redirect to /login
   const targetUrl = new URL(event.url);
-  const destRoute = allowRouteAccess(targetUrl.pathname, locals.user);
+  const destRoute = allowRouteAccess(targetUrl.pathname, locals.pb.authStore.isValid);
 
   if (destRoute !== targetUrl.pathname) {
     throw redirect(303, destRoute);

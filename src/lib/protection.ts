@@ -1,6 +1,6 @@
 const guestOnlyRoutes = ['/', '/login', '/register'];
 
-const allowRouteAccess = (targetRoute, userIsAuthenticated) => {
+const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean) => {
   // if target route starts with /app, check if user is authenticated
   if (targetRoute.startsWith('/app') && !userIsAuthenticated) {
     return '/login';

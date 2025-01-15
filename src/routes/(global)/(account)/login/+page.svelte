@@ -20,11 +20,13 @@
   let page = $state(1);
   let realPage = $state(1);
 
+
+
   function handlePage1Form(e: Event) {
     e.preventDefault();
     console.log('Form submitted');
     if (loginStatus == false) {
-      return;
+        return;
     }
 
     loginStatus = false;
@@ -34,13 +36,10 @@
     submitForm(inputs, e, formSuccess, formFailed);
 
     function formFailed() {
-      console.log('Form failed');
       loginStatus = true;
     }
 
     function formSuccess() {
-      // next page
-      console.log('Form success');
       page = 2;
     }
   }
@@ -57,7 +56,7 @@
       console.log(response);
 
       pb.authStore.loadFromCookie(document.cookie);
-      currentUser.set(pb.authStore.record as User);
+      currentUser.set(pb.authStore.record);
 
       if (response.type === "redirect" && response.location) {
         window.location.href = response?.location;
@@ -77,6 +76,10 @@
 		input.value = input.value.replace(/[^a-zA-Z0-9@._-]/g, '');
   }
 </script>
+
+<svelte:head>
+  <title>Login | JobFair</title>
+</svelte:head>
 
 <div class="w-full h-screen flex flex-col justify-center bg-surface-8">
   <div id="form" class=" bg-white max-w-[42rem] grow h-screen">
@@ -132,7 +135,7 @@
             }}
           >
             {#snippet rightLabel()}
-              <a class="link text-sm font-normal" href="student-recovery">Forgot password?</a>
+              <a class="link text-sm font-normal" href="recovery">Forgot password?</a>
             {/snippet}
           </TextInput>
 
@@ -156,7 +159,7 @@
           {/if}
 
           <div class="w-full mt-6">
-            <p class="font-normal text-surface-5 text-sm w-min whitespace-nowrap">Don't have an account? <a class="link" href="/student-register">Create one!</a></p>
+            <p class="font-normal text-surface-5 text-sm w-min whitespace-nowrap">Don't have an account? <a class="link" href="/register">Create one!</a></p>
           </div>
       </form>
     {/if}
@@ -169,7 +172,7 @@
           realPage = page;
         }}
       >
-      
+
         <h1 class="heading-xl font-normal w-full mt-6 leading-tight">Just one more thing...</h1>
         <p class="text-surface-8 font-normal text-base w-full whitespace-nowrap mb-6 leading-tight">Confirm you're not a bot</p>
         <HCaptcha class="mt-3" onverify={(newToken: string) => {
