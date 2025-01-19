@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { type Component } from 'svelte';
+	import { type Component, type Snippet } from 'svelte';
 	import { type Icon } from 'lucide-svelte';
 	import DynamicButton from '$lib/components/DynamicButton.svelte';
 
   let {
-    label = 'Hello World',
+    label,
     link = '',
     color = 'primary',
     size = 'md',
@@ -16,6 +16,7 @@
     submit = false,
     reset = false,
     disabled = false,
+    children,
     ...props
   } : {
     label?: string,
@@ -31,6 +32,8 @@
     reset?: boolean,
     disabled?: boolean,
     class?: string,
+
+    children?: Snippet,
 
     onclick?: (e: MouseEvent) => void,
     onsubmit?: (e: MouseEvent) => void,
@@ -53,7 +56,11 @@
 	{#if leftIcon}
 		<svelte:component this={leftIcon} class="w-5 h-5 stroke-2" />
 	{/if}
-	<p class="text-center">{label}</p>
+  {#if label}
+	  <p class="text-center">{label}</p>
+  {:else if children}
+    {@render children()}
+  {/if}
 	{#if rightIcon}
 		<svelte:component this={rightIcon} class="w-5 h-5 stroke-2" />
 	{/if}

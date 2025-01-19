@@ -263,7 +263,7 @@
 			</div>
 		{/if}
     {#if displayedErrorMessage}
-			<div class="flex items-center mt-1">
+			<div class="flex items-top mt-1">
         <CircleAlert class="text-red-500 h-5 w-5 mr-0.5" />
         <span class="text-red-500 text-sm font-medium h-min translate-y-[0px]">{displayedErrorMessage}</span>
 			</div>

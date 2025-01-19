@@ -34,7 +34,7 @@ body {
 	@apply ring-2 ring-primary-5;
 }
 
-a.link {
+a.link, button.link {
   @apply text-primary-5 hover:underline ring-opacity-0 focus:underline;
 }
 

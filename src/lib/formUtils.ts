@@ -1,8 +1,10 @@
 import * as devalue from 'devalue';
 import type { Dictionary, FormResponse } from '../app';
+import { deserialize } from '$app/forms';
+import type { ActionResult } from '@sveltejs/kit';
 
 export class FormUtils {
-  static async submitForm(url: string, data: Dictionary<any> | FormData, trackProgress: (progress: number) => void = () => {}): Promise<FormResponse> {
+  static async submitForm(url: string, data: Dictionary<any> | FormData, trackProgress: (progress: number) => void = () => {}): Promise<ActionResult> {
     if (url.startsWith('?')) {
       const currentUrl = new URL(window.location.href);
       const relativePath = url.slice(1);
@@ -10,7 +12,7 @@ export class FormUtils {
     }
 
     if (data instanceof FormData && trackProgress) {
-      return await this.#submitFormWithProgress(url, data, trackProgress);
+      return deserialize(await this.#submitFormWithProgress(url, data, trackProgress));
     }
 
     // convert to FormData if data is an object
@@ -33,15 +35,12 @@ export class FormUtils {
       throw new Error(`Failed to submit form: ${response.statusText}`);
     }
 
-    const body = await response.json();
+    const result: ActionResult = deserialize(await response.text());
 
-    return {
-      ...body,
-      data: body.data ? devalue.unflatten(JSON.parse(body.data)) : {},
-    }
+    return result;
   }
 
-  static async #submitFormWithProgress(url: string, formData: FormData, trackProgress: (progress: number) => void): Promise<FormResponse> {
+  static async #submitFormWithProgress(url: string, formData: FormData, trackProgress: (progress: number) => void): Promise<any> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('POST', url, true);
@@ -72,11 +71,11 @@ export class FormUtils {
 export class RequestParser {
   static async parse(request: Request, captchaSecret: string | null = null): Promise<Dictionary<any>> {
     const contentType = request.headers.get('content-type');
-    
+
     if (contentType?.includes('multipart/form-data')) {
       return await this.#parseFormData(request, captchaSecret);
     }
-    
+
     if (contentType?.includes('application/json')) {
       const body = await request.json();
       if (captchaSecret) {

@@ -83,7 +83,10 @@
 
 <div class="w-full h-screen flex flex-col justify-center bg-surface-8">
   <div id="form" class=" bg-white max-w-[42rem] grow h-screen">
-    <div class="w-full overflow-y-auto overflow-x-hidden flex items-left justify-center h-screen">
+    <div class="w-full overflow-y-auto overflow-x-hidden flex items-left justify-center h-screen"
+    in:fade={{ delay: 300, duration: 300, easing: linear }}
+    out:fade={{ duration: 300, easing: linear }}
+    >
       {#if realPage == 1 && page == 1}
         <form
         class="w-full shrink-0 px-32 flex flex-col items-center justify-center relative left-0"
@@ -95,7 +98,7 @@
         onsubmit={handlePage1Form}
         >
           <Logo class="h-12" icon="accent" text="dark" />
-          <h1 class="heading-xl font-normal w-full mt-6 leading-tight">Welcome back!</h1>
+          <h1 class="heading-xl font-medium w-full mt-6 leading-tight">Welcome back!</h1>
           <p class="text-surface-8 font-normal text-base w-full whitespace-nowrap mb-6 leading-tight">Sign in to your account</p>
           <TextInput
             name="email"
@@ -159,7 +162,7 @@
           {/if}
 
           <div class="w-full mt-6">
-            <p class="font-normal text-surface-5 text-sm w-min whitespace-nowrap">Don't have an account? <a class="link" href="/register">Create one!</a></p>
+            <p class="font-normal text-surface-5 text-sm w-min whitespace-nowrap">Don't have an account? <a class="link" href="/student-register">Create one!</a></p>
           </div>
       </form>
     {/if}
