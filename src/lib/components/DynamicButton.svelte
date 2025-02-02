@@ -113,6 +113,11 @@
 		@apply bg-white border-white text-surface-10 focus:ring-white/50;
 	}
 
+  /* BLACK BUTTON */
+  .button.black {
+    @apply bg-black border-black text-white focus:ring-black/50;
+  }
+
 	/* PRIMARY BUTTON AND VARIATIONS */
 	.button.primary {
 		@apply bg-primary-5 border-primary-4/50 text-white;

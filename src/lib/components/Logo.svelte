@@ -8,17 +8,27 @@
     height = '10',
 
     class: className = '',
+    ...props
   } : {
     link?: string,
-    icon?: 'light' | 'accent',
+    icon?: 'light' | 'accent' | 'dark',
     text?: 'light' | 'dark',
     height?: string,
 
     class?: string,
+    onclick?: (e: MouseEvent) => void,
   } = $props();
+
+  const dispatch = {
+    onclick: (e: MouseEvent) => {
+      if (props.onclick) {
+        props.onclick(e);
+      }
+    }
+  };
 </script>
 
-<DynamicButton href={link} on:click>
+<DynamicButton href={link} onclick={dispatch.onclick} class={className}>
 	<svg
 		class={`h-10 block ${className}`}
 		viewBox="0 0 276 62"

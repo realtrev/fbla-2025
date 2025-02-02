@@ -4,4 +4,4 @@ import { writable } from 'svelte/store';
 
 export const pb = new PocketBase(PUBLIC_POCKETBASE_URL);
 
-export const currentUser = writable(pb.authStore.record as AuthRecord | null);
+export const currentUser = writable(pb.authStore.record as AuthRecord);

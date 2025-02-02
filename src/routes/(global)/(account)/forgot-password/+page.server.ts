@@ -27,6 +27,7 @@ export const actions: Actions = {
       name: school.name,
       website: school.website,
       emailDomain: school.emailDomain,
+      id: school.id,
       logo: `${PUBLIC_POCKETBASE_URL}/api/files/${school.collectionId}/${school.id}/${school.logo}`
     }};
   }

@@ -24,7 +24,9 @@
     // request the latest user data
     pb.collection('users').subscribe($currentUser.id, (e: {action: string; record: AuthRecord}) => {
       if (e.action === 'update') {
+        console.log('currentUser updated', e.record);
         currentUser.set(e.record);
+
       }
 
       if (e.action === 'delete') {
@@ -33,8 +35,6 @@
     });
 
     pb.authStore.onChange((token, record) => {
-      console.log('authStore.onChange', record);
-
       if (pb.authStore.isValid) {
         // delete current cookie
         document.cookie = pb.authStore.exportToCookie({ path: '/' });

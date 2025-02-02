@@ -116,15 +116,11 @@
 
 <div class="{props.class ?? ''} relative group flex items-center">
 	<label for={captcha} class="label">
-		{#if label || displayedErrorMessage}
+		{#if label}
 			<div class="flex justify-between items-center mb-0.5">
-        {#if displayedErrorMessage}
-          <span class="text-red-500 text-xs font-medium">{displayedErrorMessage}</span>
-        {:else}
-          <span class="text-surface-5 text-xs font-medium`">
-            {label}<span class="text-red-500">{required ? '*' : ''}</span>
-          </span>
-        {/if}
+        <span class="text-surface-5 text-xs font-medium`">
+          {label}<span class="text-red-500">{required ? '*' : ''}</span>
+        </span>
 			</div>
 		{/if}
 		<div class="area-style flex m-0 p-0 hover:cursor-text overflow-hidden"></div>

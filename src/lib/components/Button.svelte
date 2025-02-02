@@ -21,7 +21,7 @@
   } : {
     label?: string,
     link?: string,
-    color?: 'primary' | 'secondary' | 'accent' | 'white' | 'surface',
+    color?: 'primary' | 'secondary' | 'accent' | 'white' | 'surface' | 'black',
     size?: 'sm' | 'md' | 'lg' | 'xl',
     outlined?: boolean,
     notab?: boolean,

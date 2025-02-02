@@ -118,18 +118,17 @@ in:fade={{ delay: 300, duration: 300, easing: linear }}
     }}
     onsubmit={handlePage1Form}
     >
-      <div class="w-full">
-        <Logo class="h-12 mr-auto" icon="accent" text="dark" link="/" />
+      <div class="w-full focus-none">
+        <Logo class="h-12 mr-auto" icon="dark" text="dark" />
       </div>
-      <h1 class="heading-xl form-title">Student Login</h1>
-      <p class="form-subtitle">Welcome back! Sign in to your account</p>
-
+      <h1 class="heading-xl form-title">Organization Login</h1>
+      <p class="form-subtitle">Sign in to your account</p>
       <TextInput
         name="email"
         class="col-span-1 w-full"
         maxlength={100}
         showcounter={false}
-        label="School email address"
+        label="Email address"
         type="email"
         size="lg"
         bind:value={email}
@@ -169,7 +168,7 @@ in:fade={{ delay: 300, duration: 300, easing: linear }}
       <div class="w-full flex justify-end">
         <Button
           disabled={!loginStatus}
-          color="primary"
+          color="black"
           class="w-full mt-8 shadow-lg shadow-primary-5/25"
           size="xl"
           submit={true}
@@ -189,9 +188,9 @@ in:fade={{ delay: 300, duration: 300, easing: linear }}
       </div>
       {/if}
 
-      <div class="w-full mt-6">
+      <!-- <div class="w-full mt-6">
         <p class="font-normal text-surface-5 text-sm w-min whitespace-nowrap">Don't have an account? <a class="link" href="/register_student">Create one!</a></p>
-      </div>
+      </div> -->
   </form>
 {/if}
 {#if realPage == 2 && page == 2}
@@ -226,7 +225,7 @@ in:fade={{ delay: 300, duration: 300, easing: linear }}
 
       <Button
         disabled={!loginStatus}
-        color="primary"
+        color="black"
         class="w-full mt-6 shadow-lg shadow-primary-5/25"
         size="xl"
         submit={true}
