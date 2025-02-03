@@ -47,7 +47,13 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   if (locals.user && locals.user.verified === true && event.url.pathname === '/verify') {
-    throw redirect(303, '/app');
+    if (locals.user?.accountType === 'student') {
+      throw redirect(303, '/app');
+    } else if (locals.user?.accountType === 'organization') {
+      throw redirect(303, '/admin/o/dashboard');
+    } else {
+      throw redirect(303, '/admin/s/dashboard');
+    }
   }
 
   // check if url pathname is in guest or auth only routes
