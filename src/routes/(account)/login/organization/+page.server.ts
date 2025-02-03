@@ -14,8 +14,8 @@ export const actions: Actions = {
 
       try {
         await locals.pb.collection('users').authWithPassword(email, password);
-        if (locals.pb.authStore?.accountType !== 'organization') {
-          return fail(400, { message: 'Invalid login credentials' });
+        if (locals.pb.authStore.baseModel?.accountType !== 'organizationAdmin') {
+          return fail(400, { message: 'Invalid account type' });
         }
 
         // get between = and first ;
@@ -35,6 +35,6 @@ export const actions: Actions = {
       return fail(400, { message: error?.message });
     }
 
-    return redirect(303, '/app');
+    return redirect(303, '/admin/o/dashboard');
   }
 };

@@ -16,8 +16,8 @@ export const actions: Actions = {
         await locals.pb.collection('users').authWithPassword(email, password);
         // get between = and first ;
         // e
-        if (locals.pb.authStore?.accountType !== 'student') {
-          return fail(400, { message: 'Invalid login credentials' });
+        if (locals.pb.authStore.baseModel?.accountType !== 'student') {
+          return fail(400, { message: 'Invalid account type' });
         }
         const cookie = locals.pb.authStore.exportToCookie({ httpOnly: false, secure: false });
         const cookieValue = cookie.split('=')[1].split(';')[0];
