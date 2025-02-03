@@ -15,7 +15,6 @@ export const actions: Actions = {
       try {
         await locals.pb.collection('users').authWithPassword(email, password);
         // get between = and first ;
-        // e
         const cookie = locals.pb.authStore.exportToCookie({ httpOnly: false, secure: false });
         const cookieValue = cookie.split('=')[1].split(';')[0];
         cookies.set('pb_auth', decodeURIComponent(cookieValue), {
