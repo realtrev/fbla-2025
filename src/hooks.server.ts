@@ -47,13 +47,19 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   if (locals.user && locals.user.verified === true && event.url.pathname === '/verify') {
-    throw redirect(303, '/app');
+    if (locals.user?.accountType === 'student') {
+      throw redirect(303, '/app');
+    } else if (locals.user?.accountType === 'organizationAdmin') {
+      throw redirect(303, '/admin/o/dashboard');
+    } else {
+      throw redirect(303, '/admin/s/dashboard');
+    }
   }
 
   // check if url pathname is in guest or auth only routes
   // for example: /app is auth only and will otherwise redirect to /login
   const targetUrl = new URL(event.url);
-  const destRoute = allowRouteAccess(targetUrl.pathname, locals.pb.authStore.isValid);
+  const destRoute = allowRouteAccess(targetUrl.pathname, locals.pb.authStore.isValid, locals.pb.authStore.baseModel?.accountType ?? null);
 
   if (destRoute !== targetUrl.pathname) {
     throw redirect(303, destRoute);

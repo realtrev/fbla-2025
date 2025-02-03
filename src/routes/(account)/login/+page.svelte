@@ -121,7 +121,7 @@ in:fade={{ delay: 300, duration: 300, easing: linear }}
       <div class="w-full">
         <Logo class="h-12 mr-auto" icon="accent" text="dark" link="/" />
       </div>
-      <h1 class="heading-xl form-title">Student Login</h1>
+      <h1 class="heading-xl form-title">Student Sign In</h1>
       <p class="form-subtitle">Welcome back! Sign in to your account</p>
 
       <TextInput

@@ -1,16 +1,39 @@
-const guestOnlyRoutes = ['/', '/login', '/register_student', '/register_business'];
+const guestOnlyRoutes = ['/', '/login', '/register_student', '/register_business', '/login/school', '/login/organization'];
 
-const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean) => {
+const schoolAdminOnlyRoutes = ['/admin/s/dashboard'];
+
+const organizationAdminOnlyRoutes = ['/admin/o/dashboard'];
+
+const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean, accountType?: string) => {
   // if target route starts with /app, check if user is authenticated
-  if (targetRoute.startsWith('/app') && !userIsAuthenticated) {
+  if (!userIsAuthenticated) {
+    if (guestOnlyRoutes.includes(targetRoute)) {
+      return targetRoute;
+    }
+
+    if (targetRoute.startsWith('/admin/o')){
+      return '/login/organization';
+    }
+    if (targetRoute.startsWith('/admin/s')) {
+      return '/login/school';
+    }
     return '/login';
   }
 
   // if target route is in guest only routes, check if user is authenticated
   if (guestOnlyRoutes.includes(targetRoute) && userIsAuthenticated) {
-    return '/app';
+    if (accountType === 'student') {
+      return '/dashboard';
+    } else if (accountType === 'organizationAdmin') {
+      return '/admin/o/dashboard';
+    } else if (accountType === 'schoolAdmin') {
+      return '/admin/s/dashboard';
+    }
   }
 
+  if (organizationAdminOnlyRoutes.includes(targetRoute) && accountType !== 'organizationAdmin') {
+
+  }
   return targetRoute;
 }
 

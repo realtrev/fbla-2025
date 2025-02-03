@@ -14,7 +14,7 @@
     children: Snippet;
   } = $props();
 
-  currentUser.set(data?.user);
+  currentUser.set(data?.user ?? null);
 
   onMount(() => {
     LocalStore.loadAll();
