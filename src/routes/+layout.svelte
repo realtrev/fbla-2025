@@ -1,5 +1,4 @@
 <script lang="ts">
-  // check
 	import { onMount, type Snippet } from 'svelte';
 	import '../app.css';
   import { pb, currentUser } from '$lib/pocketbase';
