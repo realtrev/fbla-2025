@@ -29,7 +29,7 @@ body {
 	font-weight: 500;
 }
 
-*:focus {
+*:focus:not(.avoid-focus) {
 	outline: none;
 	@apply ring-2 ring-primary-5;
 }
