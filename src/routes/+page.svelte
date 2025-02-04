@@ -18,6 +18,6 @@
     color="surface"
     class="w-min mt-3"
     size="md"
-    link="student-register"
+    link="student_register"
   />
 </div>
