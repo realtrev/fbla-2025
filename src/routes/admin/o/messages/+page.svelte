@@ -11,13 +11,7 @@
 
   <p>Hello, {$currentUser?.firstName}</p>
 
-  <Button
-    label="Log out"
-    color="primary"
-    class="w-min mt-3"
-    size="md"
-    onclick={() => goto("/api/logout")}
-  />
+  <h1 class="heading-2xl">Messages!</h1>
 
   <Profile />
 </div>

@@ -9,6 +9,7 @@
 
     children,
 
+    class: className = $bindable(""),
     ...props
   }: {
       href?: string;
@@ -41,7 +42,7 @@
 		onclick={dispatch.onclick}
 		tabindex={tabindex ?? 0}
 		{disabled}
-		class={`${selectNone ? 'hover:cursor-default ' : ''}${props.class ?? ''} group`}
+		class={`${selectNone ? 'hover:cursor-default ' : ''}${className ?? ''} group`}
 	>
     {@render children?.()}
 	</button>
@@ -51,12 +52,12 @@
     onclick={dispatch.onclick}
 		tabindex={tabindex ?? 0}
 		{disabled}
-		class={`${selectNone ? 'hover:cursor-default ' : ''}${props.class ?? ''} group`}
+		class={`${selectNone ? 'hover:cursor-default ' : ''}${className ?? ''} group`}
 	>
     {@render children?.()}
 	</button>
 {:else if href}
-	<a {href} {disabled} {tabindex} onclick={dispatch.onclick} class={props.class ?? '' + '  group'}>
+	<a {href} {disabled} {tabindex} onclick={dispatch.onclick} class={className ?? '' + '  group'}>
 		{@render children?.()}
 	</a>
 {:else}
