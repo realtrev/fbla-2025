@@ -2,18 +2,23 @@
   // check
 	import { onMount, type Snippet } from 'svelte';
 	import '../app.css';
-  import { pb, currentUser } from '$lib/pocketbase';
+  import { pb, currentUser, currentSchool, currentOrganization } from '$lib/pocketbase';
 	import { goto } from '$app/navigation';
 	import type { AuthRecord } from 'pocketbase';
   import { LocalStore, cookiesAccepted } from '$lib/stores/localStorage';
+  import type { OrganizationModel, SchoolModel } from '../app';
 
   let { data, children }: {
     data: {
       user: AuthRecord;
+      school: SchoolModel;
+      organization: OrganizationModel;
     };
     children: Snippet;
   } = $props();
 
+  currentOrganization.set(data?.organization ?? null);
+  currentSchool.set(data?.school ?? null);
   currentUser.set(data?.user ?? null);
 
   onMount(() => {

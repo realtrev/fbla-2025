@@ -9,5 +9,7 @@ export const load = async (event: ServerLoadEvent) => {
 
   return {
     user: pb.authStore.record,
+    school: locals.school,
+    organization: locals.organization
   }
 }

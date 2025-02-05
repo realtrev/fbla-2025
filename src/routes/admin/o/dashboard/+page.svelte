@@ -1,23 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-  import Button from '$lib/components/Button.svelte';
-
   import { currentUser } from '$lib/pocketbase';
-  import Profile from '$lib/components/Profile.svelte';
 </script>
 
 <div class="p-5">
-  <h1 class="heading-sm">LOGGED IN!!</h1>
 
-  <p>Hello, {$currentUser?.firstName}</p>
+  <p class="font-semibold">Welcome, {$currentUser?.firstName}</p>
 
-  <Button
-    label="Log out"
-    color="primary"
-    class="w-min mt-3"
-    size="md"
-    onclick={() => goto("/api/logout")}
-  />
-
-  <Profile />
 </div>
