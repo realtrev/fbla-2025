@@ -65,7 +65,7 @@
 		onclick={dispatch.onclick}
 		tabindex={tabindex ?? 0}
 		{disabled}
-		class={`${selectNone ? 'hover:cursor-default ' : ''}${props.class ?? ''} group`}
+		class={`${selectNone ? 'hover:cursor-default ' : ''}${className ?? ''} group`}
 	>
 		{@render children?.()}
 	</button>
