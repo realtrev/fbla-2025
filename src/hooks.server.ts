@@ -3,6 +3,7 @@ import PocketBase from 'pocketbase';
 import type { Handle } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 import { allowRouteAccess } from '$lib/protection';
+import { pb } from '$lib/database';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const { cookies, locals, request } = event;
@@ -63,6 +64,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   if (destRoute !== targetUrl.pathname) {
     throw redirect(303, destRoute);
+  }
+
+  if (locals.user?.school) {
+    locals.school = await pb.collection('schools').getOne(locals.user?.school);
+  }
+
+  if (locals.user?.organization) {
+    locals.organization = await pb.collection('organizations').getOne(locals.user?.organization);
   }
 
 	const response = await resolve(event);
