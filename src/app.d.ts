@@ -48,4 +48,18 @@ interface SchoolModel extends RecordModel {
   updated: string
 }
 
-export { FormResponse, Dictionary, OrganizationModel, SchoolModel };
+interface ListingModel extends RecordModel {
+  title: string,
+  description: string,
+  organization: string,
+  targetSchools: string[],
+  location: string,
+  type: 'full-time' | 'part-time' | 'volunteer' | 'internship',
+  applicationDeadline: string,
+  applicationLimit: number,
+  published: boolean,
+  created: string,
+  updated: string
+}
+
+export { FormResponse, Dictionary, OrganizationModel, SchoolModel, ListingModel };

@@ -96,7 +96,7 @@
     },
 
     oninput: (e: InputEvent) => {
-      buffer = e?.target?.value ?? '';
+      value = e?.target?.value ?? '';
 
       if (autoValidate) {
         checkValidity();
@@ -172,8 +172,7 @@
     }
   }
 
-	let buffer = $state(value);
-  let realValue = $state(value);
+	let buffer = $state(value);;
   let displayedErrorMessage = $derived(error);
   let length = $derived(buffer.length);
 	let input: HTMLTextAreaElement | null = $state(null);
@@ -181,8 +180,8 @@
   let keyPressed = $state(false);
 
   $effect(() => {
-    if (buffer !== realValue) {
-      buffer = realValue;
+    if (buffer !== value) {
+      buffer = value;
     }
   });
 
@@ -304,7 +303,7 @@
         onkeydown={dispatch.onkeydown}
         onscroll={dispatch.onscroll}
 
-        bind:value={realValue}
+        bind:value={buffer}
 				{maxlength}
 				{placeholder}
 				pattern={numeric ? "[0-9]*" : pattern}
@@ -320,7 +319,7 @@
 			<div
 				class:opacity-100={focus}
 				class:opacity-0={!focus}
-				class="text-xs text-right text-surface-3 absolute top-0.5 transition-opacity"
+				class="text-xs text-right font-normal text-surface-3 absolute top-0.5 transition-opacity"
 				class:right-2={label.length === 0}
 				class:right-0={label.length > 0}
 			>

@@ -11,5 +11,5 @@
     } = $props();
 </script>
 
-<img alt="Profile" ondragstart={(e) => {e.preventDefault()}} class={`${size} select-none aspect-square rounded-full ${props.class}`} src={`${PUBLIC_POCKETBASE_URL}api/files/_pb_users_auth_/${$currentUser?.id}/${$currentUser?.avatar}?thumb=100x100`} width={size} />
+<img alt="Profile" ondragstart={(e) => {e.preventDefault()}} class={`${size} shadow-lg select-none aspect-square rounded-full ${props.class}`} src={`${PUBLIC_POCKETBASE_URL}api/files/_pb_users_auth_/${$currentUser?.id}/${$currentUser?.avatar}?thumb=100x100`} width={size} />
 
