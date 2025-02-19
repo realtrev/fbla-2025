@@ -24,6 +24,7 @@
 
     validate = (value: string) => true,
     transform = (value: string) => value,
+    format = (value: string) => value,
 
     ...props
   }: {
@@ -55,6 +56,7 @@
 
     validate?: (value: string) => boolean;
     transform?: (value: string) => string;
+    format?: (value: string) => string;
 
     rightLabel?: () => any;
     before?: () => any;
@@ -88,7 +90,7 @@
     },
 
     oninput: (e: InputEvent) => {
-      buffer = e?.target?.value ?? '';
+      value = format(e?.target?.value ?? '');
 
       if (autoValidate) {
         checkValidity();
@@ -128,15 +130,14 @@
     }
   }
 
-	let buffer = $state(value);
-  let realValue = $state(buffer);
+	let buffer = $state(format(value));
   let displayedErrorMessage = $derived(error);
   let length = $derived(buffer.length);
 	let input: HTMLInputElement | null = $state(null);
 
   $effect(() => {
-    if (buffer !== realValue) {
-      buffer = realValue;
+    if (buffer !== value) {
+      buffer = format(value);
     }
   });
 
@@ -239,7 +240,7 @@
 				onchange={dispatch.onchange}
         onsubmit={dispatch.onsubmit}
 
-        bind:value={realValue}
+        bind:value={buffer}
 				{maxlength}
 				{placeholder}
 				pattern={numeric ? "[0-9]*" : pattern}
@@ -255,7 +256,7 @@
 			<div
 				class:opacity-100={focus}
 				class:opacity-0={!focus}
-				class="text-xs text-right text-surface-3 absolute top-0.5 transition-opacity"
+				class="text-xs text-right text-surface-3 absolute top-0.5 transition-opacity font-normal"
 				class:right-2={label.length === 0}
 				class:right-0={label.length > 0}
 			>
@@ -273,7 +274,7 @@
 
 <style>
 	.area-style {
-		@apply invalid:border-red-500 font-light border border-surface-3 text-surface-10 ring-0 w-full px-2.5 transition-all hover:border-accent-5;
+		@apply invalid:border-red-500 overflow-scroll font-light border border-surface-3 text-surface-10 ring-0 w-full px-2.5 transition-all hover:border-accent-5;
 	}
 
   .area-style.md {

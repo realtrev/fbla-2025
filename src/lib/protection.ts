@@ -4,8 +4,15 @@ const schoolAdminOnlyRoutes = ['/admin/s/dashboard'];
 
 const organizationAdminOnlyRoutes = ['/admin/o/dashboard', '/admin/o/messages', '/admin/o/listings'];
 
+const anyAccess = ['/licenses'];
+
+
 const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean, accountType?: string) => {
   // if target route starts with /app, check if user is authenticated
+  if (anyAccess.includes(targetRoute)) {
+    return targetRoute;
+  }
+
   if (!userIsAuthenticated) {
     if (guestOnlyRoutes.includes(targetRoute)) {
       return targetRoute;

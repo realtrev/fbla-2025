@@ -74,7 +74,7 @@
 <style>
 	.button {
 		/*@apply disabled:brightness-90 active:brightness-[120%] whitespace-nowrap hover:scale-[1.05] focus:scale-[1.05] active:shadow-none active:scale-100 hover:shadow-xl hover:brightness-[105%] flex gap-2 items-center font-semibold transition-all ease-in-out duration-500 focus:outline-none rounded-xl cursor-pointer px-5 py-2.5 text-xs border-2 bg-primary-5 border-primary-5 text-white;*/
-		@apply disabled:brightness-[.9] hover:brightness-110 active:brightness-95 flex gap-2.5 flex-nowrap whitespace-nowrap items-center justify-center font-medium border border-primary-5 text-surface-10 rounded-lg ring-0 transition-all hover:border-primary-5 focus:ring-2 focus:ring-primary-5 focus:ring-opacity-50 outline-none;
+		@apply disabled:brightness-[.9] hover:brightness-110 active:brightness-95 flex gap-2.5 flex-nowrap whitespace-nowrap items-center justify-center font-medium border border-primary-5 text-surface-10 rounded-full ring-0 transition-all hover:border-primary-5 focus:ring-2 focus:ring-primary-5 focus:ring-opacity-50 outline-none;
 	}
 
 	.button.sm {
@@ -86,11 +86,11 @@
 	}
 
 	.button.lg {
-		@apply px-8 py-3 text-base rounded-xl;
+		@apply px-8 py-3 text-base rounded-full;
 	}
 
 	.button.xl {
-		@apply px-8 py-4 text-base rounded-2xl;
+		@apply px-8 py-4 text-base rounded-full;
 	}
 
   .button.sm.glowing {
@@ -119,6 +119,11 @@
     @apply bg-black border-black text-white focus:ring-black/50;
   }
 
+  /* RED BUTTON */
+  .button.red {
+    @apply bg-red-600 border-red-600 text-white focus:ring-red-500/50;
+  }
+
 	/* PRIMARY BUTTON AND VARIATIONS */
 	.button.primary {
 		@apply bg-primary-5 border-primary-4/50 text-white;
@@ -130,7 +135,7 @@
 
 	/* SECONDARY BUTTON AND VARIATIONS */
 	.button.accent {
-		@apply border-2 bg-accent-5 border-accent-5 text-accent-1 focus:ring-accent-5/50;
+		@apply border-2 bg-accent-6 border-accent-6 text-accent-1 focus:ring-accent-5/50;
 	}
 
 	.button.accent.glowing {
