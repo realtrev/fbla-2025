@@ -8,6 +8,7 @@
   import { PlusIcon } from 'lucide-svelte';
 
   import Loading from '$lib/components/Loading.svelte';
+  import Listing from './Listing.svelte';
 
   let {
     data
@@ -41,12 +42,16 @@
         <Loading />
       </div>
     {:then}
-        <div class="w-full flex flex-col">
+        <div class="w-full flex flex-col mt-5 border border-surface-1 rounded-xl py-5">
+          <div class="grid grid-cols-10 px-3 text-sm font-surface-7">
+            <div class="col-span-2">
+              <p>Title</p>
+            </div>
+          </div>
           {#each list.items as listing}
-            <a class="w-full" href={`/admin/o/listings/${listing.id}`}>
-              <p>{listing.title}</p>
-            </a>
+          <Listing listing={listing} />
           {/each}
+            <div class="w-full border-t border-t-surface-2"></div>
         </div>
     {:catch error}
       <div class="w-full h-96 flex items-center justify-center">
