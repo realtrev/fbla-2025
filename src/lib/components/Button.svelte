@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { type Component, type Snippet } from 'svelte';
 	import { type Icon } from 'lucide-svelte';
-	import DynamicButton from '$lib/components/DynamicButton.svelte';
+	import DynamicButton from '../../migration/DynamicButton.svelte';
 
   let {
     label,

@@ -1,24 +1,18 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-  import Button from '$lib/components/Button.svelte';
+  import { Button } from '$lib/components/ui/button/index.js';
 
   import { currentUser } from '$lib/pocketbase';
 </script>
 
 <div class="p-5">
-  <h1 class="heading-sm">LOGGED IN!!</h1>
+  <h1>LOGGED IN!!</h1>
 
-  <p>Hello, {$currentUser?.name}</p>
+  <p>Hello, {$currentUser?.firstName}</p>
 
   <p>
     {JSON.stringify($currentUser)}
   </p>
 
-  <Button
-    label="Log out"
-    color="primary"
-    class="w-min mt-3"
-    size="md"
-    onclick={() => goto("/api/logout")}
-  />
+  <Button  onclick={() => goto("/api/logout")}>Log out</Button>
 </div>

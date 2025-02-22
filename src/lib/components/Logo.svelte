@@ -1,7 +1,7 @@
 <script lang="ts">
-	import DynamicButton from '$lib/components/DynamicButton.svelte';
 	import { fade } from 'svelte/transition';
 	import { linear } from 'svelte/easing';
+	import { cn } from '$lib/utils';
 
   let {
     link = '',
@@ -32,9 +32,9 @@
   };
 </script>
 
-<DynamicButton href={link} onclick={dispatch.onclick} class={className + " transition-all ring-opacity-0 avoid-focus"}>
+<a href={link} onclick={dispatch.onclick} class={cn(className, "transition-all ring-opacity-0")}>
 	<svg
-		class={`h-10 block ${className} ring-opacity-0`}
+		class={"h-10 block fill-foreground ring-opacity-0"}
 		viewBox={!icononly ? "0 0 276 62" : "0 0 82 62"}
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
@@ -87,22 +87,4 @@
 			</clipPath>
 		</defs>
 	</svg>
-</DynamicButton>
-
-<style>
-	.icon.accent {
-		@apply fill-accent-5 group-focus:fill-primary-6;
-	}
-
-	.icon.light {
-		@apply fill-white;
-	}
-
-	.text.light {
-		@apply fill-white;
-	}
-
-	.text.dark {
-		@apply fill-surface-9;
-	}
-</style>
+</a>

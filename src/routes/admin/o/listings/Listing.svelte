@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { EllipsisVerticalIcon } from 'lucide-svelte';
+  import { EllipsisVerticalIcon } from 'lucide-svelte/icons/ellipsis-vertical';
   import { createMenu } from 'svelte-headlessui';
 	import Transition from 'svelte-transition';
 

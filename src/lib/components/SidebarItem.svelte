@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Component } from 'svelte';
-    import DynamicButton from '$lib/components/DynamicButton.svelte';
+    import DynamicButton from '../../migration/DynamicButton.svelte';
 
     let {
         label = "",

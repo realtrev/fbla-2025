@@ -1,58 +1,72 @@
-import containerQueries from '@tailwindcss/container-queries';
-import forms from '@tailwindcss/forms';
-import typography from '@tailwindcss/typography';
-import type { Config } from 'tailwindcss';
+import { fontFamily } from "tailwindcss/defaultTheme";
+import type { Config } from "tailwindcss";
 
-export default {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
-
+const config: Config = {
+	darkMode: ["class"],
+	content: ["./src/**/*.{html,js,svelte,ts}"],
+	safelist: ["dark"],
 	theme: {
+		container: {
+			center: true,
+			padding: "2rem",
+			screens: {
+				"2xl": "1400px"
+			}
+		},
 		extend: {
 			boxShadow: {
 				glow: '0px 4px 20px 1px rgb(0 0 0 / 0.05)',
 				'glow-lg': '0px 4px 35px 1px rgb(0 0 0 / 0.05)',
 			},
 			colors: {
+				border: "hsl(var(--border) / <alpha-value>)",
+				input: "hsl(var(--input) / <alpha-value>)",
+				ring: "hsl(var(--ring) / <alpha-value>)",
+				background: "hsl(var(--background) / <alpha-value>)",
+				foreground: "hsl(var(--foreground) / <alpha-value>)",
 				primary: {
-					1: '#E5EEFF',
-					2: '#B3CCFF',
-					3: '#80AAFF',
-					4: '#4D88FF',
-					5: '#1A66FF',
-					6: '#004CE6',
-					7: '#003BB3',
-					8: '#002A80',
-					9: '#00194D',
-					10: '#00081A',
+					DEFAULT: "hsl(var(--primary) / <alpha-value>)",
+					foreground: "hsl(var(--primary-foreground) / <alpha-value>)"
+				},
+				secondary: {
+					DEFAULT: "hsl(var(--secondary) / <alpha-value>)",
+					foreground: "hsl(var(--secondary-foreground) / <alpha-value>)"
 				},
 				accent: {
-					1: '#EBFAF5',
-					2: '#C3EFE1',
-					3: '#9BE4CD',
-					4: '#73D9B8',
-					5: '#4BCEA4',
-					6: '#31B48B',
-					7: '#268C6C',
-					8: '#1B644D',
-					9: '#103C2E',
-					10: '#0B281F',
+					DEFAULT: "hsl(var(--accent) / <alpha-value>)",
+					foreground: "hsl(var(--secondary-foreground) / <alpha-value>)"
 				},
-				surface: {
-					0: '#EFEFF5',
-					1: '#E0E0EB',
-					2: '#D0D0E1',
-					3: '#B1B1CD',
-					4: '#9292B9',
-					5: '#7373A5',
-					6: '#5A5A8C',
-					7: '#46466D',
-					8: '#32324E',
-					9: '#1E1E2F',
-					10: '#101019',
+				destructive: {
+					DEFAULT: "hsl(var(--destructive) / <alpha-value>)",
+					foreground: "hsl(var(--destructive-foreground) / <alpha-value>)"
 				},
+				muted: {
+					DEFAULT: "hsl(var(--muted) / <alpha-value>)",
+					foreground: "hsl(var(--muted-foreground) / <alpha-value>)"
+				},
+				accent: {
+					DEFAULT: "hsl(var(--accent) / <alpha-value>)",
+					foreground: "hsl(var(--accent-foreground) / <alpha-value>)"
+				},
+				popover: {
+					DEFAULT: "hsl(var(--popover) / <alpha-value>)",
+					foreground: "hsl(var(--popover-foreground) / <alpha-value>)"
+				},
+				card: {
+					DEFAULT: "hsl(var(--card) / <alpha-value>)",
+					foreground: "hsl(var(--card-foreground) / <alpha-value>)"
+				}
 			},
-		},
+			borderRadius: {
+				lg: "var(--radius)",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)"
+			},
+			fontFamily: {
+				sans: [...fontFamily.sans]
+			}
+		}
 	},
+};
 
-	plugins: [typography, forms, containerQueries]
-} satisfies Config;
+export default config;

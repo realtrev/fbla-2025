@@ -1,11 +1,12 @@
 <script lang="ts">
-  // check
+  import { ModeWatcher } from "mode-watcher";
+  import { Toaster } from 'svelte-sonner';
 	import { onMount, type Snippet } from 'svelte';
 	import '../app.css';
   import { pb, currentUser, currentSchool, currentOrganization } from '$lib/pocketbase';
 	import { goto } from '$app/navigation';
 	import type { AuthRecord } from 'pocketbase';
-  import { LocalStore, cookiesAccepted } from '$lib/stores/localStorage';
+  import { LocalStore } from '$lib/stores/localStorage';
   import type { OrganizationModel, SchoolModel } from '../app';
 
   let { data, children }: {
@@ -52,4 +53,5 @@
 
 </script>
 
+<Toaster closeButton position="bottom-center" />
 {@render children()}
