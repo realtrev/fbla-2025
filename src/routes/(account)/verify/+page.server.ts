@@ -1,14 +1,24 @@
 import { type Actions, json, fail, redirect } from '@sveltejs/kit';
-import { HCAPTCHA_SECRET } from '$env/static/private';
+import { CF_CAPTCHA_SECRET } from '$env/static/private';
 import { PUBLIC_POCKETBASE_URL } from '$env/static/public';
-import { RequestParser } from '$lib/formUtils';
 import { pb } from '$lib/database';
+import { validateToken } from '$lib/utils';
 
 export const actions: Actions = {
-  resendVerificationEmail: async ({ request }) => {
-    const data = await RequestParser.parse(request);
-    const { email } = data;
+  resendEmailVerification: async (event) => {
+    const { locals, request, cookies, body } = event;
 
+    // Get the raw form data
+    const formData = await request.formData();
+
+    // Access the Turnstile token
+    const turnstileToken = formData.get('cf-turnstile-response');
+
+    if (!await validateToken(turnstileToken, CF_CAPTCHA_SECRET)) {
+      return fail(400, { message: 'Failed to verify CAPTCHA' });
+    }
+
+    const email = locals.user.email;
     await pb.collection('users').requestVerification(email).then((response) => {
       console.log(response);
     })

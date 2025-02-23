@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Check, CircleAlert, PlusIcon, UploadIcon } from 'lucide-svelte';
+	import Check from 'lucide-svelte/icons/check';
+  import { Check, CircleAlert, PlusIcon, UploadIcon } from 'lucide-svelte/icons/check';
 	import { scale } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { BinarySize, dragAndDropFiles, ellipsisInTheMiddle } from '$lib/utils';
