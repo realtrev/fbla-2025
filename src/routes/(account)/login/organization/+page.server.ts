@@ -8,7 +8,7 @@ import { schema, type FormSchema } from '../schema';
 import { zod } from 'sveltekit-superforms/adapters';
 
 export const load = async () => {
-  const form = await superValidate(zod(schema), { errors: true });
+  const form = await superValidate(zod(schema));
   return { form };
 }
 

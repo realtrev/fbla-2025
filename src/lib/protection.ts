@@ -1,4 +1,4 @@
-const guestOnlyRoutes = ['/', '/login', '/register_student', '/register_business', '/login/school', '/login/organization'];
+const guestOnlyRoutes = ['/', '/login', '/register_student', '/register_business', '/login/school', '/login/organization', '/forgot_password'];
 
 const schoolAdminOnlyRoutes = ['/admin/s/dashboard'];
 

@@ -53,5 +53,5 @@
 
 </script>
 
-<Toaster closeButton position="bottom-center" />
+<Toaster position="bottom-center" />
 {@render children()}

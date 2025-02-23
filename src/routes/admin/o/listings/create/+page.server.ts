@@ -20,5 +20,5 @@ export const load = async ({ cookies, locals }) => {
 
   console.log(value);
 
-  return redirect(303, '/admin/o/listings/' + value.id);
+  return redirect(303, '/admin/o/listings/edit/' + value.id);
 }

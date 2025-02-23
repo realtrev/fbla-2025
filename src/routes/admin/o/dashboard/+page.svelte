@@ -1,6 +1,9 @@
 <script lang="ts">
+  import { currentOrganization } from '$lib/pocketbase';
+
+  let {
+    breadcrumbList
+  } = $props();
 </script>
 
-<div class="p-5">
-  <h1 class="heading-md">Dashboard</h1>
-</div>
+<h1 class="text-2xl">Dashboard</h1>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { toast } from "svelte-sonner";
   import { Button } from "$lib/components/ui/button/index.js";
   import { Input } from "$lib/components/ui/input/index.js";
 	import { Label } from "$lib/components/ui/label/index.js";
@@ -14,7 +15,7 @@
 
   import LoaderCircleIcon from 'lucide-svelte/icons/loader-circle';
 
-  let { form: givenForm, title, subtitle, emaillabel } = $props();
+  let { form: givenForm, title, subtitle, emaillabel, showSignUp = false } = $props();
 
   let submitting = $state(false);
 
@@ -27,15 +28,20 @@
       submitting = true;
     },
     onResult: ({ result, formElement, cancel }) => {
-      reset?.();
       submitting = false;
 
       if (result.type === "redirect") {
         window.location.href = result.location;
       }
 
+      if (result.type === "failure") {
+        if (result.data.form.message) {
+          toast.error(result.data.form.message);
+        }
+        reset?.();
+      }
+
       if (result?.data?.form) {
-        $message = result.data.form.message;
         $errors = result.data.form.errors;
       }
     },
@@ -89,13 +95,13 @@
     <Turnstile
       siteKey={PUBLIC_CF_SITEKEY}
       action="turnstile"
-      size="invisible"
+      size="flexible"
       bind:reset
     />
 
-    {#if $message}
-      <Label class="w-full text-center mb-3">{$message}</Label>
-    {/if}
+    <div class="mt-6">
+
+    </div>
 
     <Form.Button disabled={submitting} class="w-full shadown" type="submit">
       {#if submitting}
@@ -104,8 +110,10 @@
       Sign in
     </Form.Button>
 
-    <div class="mt-4 text-center text-sm text-muted-foreground">
-      Don't have an account?
-      <a href="register_student" class="underline">Sign up</a>
-    </div>
+    {#if showSignUp}
+      <div class="mt-4 text-center text-sm text-muted-foreground">
+        Don't have an account?
+        <a href="register_student" class="underline">Sign up</a>
+      </div>
+    {/if}
   </form>

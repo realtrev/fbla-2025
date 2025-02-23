@@ -1,62 +1,51 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-  import Button from '$lib/components/Button.svelte';
+  import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+  import { Card } from '$lib/components/ui/card';
+  import { Button } from '$lib/components/ui/button';
+  import { goto } from '$app/navigation';
 
-  import { currentUser } from '$lib/pocketbase';
-  import Profile from '$lib/components/Profile.svelte';
+  import { pb } from '$lib/pocketbase';
   import { onMount } from 'svelte';
-  import { PlusIcon } from 'lucide-svelte';
+  import ListingTable from '$lib/components/listing-table/ListingTable.svelte';
 
-  import Loading from '$lib/components/Loading.svelte';
-  import Listing from './Listing.svelte';
+  let page = $state(1);
+  let listings = $state([]) as ListingModel[];
+  let totalCount = $state(0);
+  let totalPages = $state(0);
+  let pageSize = $state(10);
+  let loading = $state(true);
 
-  let {
-    data
-  }: {
-    data: {
-      listings: ListingModel[]
-    }
-  } = $props();
+  loadListings();
 
-  let list = $state([] as ListingModel[]);
-
-  onMount(async () => {
-    list = await data.listings;
-    console.log(list);
-  })
+  async function loadListings() {
+    const resultList = await pb.collection('listings').getFullList({
+//      filter: 'someField1 != someField2',
+    })
+    .then((result) => {
+      listings = result as ListingModel[];
+      totalCount = listings.length;
+    })
+    loading = false;
+  }
 </script>
 
-<div class="p-5">
-  <div class="w-full flex justify-between items-center">
-    <h1 class="heading-lg">Listings</h1>
-    <Button
-          label="Create"
-          color="accent"
-          leftIcon={PlusIcon}
-          link="/admin/o/listings/create"
-      />
+<h1 class="text-lg md:text-2xl font-semibold">Listings</h1>
+<Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+  {#if loading}
+  <div class="size-full flex grow items-center justify-center">
+    <LoaderCircle class="animate-spin" />
   </div>
-  <div>
-    {#await data.listings}
-      <div class="w-full h-96 flex items-center justify-center">
-        <Loading />
-      </div>
-    {:then}
-        <div class="w-full flex flex-col mt-5 border border-surface-1 rounded-xl py-5">
-          <div class="grid grid-cols-10 px-3 text-sm font-surface-7">
-            <div class="col-span-2">
-              <p>Title</p>
-            </div>
-          </div>
-          {#each list.items as listing}
-          <Listing listing={listing} />
-          {/each}
-            <div class="w-full border-t border-t-surface-2"></div>
-        </div>
-    {:catch error}
-      <div class="w-full h-96 flex items-center justify-center">
-        Couldn't retreive job listings
-      </div>
-    {/await}
-  </div>
-</div>
+  {:else}
+    {#if !listings.length}
+    <div class="flex flex-col grow justify-center items-center gap-1 text-center">
+      <h3 class="text-2xl font-bold tracking-tight">You have no listings</h3>
+      <p class="text-muted-foreground text-sm">
+        You can start sharing listings as soon as you make one.
+      </p>
+      <Button class="mt-4" onclick={() => { goto("/admin/o/listings/create"); toast.success("Creating new listing...")}}>Add Listing</Button>
+    </div>
+    {:else}
+      <ListingTable bind:listings bind:count={totalCount} bind:currentPage={page} bind:perPage={pageSize} />
+    {/if}
+  {/if}
+</Card>

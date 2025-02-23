@@ -17,7 +17,7 @@
 	import placeholder from '$lib/assets/placeholder.png';
 
 	import Footer from '$lib/components/Footer.svelte';
-	import Button from '$lib/components/Button.svelte';
+	import { Button } from '$lib/components/ui/button';
 	import Benefits from '$lib/components/Benefits.svelte';
 	import FeatureCard from './FeatureCard.svelte';
 
@@ -53,16 +53,16 @@
 
 <section
 	style="background-image: url({mountainPic}); background-position: center; background-size: cover; width: 100vw;"
-	class="-z-20 lg:max-h-[800px] pt-20"
+	class="lg:max-h-[800px] pt-20"
 >
 	<div class="max-w-screen-xl md:px-8 px-4 pb-16 mx-auto gap-24 md:mt-20 mt-10">
 		<div class="flex flex-col gap-4 shrink md:w-1/2">
 			<Saos once={true} animation={'slide-up-small 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
-				<h1 class="display-lg bold z-40 text-white text-center sm:text-left">
-					Helping jobs<br />
-					<span class="display-lg bold text-accent-5 relative -z-20">
+				<h1 class="text-6xl md:text-8xl font-bold text-white text-center sm:text-left">
+					<span class="z-20">Helping jobs</span><br />
+					<span class="display-lg font-extrabold text-primary relative">
 						find<svg
-							class="absolute top-1/2 left-1/2 center fill-accent-5 opacity-15 sm:block hidden"
+							class="absolute origin-center -top-[20%] -left-[20%]  center fill-primary opacity-15 sm:block hidden -z-[0]"
 							width="260"
 							height="160"
 							viewBox="0 0 319 220"
@@ -81,27 +81,13 @@
 					students...
 				</h1>
 			</Saos>
-			<p class="text-surface-2 my-6 mr-24 font-medium w-full md:w-auto max-w-[400px]">
-				Welcome to Productify, a company dedicated to improving the lives of others by making
-				productivity as easy as possible. Make a difference. Change lives. <strong
-					>We’re hiring!</strong
-				>
+			<p class="text-white/80 my-6 mr-24 font-medium w-full md:w-auto max-w-[400px]">
+				Welcome to JobFair, a company dedicated to connecting students and jobs.
+				Get started finding full-time, part-time, volunteer jobs, and more today.
 			</p>
 			<div class="flex gap-4 w-full flex-wrap">
-				<Button
-					label="Learn more"
-					color="surface"
-					class="sm:w-auto w-full"
-					size="lg"
-					link="#about"
-				/>
-				<Button
-					label="Apply now"
-					class="glowing sm:w-auto w-full"
-					size="lg"
-					link="/apply"
-					rightIcon={ArrowRight}
-				/>
+				<Button href="#about" >Learn more</Button>
+				<Button href="/login">Log in</Button>
 			</div>
 		</div>
 	</div>
@@ -142,12 +128,12 @@
 	<div class="flex flex-col gap-4 md:w-2/5">
 		<div class="relative">
 			<Saos once={true} animation={'slide-in 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
-				<h1 class="display-md bold">
+				<h1 class="text-4xl md:text-6xl font-bold">
 					What
-					<span class="display-md bold -z-10 text-primary-5 relative">
+					<span class="display-md bold -z-10 text-primary relative">
 						do
 						<svg
-							class="absolute inline-block -z-10 top-[43%] left-[40%] center"
+							class="absolute inline-block -z-10 -top-[70%] -left-[35%] center"
 							width="120"
 							height="185"
 							viewBox="0 0 217 185"
@@ -173,12 +159,12 @@
 		</div>
 	</div>
 </section>
-<section class="overflow-hidden relative bg-accent-1 justify-center gap-24 -z-20">
-	<div class="absolute blurbox bg-accent-2 left -z-10" />
-	<div class="absolute blurbox bg-accent-2 right -z-10" />
+<section class="overflow-hidden relative bg-primary/85 justify-center gap-24 -z-20">
+	<div class="absolute blurbox bg-primary/75 left -z-10" />
+	<div class="absolute blurbox bg-primary/75 right -z-10" />
 	<div class="max-w-screen-xl px-8 py-32 mx-auto z-10">
 		<Saos once={true} animation={'slide-up 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
-			<h1 class="heading-2xl bold text-accent-10 md:w-1/2 lg:w-1/3 w-full text-center mx-auto">
+			<h1 class="text-4xl md:text-6xl font-bold text-white md:w-1/2 lg:w-1/3 w-full text-center mx-auto">
 				Build a platform that inspires progress.
 			</h1>
 		</Saos>

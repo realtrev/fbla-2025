@@ -96,43 +96,43 @@
 </section>
 
 <style>
-	.theme-primary.bg-color {
-		@apply bg-primary-1;
-	}
+/*	.theme-primary.bg-color {*/
+/*		@apply bg-primary-1;*/
+/*	}*/
 
-	.theme-accent.bg-color {
-		@apply bg-accent-1;
-	}
+/*	.theme-accent.bg-color {*/
+/*		@apply bg-accent-1;*/
+/*	}*/
 
-	.theme-primary .bg-color-splotch {
-		@apply bg-primary-2;
-	}
+/*	.theme-primary .bg-color-splotch {*/
+/*		@apply bg-primary-2;*/
+/*	}*/
 
-	.theme-accent .bg-color-splotch {
-		@apply bg-accent-2;
-	}
+/*	.theme-accent .bg-color-splotch {*/
+/*		@apply bg-accent-2;*/
+/*	}*/
 
-	.theme-primary .text-color-h {
-		@apply text-primary-10;
-	}
+/*	.theme-primary .text-color-h {*/
+/*		@apply text-primary-10;*/
+/*	}*/
 
-	.theme-accent .text-color-h {
-		@apply text-accent-10;
-	}
+/*	.theme-accent .text-color-h {*/
+/*		@apply text-accent-10;*/
+/*	}*/
 
-	.theme-primary .text-color-p {
-		@apply text-primary-9;
-	}
+/*	.theme-primary .text-color-p {*/
+/*		@apply text-primary-9;*/
+/*	}*/
 
-	.theme-accent .text-color-p {
-		@apply text-accent-9;
-	}
+/*	.theme-accent .text-color-p {*/
+/*		@apply text-accent-9;*/
+/*	}*/
 
-	.theme-primary .text-color-icon {
-		@apply text-primary-6;
-	}
+/*	.theme-primary .text-color-icon {*/
+/*		@apply text-primary-6;*/
+/*	}*/
 
-	.theme-accent .text-color-icon {
-		@apply text-accent-6;
-	}
+/*	.theme-accent .text-color-icon {*/
+/*		@apply text-accent-6;*/
+/*	}*/
 </style>

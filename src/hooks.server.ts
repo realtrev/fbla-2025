@@ -49,7 +49,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   if (locals.user && locals.user.verified === true && event.url.pathname === '/verify') {
     if (locals.user?.accountType === 'student') {
-      throw redirect(303, '/app');
+      throw redirect(303, '/dashboard');
     } else if (locals.user?.accountType === 'organizationAdmin') {
       throw redirect(303, '/admin/o/dashboard');
     } else {
@@ -67,11 +67,19 @@ export const handle: Handle = async ({ event, resolve }) => {
   }
 
   if (locals.user?.school) {
-    locals.school = await pb.collection('schools').getOne(locals.user?.school);
+    try {
+      locals.school = await pb.collection('schools').getOne(locals.user?.school);
+    } catch(e) {
+      console.log("School not received");
+    }
   }
 
   if (locals.user?.organization) {
-    locals.organization = await pb.collection('organizations').getOne(locals.user?.organization);
+    try {
+      locals.organization = await pb.collection('organizations').getOne(locals.user?.organization);
+    } catch(e) {
+      console.log("Organization not received");
+    }
   }
 
 	const response = await resolve(event);

@@ -1,36 +1,47 @@
-import { type Actions, fail, redirect } from '@sveltejs/kit';
-import { RequestParser } from '$lib/formUtils';
+import { type Actions, redirect } from '@sveltejs/kit';
+import { CF_CAPTCHA_SECRET } from '$env/static/private';
+import { message, superValidate, fail, setError } from 'sveltekit-superforms';
+import { validateToken } from '$lib/utils';
+import { emailOnly } from './emailOnly';
+import { zod } from 'sveltekit-superforms/adapters';
+import { pb } from '$lib/database';
 
-import { HCAPTCHA_SECRET } from '$env/static/private';
+export const load = async () => {
+  const emailOnlyClientForm = await superValidate(zod(emailOnly));
+
+  return { emailOnlyForm: emailOnlyClientForm };
+}
 
 export const actions: Actions = {
-	login: async ({ locals, request, cookies }) => {
-    console.log('request', request.body);
+  resetPassword: async (event) => {
+    const { locals, request, cookies, body } = event;
 
-    try {
-      const data = await RequestParser.parse(request, HCAPTCHA_SECRET)
+    // Get the raw form data
+    const formData = await request.formData();
 
-      const { email, password } = data;
+    // Access the Turnstile token
+    const turnstileToken = formData.get('cf-turnstile-response');
 
-      try {
-        await locals.pb.collection('users').authWithPassword(email, password);
-        // get between = and first ;
-        const cookie = locals.pb.authStore.exportToCookie({ httpOnly: false, secure: false });
-        const cookieValue = cookie.split('=')[1].split(';')[0];
-        cookies.set('pb_auth', decodeURIComponent(cookieValue), {
-          httpOnly: false,
-          secure: false,
-          path: '/',
-        });
-      } catch (error) {
-        return fail(400, { message: 'Invalid login credentials' });
-      }
-    } catch (error: any) {
-      console.error(error);
-
-      return fail(400, { message: error?.message });
+    const form = await superValidate(formData, zod(emailOnly));
+    if (!await validateToken(turnstileToken, CF_CAPTCHA_SECRET)) {
+      return message(form, 'Failed to verify CAPTCHA', {
+        status: 400
+      });
     }
 
-    return redirect(303, '/app');
-  }
+    if (!form.valid) {
+      return fail(400, {
+        form,
+      });
+    }
+
+    console.log("success");
+    const { email } = form.data;
+
+    console.log(form.data);
+
+    return {
+      form
+    }
+  },
 };

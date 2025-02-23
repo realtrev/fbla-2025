@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-  import Button from '$lib/components/Button.svelte';
+  import { Button } from '$lib/components/ui/button/index';
 
   import { currentUser } from '$lib/pocketbase';
 </script>
@@ -15,10 +15,6 @@
   </p>
 
   <Button
-    label="Log out"
-    color="primary"
-    class="w-min mt-3"
-    size="md"
     onclick={() => goto("/api/logout")}
-  />
+  >Log out</Button>
 </div>

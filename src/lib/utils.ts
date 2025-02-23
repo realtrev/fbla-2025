@@ -2,6 +2,76 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
+import { writable } from 'svelte/store';
+import { page } from '$app/state';
+import { deserialize } from '$app/forms';
+
+export function postAction(path: string, options: {
+	onSubmit?: (helpers: {
+    formData: FormData;
+    cancel: () => void;
+	}) => void;
+	onResult?: (result: {
+		action
+	}) => void;
+	onError?: (e: any) => void;
+}) {
+  let isSubmitting = writable(false);
+  let error = writable(null);
+
+  async function submit(event?: Event) {
+    event?.preventDefault();
+    isSubmitting.set(true);
+    error.set(null);
+
+    try {
+      const formData = new FormData();
+      let cancelled = false;
+
+      options.onSubmit?.({
+        formData,
+        cancel: () => {
+          cancelled = true;
+          isSubmitting.set(false);
+        }
+      });
+
+      if (cancelled) return;
+
+      let fullPath = path;
+      if (path.startsWith("?")) {
+        fullPath = page.url.pathname + "" + path.substring(1);
+      }
+      const response = await fetch(fullPath, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Get JSON result
+      const data = await response.text();
+      console.log(data);
+      const action = deserialize(data);
+
+      // Call result handler
+      options.onResult?.({ action });
+    } catch (err) {
+      error.set(err instanceof Error ? err : new Error("Unknown error"));
+      options.onError?.(error);
+    } finally {
+      isSubmitting.set(false);
+    }
+  }
+
+  return {
+    submit,
+    isSubmitting,
+    error,
+  };
+}
 
 function buildDebouncer(callback: Function, timeout = 300, immediate = false) {
 	let timer = 0;
