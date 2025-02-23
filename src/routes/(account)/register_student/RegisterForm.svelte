@@ -104,14 +104,6 @@
   </p>
 
     <form class={page === 1 ? "" : "hidden"} method="POST" use:enhance1 action="?/checkEmail">
-      {#if page === 1}
-      <Turnstile
-        siteKey={PUBLIC_CF_SITEKEY}
-        action="turnstile"
-        size="invisible"
-        bind:reset
-      />
-      {/if}
       <div class="my-6 gap-4 grid">
         <div class="grid gap-4 md:grid-cols-2">
             <Form.Field {form} name="firstName">
@@ -167,7 +159,8 @@
         <Turnstile
           siteKey={PUBLIC_CF_SITEKEY}
           action="turnstile"
-          size="invisible"
+          size="flexible"
+          theme="light"
           bind:reset2
         />
         <div class="rounded-xl border border-surface-3 w-full mt-6">

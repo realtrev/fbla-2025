@@ -78,16 +78,18 @@
 
       <Form.Field {form} name="password">
         <Form.Control let:attrs>
-        <div class="grid gap-1">
-          <div class="w-full flex justify-between">
-              <Form.Label class="text-sm w-min" for="password">Password</Form.Label>
-              <a href="/forgot_password" class="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </a>
+        {#snippet children({ props })}
+          <div class="grid gap-1">
+            <div class="w-full flex justify-between">
+                <Form.Label class="text-sm w-min" for="password">Password</Form.Label>
+                <a href="/forgot_password" class="ml-auto inline-block text-sm underline">
+                  Forgot your password?
+                </a>
+            </div>
+            <Input {...props} id="password" type="password" class="w-full" bind:value={$formData.password} />
+            <Form.FieldErrors class="text-xs" />
           </div>
-          <Input {...attrs} id="password" type="password" class="w-full" bind:value={$formData.password} />
-          <Form.FieldErrors class="text-xs" />
-        </div>
+        {/snippet}
         </Form.Control>
       </Form.Field>
     </div>
@@ -96,6 +98,7 @@
       siteKey={PUBLIC_CF_SITEKEY}
       action="turnstile"
       size="flexible"
+      theme="light"
       bind:reset
     />
 

@@ -8,7 +8,7 @@
 		{
 			title: 'GitHub',
 			href: 'https://github.com/realtrev/fbla-2025',
-			icon: GithubIcon
+			icon: GitHub
 		},
 		{
 			title: 'Trevor\'s Portfolio',
@@ -43,7 +43,7 @@
 	<div class="max-w-screen-xl mx-auto py-5 h-full px-4">
 		<div class="flex flex-wrap">
 			<Logo iconColor="text-background" textColor="text-background" />
-			<div class="ml-auto flex gap-0.5">
+			<div class="ml-auto flex gap-0.5 text-sm">
 				{#each footerLinks as link}
 					<a
 						href={link.href}
@@ -51,7 +51,7 @@
 						rel="noopener"
 						class="text-background whitespace-nowrap hover:bg-muted/10 rounded-md flex px-4 h-10 items-center justify-center transition-all"
 					>
-						<svelte:component this={link.icon} class="w-6 h-6 mr-2" />
+						<svelte:component this={link.icon} class="size-4 mr-2" />
 						<p class="text-background">{link.title}</p>
 					</a>
 				{/each}

@@ -69,7 +69,8 @@
     <Turnstile
       siteKey={PUBLIC_CF_SITEKEY}
       action="turnstile"
-      size="invisible"
+      size="flexible"
+      theme="light"
       on:callback={turnstileCallback}
       bind:reset
     />

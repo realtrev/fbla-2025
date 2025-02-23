@@ -19,17 +19,7 @@ export const actions: Actions = {
 
     // Get the raw form data
     const formData = await request.formData();
-
-    // Access the Turnstile token
-    const turnstileToken = formData.get('cf-turnstile-response');
-
     const form = await superValidate(formData, zod(basicInfo));
-    if (!await validateToken(turnstileToken, CF_CAPTCHA_SECRET)) {
-      return message(form, 'Failed to verify CAPTCHA', {
-        status: 400
-      });
-    }
-
     if (!form.valid) {
       return fail(400, {
         form,
