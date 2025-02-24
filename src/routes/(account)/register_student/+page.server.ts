@@ -7,8 +7,12 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { pb } from '$lib/database';
 
 export const load = async () => {
-  const basicInfoForm = await superValidate(zod(basicInfo));
-  const passwordFormClient = await superValidate(zod(passwordForm));
+  const basicInfoForm = await superValidate(zod(basicInfo), {
+    id: "checkEmail"
+  });
+  const passwordFormClient = await superValidate(zod(passwordForm), {
+    id: "createAccount"
+  });
 
   return { basicInfo: basicInfoForm, password: passwordFormClient };
 }
@@ -19,17 +23,7 @@ export const actions: Actions = {
 
     // Get the raw form data
     const formData = await request.formData();
-
-    // Access the Turnstile token
-    const turnstileToken = formData.get('cf-turnstile-response');
-
     const form = await superValidate(formData, zod(basicInfo));
-    if (!await validateToken(turnstileToken, CF_CAPTCHA_SECRET)) {
-      return message(form, 'Failed to verify CAPTCHA', {
-        status: 400
-      });
-    }
-
     if (!form.valid) {
       return fail(400, {
         form,
@@ -78,6 +72,9 @@ export const actions: Actions = {
     const turnstileToken = formData.get('cf-turnstile-response');
 
     const schoolId = formData.get('schoolId');
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    const email = formData.get('email');
     if (!schoolId) {
       return message(form, 'No school ID', {
         status: 400
@@ -97,7 +94,7 @@ export const actions: Actions = {
       });
     }
 
-    const { firstName, lastName, email, password } = form.data;
+    const { password } = form.data;
 
     const user = await pb.collection('users').create({
       email,

@@ -29,6 +29,7 @@
     },
     onResult: ({ result, formElement, cancel }) => {
       submitting = false;
+      console.log(result);
 
       if (result.type === "redirect") {
         window.location.href = result.location;
@@ -38,11 +39,10 @@
         if (result.data.form.message) {
           toast.error(result.data.form.message);
         }
-        reset?.();
-      }
 
-      if (result?.data?.form) {
-        $errors = result.data.form.errors;
+        if (result?.data.form.posted) {
+          reset?.();
+        }
       }
     },
     resetForm: () => false
@@ -67,27 +67,31 @@
     <div class="my-6 gap-4 grid">
 
       <Form.Field {form} name="email">
-        <Form.Control let:attrs>
         <div class="grid gap-1">
-          <Form.Label class="text-sm">{emaillabel}</Form.Label>
-          <Input {...attrs} id="email" placeholder="t@mail.com" type="email" class="w-full" bind:value={$formData.email} />
-          <Form.FieldErrors class="text-xs" />
-        </div>
+        <Form.Control>
+          {#snippet children({ props })}
+            <Form.Label class="text-sm">{emaillabel}</Form.Label>
+            <Input {...props} placeholder="t@mail.com" type="email" class="w-full" bind:value={$formData.email} />
+          {/snippet}
         </Form.Control>
+        <Form.FieldErrors class="text-xs" />
+        </div>
       </Form.Field>
 
       <Form.Field {form} name="password">
-        <Form.Control let:attrs>
-        <div class="grid gap-1">
-          <div class="w-full flex justify-between">
-              <Form.Label class="text-sm w-min" for="password">Password</Form.Label>
-              <a href="/forgot_password" class="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </a>
-          </div>
-          <Input {...attrs} id="password" type="password" class="w-full" bind:value={$formData.password} />
-          <Form.FieldErrors class="text-xs" />
-        </div>
+        <Form.Control>
+          {#snippet children({ props })}
+            <div class="grid gap-1">
+              <div class="w-full flex justify-between">
+                  <Form.Label class="text-sm w-min" for="password">Password</Form.Label>
+                  <a href="/forgot_password" class="ml-auto inline-block text-sm underline">
+                    Forgot your password?
+                  </a>
+              </div>
+              <Input {...props} type="password" class="w-full" bind:value={$formData.password} />
+              <Form.FieldErrors class="text-xs" />
+            </div>
+          {/snippet}
         </Form.Control>
       </Form.Field>
     </div>
@@ -96,6 +100,7 @@
       siteKey={PUBLIC_CF_SITEKEY}
       action="turnstile"
       size="flexible"
+      theme="light"
       bind:reset
     />
 

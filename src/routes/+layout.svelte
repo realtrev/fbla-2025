@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ModeWatcher } from "mode-watcher";
-  import { Toaster } from 'svelte-sonner';
+  import { Toaster, toast } from 'svelte-sonner';
 	import { onMount, type Snippet } from 'svelte';
 	import '../app.css';
   import { pb, currentUser, currentSchool, currentOrganization } from '$lib/pocketbase';
@@ -32,8 +32,13 @@
     pb.collection('users').subscribe($currentUser.id, (e: {action: string; record: AuthRecord}) => {
       if (e.action === 'update') {
         console.log('currentUser updated', e.record);
-        currentUser.set(e.record);
 
+				if (e.record.verified && currentUser.verified !== e.record.verified) {
+					toast.success("Your email has been verified.");
+					goto("/api/logout");
+				}
+
+        currentUser.set(e.record);
       }
 
       if (e.action === 'delete') {

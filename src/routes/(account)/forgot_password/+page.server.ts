@@ -35,10 +35,8 @@ export const actions: Actions = {
       });
     }
 
-    console.log("success");
     const { email } = form.data;
-
-    console.log(form.data);
+    const result = await pb.collection('users').requestPasswordReset(email);
 
     return {
       form

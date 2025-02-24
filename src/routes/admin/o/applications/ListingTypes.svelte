@@ -3,7 +3,10 @@
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
   import { Button } from "$lib/components/ui/button";
   import { Badge } from '$lib/components/ui/badge';
-  export let listingType: string;
+
+	let {
+		listingType = $bindable('Undefined')
+	} = $props();
 
   const values = [
     {
@@ -29,4 +32,4 @@
   }
 </script>
 
-<Badge variant="alternate">{present(listingType)}</Badge>
+<Badge variant="outline">{present(listingType)}</Badge>

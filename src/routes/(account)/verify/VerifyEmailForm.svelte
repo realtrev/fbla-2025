@@ -12,6 +12,7 @@
   import { postAction } from '$lib/utils';
 
   import LoaderCircleIcon from 'lucide-svelte/icons/loader-circle';
+  import { currentUser, pb } from '$lib/pocketbase';
 
   let dialogOpen = $state(false);
   let turnstileToken = $state("");
@@ -61,7 +62,7 @@
     Verify your email!
   </h2>
 
-  <p class="w-full text-center text-muted-foreground text-sm">
+  <p class="w-full text-center text-muted-foreground text-sm mb-6">
     You're almost there. Check your email for a verification link. Select below to send one again. Once you verify your account, you'll be automatically redirected.
   </p>
 
@@ -69,7 +70,8 @@
     <Turnstile
       siteKey={PUBLIC_CF_SITEKEY}
       action="turnstile"
-      size="invisible"
+      size="flexible"
+      theme="light"
       on:callback={turnstileCallback}
       bind:reset
     />

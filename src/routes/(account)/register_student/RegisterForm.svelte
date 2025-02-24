@@ -14,17 +14,19 @@
   import Loading from '$lib/components/Loading.svelte';
 
   import LoaderCircleIcon from 'lucide-svelte/icons/loader-circle';
+  import { onDestroy, onMount } from 'svelte';
+  import { createEnterKeyHandler } from '$lib/utils';
 
   let { page1, page2, title, subtitle } = $props();
+
+  let submitForm;
+  let submitButton = $state(null);
 
   let page = $state(1);
   let school = $state(null) as SchoolModel;
   let submitting = $state(false);
 
 	let reset = $state<() => void>();
-	let reset2 = $state<() => void>();
-
-
 
   const form = superForm(page1, {
     validators: zodClient(basicInfo),
@@ -50,8 +52,6 @@
         school.logo = `${PUBLIC_POCKETBASE_URL}/api/files/${school.collectionId}/${school.id}/${school.logo}`;
         page = 2;
       }
-
-      reset?.();
     },
     resetForm: () => false
   });
@@ -61,14 +61,13 @@
     validationMethod: 'onsubmit',
     onSubmit: ({ action, formData }) => {
       submitting = true;
-      $page2Data.email = $page1Data.email;
-      $page2Data.firstName = $page1Data.firstName;
-      $page2Data.lastName = $page1Data.lastName;
 
+      formData.append("firstName", $page1Data.firstName);
+      formData.append("lastName", $page1Data.lastName);
+      formData.append("email", $page1Data.email);
       formData.append("schoolId", school.id);
     },
     onResult: ({ result, formElement, cancel }) => {
-      reset2?.();
       submitting = false;
       console.log(result);
 
@@ -79,15 +78,32 @@
       if (result?.data?.form) {
         $message2 = result.data.form.message;
         $errors2 = result.data.form.errors;
+
+        if (result?.data.form.posted) {
+          reset?.();
+        }
       }
     },
-    resetForm: () => false
+    resetForm: () => false,
+    dataType: 'json'
   });
 
   const { form: page1Data, enhance: enhance1, message: message1, errors: errors1 } = form;
 
 
   const { form: page2Data, enhance: enhance2, message: message2, errors: errors2 } = secondPage;
+
+
+  let cleanup;
+  onMount(() => {
+    cleanup = createEnterKeyHandler(submitForm, submitButton);
+  });
+
+  onDestroy(() => {
+    if (cleanup) {
+      cleanup();
+    }
+  });
 </script>
 
 <div class="p-6 flex flex-col w-[28rem]" >
@@ -104,44 +120,42 @@
   </p>
 
     <form class={page === 1 ? "" : "hidden"} method="POST" use:enhance1 action="?/checkEmail">
-      {#if page === 1}
-      <Turnstile
-        siteKey={PUBLIC_CF_SITEKEY}
-        action="turnstile"
-        size="invisible"
-        bind:reset
-      />
-      {/if}
       <div class="my-6 gap-4 grid">
         <div class="grid gap-4 md:grid-cols-2">
             <Form.Field {form} name="firstName">
-              <Form.Control let:attrs>
-              <div class="grid gap-1">
-                <Form.Label class="text-sm">First Name</Form.Label>
-                <Input {...attrs} id="firstName" type="text" class="w-full" bind:value={$page1Data.firstName} />
-                <Form.FieldErrors class="text-xs" />
-              </div>
+              <Form.Control>
+                {#snippet children({ props })}
+                  <div class="grid gap-1">
+                    <Form.Label class="text-sm">First Name</Form.Label>
+                    <Input {...props} id="firstName" type="text" class="w-full" bind:value={$page1Data.firstName} />
+                    <Form.FieldErrors class="text-xs" />
+                  </div>
+                {/snippet}
               </Form.Control>
             </Form.Field>
 
             <Form.Field {form} name="lastName">
-              <Form.Control let:attrs>
-              <div class="grid gap-1">
-                <Form.Label class="text-sm">Last Name</Form.Label>
-                <Input {...attrs} id="lastName" type="text" class="w-full" bind:value={$page1Data.lastName} />
-                <Form.FieldErrors class="text-xs" />
-              </div>
+              <Form.Control>
+              {#snippet children({ props })}
+                <div class="grid gap-1">
+                  <Form.Label class="text-sm">Last Name</Form.Label>
+                  <Input {...props} id="lastName" type="text" class="w-full" bind:value={$page1Data.lastName} />
+                  <Form.FieldErrors class="text-xs" />
+                </div>
+              {/snippet}
               </Form.Control>
             </Form.Field>
         </div>
 
           <Form.Field {form} name="email">
-            <Form.Control let:attrs>
-            <div class="grid gap-1">
-              <Form.Label class="text-sm">Student Email</Form.Label>
-              <Input {...attrs} id="email" placeholder="t@mail.com" type="email" class="w-full" bind:value={$page1Data.email} />
-              <Form.FieldErrors class="text-xs" />
-            </div>
+            <Form.Control>
+              {#snippet children({ props })}
+                <div class="grid gap-1">
+                  <Form.Label class="text-sm">Student Email</Form.Label>
+                  <Input {...props} id="email" placeholder="t@mail.com" type="email" class="w-full" bind:value={$page1Data.email} />
+                  <Form.FieldErrors class="text-xs" />
+                </div>
+              {/snippet}
             </Form.Control>
           </Form.Field>
         </div>
@@ -162,14 +176,8 @@
           <a href="/login" class="underline">Sign in</a>
         </div>
       </form>
-      <form class={page === 2 ? "" : "hidden"} method="POST" use:enhance2 action="?/createAccount">
+      <form bind:this={submitForm} class={page === 2 ? "" : "hidden"} method="POST" use:enhance2 action="?/createAccount">
         {#if page === 2}
-        <Turnstile
-          siteKey={PUBLIC_CF_SITEKEY}
-          action="turnstile"
-          size="invisible"
-          bind:reset2
-        />
         <div class="rounded-xl border border-surface-3 w-full mt-6">
           <div class="p-6 flex flex-col items-center">
             <img src={school.logo} alt="School logo" class="h-20 aspect-square mx-auto" />
@@ -204,54 +212,52 @@
         {/if}
 
         <div class="my-6 gap-4 grid">
-          <div class="hidden">
-            <Form.Field form={secondPage} name="firstName">
-              <Form.Control let:attrs>
-              <Input {...attrs} id="firstName" type="hidden" class="w-full" bind:value={$page1Data.firstName} />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field form={secondPage} name="lastName">
-              <Form.Control let:attrs>
-              <Input {...attrs} id="lastName" type="hidden" class="w-full" bind:value={$page1Data.lastName} />
-              </Form.Control>
-            </Form.Field>
-            <Form.Field form={secondPage} name="email">
-              <Form.Control let:attrs>
-              <Input {...attrs} id="email" type="hidden" class="w-full" bind:value={$page1Data.email} />
-              </Form.Control>
-            </Form.Field>
-          </div>
-
           <div class="grid gap-4 md:grid-cols-2">
             <Form.Field form={secondPage} name="password">
-              <Form.Control let:attrs>
-              <div class="grid gap-1">
-                <Form.Label class="text-sm">Password</Form.Label>
-                <Input {...attrs} id="password" type="password" class="w-full" bind:value={$page2Data.password} />
-                <Form.FieldErrors class="text-xs" />
-              </div>
+              <Form.Control>
+                {#snippet children({ props })}
+                  <div class="grid gap-1">
+                    <Form.Label class="text-sm">Password</Form.Label>
+                    <Input {...props} id="password" type="password" class="w-full" bind:value={$page2Data.password} />
+                    <Form.FieldErrors class="text-xs" />
+                  </div>
+                {/snippet}
               </Form.Control>
             </Form.Field>
 
             <Form.Field form={secondPage} name="passwordConfirm">
-              <Form.Control let:attrs>
-              <div class="grid gap-1">
-                <Form.Label class="text-sm">Confirm Password</Form.Label>
-                <Input {...attrs} id="passwordConfirm" type="password" class="w-full" bind:value={$page2Data.passwordConfirm} />
-                <Form.FieldErrors class="text-xs" />
-              </div>
+              <Form.Control>
+              {#snippet children({ props })}
+                <div class="grid gap-1">
+                  <Form.Label class="text-sm">Confirm Password</Form.Label>
+                  <Input {...props} id="passwordConfirm" type="password" class="w-full" bind:value={$page2Data.passwordConfirm} />
+                  <Form.FieldErrors class="text-xs" />
+                </div>
+              {/snippet}
               </Form.Control>
             </Form.Field>
           </div>
         </div>
 
-        <Label class="w-full text-center mb-3">{$message2}</Label>
+        <Turnstile
+          siteKey={PUBLIC_CF_SITEKEY}
+          action="turnstile"
+          size="flexible"
+          theme="light"
+          bind:reset
+        />
 
-        <Form.Button disabled={submitting} class="w-full">
-          {#if submitting}
-            <LoaderCircleIcon class="w-5 h-5 animate-spin mr-1" />
-          {/if}
-          Create my account
-        </Form.Button>
+        <div class="grid gap-4 grid-cols-2 mt-6">
+          <Button variant="secondary" disabled={submitting} class="w-full" onclick={() => page = 1}>
+            Back
+          </Button>
+
+          <Form.Button disabled={submitting} class="w-full" type="submit" bind:ref={submitButton}>
+            {#if submitting}
+              <LoaderCircleIcon class="w-5 h-5 animate-spin mr-1" />
+            {/if}
+            Create my account
+          </Form.Button>
+        </div>
       </form>
   </div>

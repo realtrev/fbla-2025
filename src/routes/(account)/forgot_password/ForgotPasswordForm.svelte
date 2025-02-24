@@ -87,12 +87,14 @@
       />
       <div class="my-6 gap-4 grid">
           <Form.Field {form} name="email">
-            <Form.Control let:attrs>
-            <div class="grid gap-1">
-              <Form.Label class="text-sm">{emaillabel}</Form.Label>
-              <Input {...attrs} id="email" placeholder="t@mail.com" type="email" class="w-full" bind:value={$formData.email} />
-              <Form.FieldErrors class="text-xs" />
-            </div>
+            <Form.Control>
+              {#snippet children({ props })}
+                <div class="grid gap-1">
+                  <Form.Label class="text-sm">{emaillabel}</Form.Label>
+                  <Input {...props} id="email" placeholder="t@mail.com" type="email" class="w-full" bind:value={$formData.email} />
+                  <Form.FieldErrors class="text-xs" />
+                </div>
+              {/snippet}
             </Form.Control>
           </Form.Field>
         </div>
@@ -101,7 +103,7 @@
           <Label class="w-full text-center mb-3">{$message}</Label>
         {/if}
 
-        <Form.Button disabled={submitting} class="w-full" type="submit" action="?/">
+        <Form.Button disabled={submitting} class="w-full" type="submit">
           {#if submitting}
             <LoaderCircleIcon class="w-5 h-5 animate-spin mr-1" />
           {/if}

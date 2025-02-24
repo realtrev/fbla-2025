@@ -2,7 +2,7 @@ const guestOnlyRoutes = ['/', '/login', '/register_student', '/register_business
 
 const schoolAdminOnlyRoutes = ['/admin/s/dashboard'];
 
-const organizationAdminOnlyRoutes = ['/admin/o/dashboard', '/admin/o/messages', '/admin/o/listings'];
+const organizationAdminOnlyRoutes = ['/admin/o/dashboard', '/admin/o/messages', '/admin/o/listings', '/admin/o/applications'];
 
 const anyAccess = ['/licenses'];
 
