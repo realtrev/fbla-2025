@@ -71,18 +71,11 @@
     <div class="flex items-center justify-end gap-4">
       <Input class="grow w-max md:w-56 shadow" placeholder="Search..." />
       <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild let:builder>
-          <Button
-            variant="outline"
-            size="icon"
-            class="overflow-hidden rounded-full"
-            builders={[builder]}
-          >
-            <Avatar.Root>
-              <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-              <Avatar.Fallback>CN</Avatar.Fallback>
-            </Avatar.Root>
-          </Button>
+        <DropdownMenu.Trigger class="rounded-full">
+          <Avatar.Root>
+            <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
+            <Avatar.Fallback>CN</Avatar.Fallback>
+          </Avatar.Root>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="end">
           <DropdownMenu.Label>My Account</DropdownMenu.Label>

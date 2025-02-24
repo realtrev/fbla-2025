@@ -17,34 +17,63 @@
     data
   }: {
     data: {
-      listings: ListingModel[];
+      applications: ListingModel[];
     }
   } = $props();
 
   let page = $state(1);
-  let listings = $state([]) as ListingModel[];
+  let applications = $state([]) as ListingModel[];
   let totalCount = $state(0);
   let totalPages = $state(0);
   let pageSize = $state(10);
 
   async function loadListings() {
-    const resultList = await pb.collection('listings').getFullList({
-//      filter: 'someField1 != someField2',
+    const resultList = await pb.collection('applications').getFullList({
+      expand: 'listing,student',
     })
     .then((result) => {
-      listings = result as ListingModel[];
-      totalCount = listings.length;
+      applications = result as ListingModel[];
+      totalCount = applications.length;
+      console
     })
   }
 
+  console.log(data.applications);
+
   const columns = [
     {
-      accessorKey: "title",
-      header: "Title",
+      accessorKey: "student",
+      header: "Student",
+      cell: ({ row }) => {
+        const nameSnippet = createRawSnippet<[string]>((getName) => {
+          const name = getName();
+          return {
+            render: () => `<div>${name}</div>`,
+          };
+        });
+
+        return renderSnippet(
+          nameSnippet,
+          `${row.original.expand.student.firstName} ${row.original.expand.student.lastName}`
+        );
+      }
     },
     {
-      accessorKey: "description",
-      header: "Description",
+      accessorKey: "listing",
+      header: "Listing",
+      cell: ({ row }) => {
+        const nameSnippet = createRawSnippet<[string]>((getName) => {
+          const name = getName();
+          return {
+            render: () => `<div>${name}</div>`,
+          };
+        });
+
+        return renderSnippet(
+          nameSnippet,
+          `${row.original.expand.student.firstName} ${row.original.expand.student.lastName}`
+        );
+      }
     },
     {
       accessorKey: "type",
@@ -69,32 +98,23 @@
   loadListings();
 
   onMount(() => {
-    totalCount = listings.length;
-    listings = data.listings;
+    totalCount = applications.length;
+    applications = data.applications;
   });
 </script>
 
-<h1 class="text-lg md:text-2xl font-semibold">Listings</h1>
+<h1 class="text-lg md:text-2xl font-semibold">Applications</h1>
 <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
-  {#if !listings.length}
+  {#if !data.applications.length}
   <div class="flex flex-col grow justify-center items-center gap-1 text-center">
-    <h3 class="text-2xl font-bold tracking-tight">You have no listings</h3>
+    <h3 class="text-2xl font-bold tracking-tight">You have no applications.</h3>
     <p class="text-muted-foreground text-sm">
-      You can start sharing listings as soon as you make one.
+
     </p>
     <Button class="mt-4" onclick={() => { goto("/admin/o/listings/create"); toast.success("Creating new listing...")}}>Add Listing</Button>
   </div>
   {:else}
-    <Table bind:data={listings} {columns} bind:count={totalCount} bind:currentPage={page} bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/edit/" + row.id)}>
-      {#snippet action()}
-        <Button
-          href="/admin/o/listings/create"
-          class="ml-4"
-        >
-          <Plus class="h-5 w-5" />
-          Create
-        </Button>
-      {/snippet}
+    <Table bind:data={applications} {columns} bind:count={totalCount} bind:currentPage={page} bind:perPage={pageSize} class="hover:cursor-pointer">
     </Table>
   {/if}
 </Card>

@@ -18,20 +18,6 @@ export const basicInfo = z.object({
 });
 
 export const password = z.object({
-  email: z.string({
-      required_error: "Email is required"
-    })
-    .email("Please enter a valid email"),
-  firstName: z.string()
-    .transform(value => value.replace(/\s+/g, ''))
-    .pipe(z.string({
-      required_error: "First name is required"
-    })),
-  lastName: z.string()
-    .transform(value => value.replace(/\s+/g, ''))
-    .pipe(z.string({
-      required_error: "Last name is required"
-    })),
   password: z.string()
     .min(8,{
       message: "Must be at least 8 characters"
