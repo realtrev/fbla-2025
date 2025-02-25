@@ -3,16 +3,11 @@
 	import { type ComponentType } from 'svelte';
 
 	import Saos from 'saos';
-	import ArrowRight from 'lucide-svelte/icons/arrow-right';
-	import Phone from 'lucide-svelte/icons/phone';
-	import User from 'lucide-svelte/icons/user';
 	import CableCarIcon from 'lucide-svelte/icons/cable-car';
 	import BikeIcon from 'lucide-svelte/icons/bike';
 	import HandHelping from 'lucide-svelte/icons/hand-helping';
-
 	import mountainPic from '$lib/assets/deliciousmountain.png';
 	import placeholder from '$lib/assets/placeholder.png';
-
 	import Footer from '$lib/components/Footer.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import Benefits from './Benefits.svelte';
