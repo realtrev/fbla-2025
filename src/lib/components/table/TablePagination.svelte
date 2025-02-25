@@ -28,7 +28,7 @@
   const siblingCount = $derived(isDesktop.current ? 1 : 0);
  </script>
 
-<Pagination.Root {count} {perPage} {siblingCount} onPageChange={pageChangeWrapper}>
+<Pagination.Root {count} {perPage} {siblingCount} bind:page={currentPage} onPageChange={pageChangeWrapper}>
  {#snippet children({ pages, currentPage })}
   <Pagination.Content>
    <Pagination.Item>

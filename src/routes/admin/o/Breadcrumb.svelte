@@ -33,8 +33,41 @@
       href: '/admin/o/listings'
     },
     {
-      value: 'Edit',
+      value: 'Edit Listing',
       href: '/admin/o/listings/edit'
+    },
+  ];
+
+  const applications = [
+    {
+      value: $currentOrganization?.name ?? 'Organization',
+      href: '/admin/o/profile'
+    },
+    {
+      value: 'Applications',
+      href: '/admin/o/applications'
+    },
+  ];
+
+  const schools = [
+    {
+      value: $currentOrganization?.name ?? 'Organization',
+      href: '/admin/o/profile'
+    },
+    {
+      value: 'Schools',
+      href: '/admin/o/schools'
+    },
+  ];
+
+  const messages = [
+    {
+      value: $currentOrganization?.name ?? 'Organization',
+      href: '/admin/o/profile'
+    },
+    {
+      value: 'Messages',
+      href: '/admin/o/messages'
     },
   ];
 
@@ -58,6 +91,21 @@
 
     if (url.startsWith('/admin/o/listings')) {
       breadcrumbList = listings.slice(0, 2);
+      return;
+    }
+
+    if (url.startsWith('/admin/o/schools')) {
+      breadcrumbList = schools;
+      return;
+    }
+
+    if (url.startsWith('/admin/o/applications')) {
+      breadcrumbList = applications;
+      return;
+    }
+
+    if (url.startsWith('/admin/o/messages')) {
+      breadcrumbList = messages;
       return;
     }
   }

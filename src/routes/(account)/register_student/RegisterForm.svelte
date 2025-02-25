@@ -10,12 +10,9 @@
   import { superForm } from "sveltekit-superforms";
 	import { Turnstile } from 'svelte-turnstile';
   import { PUBLIC_CF_SITEKEY, PUBLIC_POCKETBASE_URL } from '$env/static/public';
-  import { deserialize } from '$app/forms';
+  import LoaderCircleIcon from 'lucide-svelte/icons/loader-circle';
   import Loading from '$lib/components/Loading.svelte';
 
-  import LoaderCircleIcon from 'lucide-svelte/icons/loader-circle';
-  import { onDestroy, onMount } from 'svelte';
-  import { createEnterKeyHandler } from '$lib/utils';
 
   let { page1, page2, title, subtitle } = $props();
 
@@ -92,18 +89,6 @@
 
 
   const { form: page2Data, enhance: enhance2, message: message2, errors: errors2 } = secondPage;
-
-
-  let cleanup;
-  onMount(() => {
-    cleanup = createEnterKeyHandler(submitForm, submitButton);
-  });
-
-  onDestroy(() => {
-    if (cleanup) {
-      cleanup();
-    }
-  });
 </script>
 
 <div class="p-6 flex flex-col w-[28rem]" >
@@ -121,7 +106,7 @@
 
     <form class={page === 1 ? "" : "hidden"} method="POST" use:enhance1 action="?/checkEmail">
       <div class="my-6 gap-4 grid">
-        <div class="grid gap-4 md:grid-cols-2">
+        <div class="grid gap-4 sm:grid-cols-2">
             <Form.Field {form} name="firstName">
               <Form.Control>
                 {#snippet children({ props })}
@@ -211,32 +196,30 @@
         <!--</div>-->
         {/if}
 
-        <div class="my-6 gap-4 grid">
-          <div class="grid gap-4 md:grid-cols-2">
-            <Form.Field form={secondPage} name="password">
-              <Form.Control>
-                {#snippet children({ props })}
-                  <div class="grid gap-1">
-                    <Form.Label class="text-sm">Password</Form.Label>
-                    <Input {...props} id="password" type="password" class="w-full" bind:value={$page2Data.password} />
-                    <Form.FieldErrors class="text-xs" />
-                  </div>
-                {/snippet}
-              </Form.Control>
-            </Form.Field>
-
-            <Form.Field form={secondPage} name="passwordConfirm">
-              <Form.Control>
+        <div class="my-6 sm:grid-cols-2 grid gap-4 grid-cols-1">
+          <Form.Field form={secondPage} name="password" class="col-span-1">
+            <Form.Control>
               {#snippet children({ props })}
                 <div class="grid gap-1">
-                  <Form.Label class="text-sm">Confirm Password</Form.Label>
-                  <Input {...props} id="passwordConfirm" type="password" class="w-full" bind:value={$page2Data.passwordConfirm} />
+                  <Form.Label class="text-sm">Password</Form.Label>
+                  <Input {...props} id="password" type="password" class="w-full" bind:value={$page2Data.password} />
                   <Form.FieldErrors class="text-xs" />
                 </div>
               {/snippet}
-              </Form.Control>
-            </Form.Field>
-          </div>
+            </Form.Control>
+          </Form.Field>
+
+          <Form.Field form={secondPage} name="passwordConfirm"  class="col-span-1">
+            <Form.Control>
+            {#snippet children({ props })}
+              <div class="grid gap-1 col-span-1">
+                <Form.Label class="text-sm">Confirm Password</Form.Label>
+                <Input {...props} id="passwordConfirm" type="password" class="w-full" bind:value={$page2Data.passwordConfirm} />
+                <Form.FieldErrors class="text-xs" />
+              </div>
+            {/snippet}
+            </Form.Control>
+          </Form.Field>
         </div>
 
         <Turnstile
@@ -247,17 +230,17 @@
           bind:reset
         />
 
-        <div class="grid gap-4 grid-cols-2 mt-6">
-          <Button variant="secondary" disabled={submitting} class="w-full" onclick={() => page = 1}>
-            Back
-          </Button>
-
-          <Form.Button disabled={submitting} class="w-full" type="submit" bind:ref={submitButton}>
+        <div class="flex flex-col sm:flex-row gap-4 mt-6">
+          <Form.Button disabled={submitting} class="w-full sm:order-last" type="submit">
             {#if submitting}
               <LoaderCircleIcon class="w-5 h-5 animate-spin mr-1" />
             {/if}
             Create my account
           </Form.Button>
+
+          <Button variant="secondary" disabled={submitting} class="w-full col-span-1" onclick={() => page = 1}>
+            Back
+          </Button>
         </div>
       </form>
   </div>

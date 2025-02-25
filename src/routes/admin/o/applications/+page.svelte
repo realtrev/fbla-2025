@@ -105,16 +105,6 @@
 
 <h1 class="text-lg md:text-2xl font-semibold">Applications</h1>
 <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
-  {#if !data.applications.length}
-  <div class="flex flex-col grow justify-center items-center gap-1 text-center">
-    <h3 class="text-2xl font-bold tracking-tight">You have no applications.</h3>
-    <p class="text-muted-foreground text-sm">
-
-    </p>
-    <Button class="mt-4" onclick={() => { goto("/admin/o/listings/create"); toast.success("Creating new listing...")}}>Add Listing</Button>
-  </div>
-  {:else}
-    <Table bind:data={applications} {columns} bind:count={totalCount} bind:currentPage={page} bind:perPage={pageSize} class="hover:cursor-pointer">
-    </Table>
-  {/if}
+  <Table bind:data={applications} {columns} bind:count={totalCount} bind:currentPage={page} bind:perPage={pageSize} class="hover:cursor-pointer">
+  </Table>
 </Card>

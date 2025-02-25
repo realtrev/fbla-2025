@@ -11,23 +11,21 @@
     getSortedRowModel,
     getFilteredRowModel,
   } from "@tanstack/table-core";
-  import { readable } from "svelte/store";
-  import ListingActions from "../../../routes/admin/o/listings/ListingActions.svelte";
-  import TablePagination from "./TablePagination.svelte";
-  import ListingTypes from "../../../routes/admin/o/listings/ListingTypes.svelte";
-  import { Button } from "$lib/components/ui/button";
-  import {parseDateTime} from '@internationalized/date';
-  import { goto } from '$app/navigation';
-  import * as Table from "$lib/components/ui/table";
-  import { Input } from '$lib/components/ui/input';
-  import Plus from 'lucide-svelte/icons/plus';
   import {
     createSvelteTable,
     FlexRender,
   } from "$lib/components/ui/data-table";
+  import { Button } from "$lib/components/ui/button";
+  import { goto } from '$app/navigation';
+  import * as Table from "$lib/components/ui/table";
+  import { Input } from '$lib/components/ui/input';
+  import Plus from 'lucide-svelte/icons/plus';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import type { Snippet } from 'svelte';
   import ChevronDown from 'lucide-svelte/icons/chevron-down';
+
+  import TablePagination from "./TablePagination.svelte";
+  import TableSortButton from "./TableSortButton.svelte";
 
   let {
     data = $bindable([]),
@@ -36,6 +34,8 @@
     currentPage = $bindable(1),
 
     columns = [],
+    filterColumn,
+    searchPlaceholder = "Search entries...",
     class: className,
     action,
 
@@ -46,16 +46,23 @@
     perPage?: number,
     currentPage?: number,
     columns: ColumnDef<any, any>[],
-    class?: string,
+    filterColumn?: string,
+    searchPlaceholder?: string,
 
+    class?: string,
     action: Snippet,
+
+    sorting?: {
+      id: string,
+      desc: boolean
+    }[],
 
     onrowclick?: (row: any) => void,
     onpagechange?: (page: number) => void
   } = $props();
 
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: perPage });
-  let sorting = $state<SortingState>([]);
+  let sorting = $state<SortingState>(props.sorting ?? []);
   let columnFilters = $state<ColumnFiltersState>([]);
   let columnVisibility = $state<VisibilityState>({});
 
@@ -66,6 +73,15 @@
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: (updater) => {
+      if (typeof updater === "function") {
+        sorting = updater(sorting);
+      } else {
+        sorting = updater;
+      }
+    },
     onPaginationChange: (updater) => {
       if (typeof updater === "function") {
         pagination = updater(pagination);
@@ -80,6 +96,15 @@
         columnVisibility = updater;
       }
     },
+    onColumnFiltersChange: (updater) => {
+      if (typeof updater === "function") {
+        columnFilters = updater(columnFilters);
+      } else {
+        columnFilters = updater;
+      }
+      totalCount = table.getFilteredRowModel().rows.length;
+      currentPage = 1;
+    },
     state: {
       get pagination() {
         return pagination;
@@ -93,20 +118,27 @@
       get columnVisibility() {
         return columnVisibility;
       },
-    },
+    }
   });
+
+  let totalCount = $state(table.getCoreRowModel().rows.length);
+  $effect(() => {
+    totalCount = table.getFilteredRowModel().rows.length;
+  });
+  let endOfPage = $derived(Math.min((pagination.pageIndex + 1) * pagination.pageSize, totalCount));
 
   function pageChangeWrapper(page: number) {
     console.log(page);
     table.setPageIndex(page - 1);
     props.onpagechange?.(page);
   }
-
 </script>
 
 <div class="w-full px-6">
   <div class="w-full flex justify-between">
-    <Input placeholder="Search..." class="max-w-60 mb-6" />
+    <Input placeholder={searchPlaceholder} class="max-w-60 mb-6" oninput={(e) => {
+             table.getColumn(filterColumn ?? "")?.setFilterValue(e.currentTarget.value);
+      }} />
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
@@ -172,7 +204,14 @@
       </Table.Body>
     </Table.Root>
   </div>
-    <div class="flex items-center justify-center space-x-4 py-4">
-      <TablePagination onpagechange={pageChangeWrapper} bind:currentPage {perPage} bind:count />
+    <div class="flex items-center justify-between space-x-4 py-4 px-2">
+      <div class="text-sm text-muted-foreground">
+        {pagination.pageIndex * pagination.pageSize + 1}-{endOfPage}
+        of
+        {totalCount}
+      </div>
+      <div>
+        <TablePagination onpagechange={pageChangeWrapper} bind:currentPage {perPage} bind:count={totalCount} />
+      </div>
     </div>
   </div>

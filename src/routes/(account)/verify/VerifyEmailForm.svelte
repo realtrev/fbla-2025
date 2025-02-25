@@ -10,6 +10,7 @@
   import { zodClient } from 'sveltekit-superforms/adapters';
   import { onMount } from 'svelte';
   import { postAction } from '$lib/utils';
+  import { goto } from '$app/navigation';
 
   import LoaderCircleIcon from 'lucide-svelte/icons/loader-circle';
   import { currentUser, pb } from '$lib/pocketbase';
@@ -85,6 +86,10 @@
         {:else}
           Resend email verification
         {/if}
+      </Button>
+
+      <Button onclick={() => goto("/api/logout")} class="w-full" type="submit">
+        Log out
       </Button>
     </div>
   </form>

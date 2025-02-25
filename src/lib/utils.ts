@@ -73,6 +73,21 @@ export function postAction(path: string, options: {
 	};
 }
 
+export function formatDate(isoString, includeTime = false) {
+    const date = new Date(isoString);
+
+    const options = { year: 'numeric', month: 'short', day: 'numeric', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone };
+    let formattedDate = date.toLocaleDateString('en-US', options);
+
+    if (includeTime) {
+        const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true, timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone };
+        formattedDate += `|${date.toLocaleTimeString('en-US', timeOptions)}`;
+    }
+
+    return formattedDate;
+}
+
+
 function buildDebouncer(callback: Function, timeout = 300, immediate = false) {
 	let timer = 0;
 	return (...args: any[]) => {
