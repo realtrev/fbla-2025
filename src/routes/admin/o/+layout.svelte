@@ -4,6 +4,7 @@
   import ListCheck from 'lucide-svelte/icons/list-check';
   import FileIcon from 'lucide-svelte/icons/file';
   import Send from 'lucide-svelte/icons/send';
+  import School from 'lucide-svelte/icons/school';
 
   import * as Avatar from "$lib/components/ui/avatar";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
@@ -30,7 +31,6 @@
       href: "/admin/o/dashboard",
       title: "Dashboard",
       icon: House,
-      badge: "3"
     },
     {
       href: "/admin/o/listings",
@@ -40,14 +40,17 @@
     {
       href: "/admin/o/applications",
       title: "Applications",
-      icon: FileIcon,
-      badge: "HEY"
+      icon: FileIcon
     },
     {
       href: "/admin/o/messages",
       title: "Messages",
       icon: Send,
-      badge: "133"
+    },
+    {
+      href: "/admin/o/schools",
+      title: "Schools",
+      icon: School
     }
   ];
 </script>

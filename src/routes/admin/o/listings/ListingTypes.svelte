@@ -8,28 +8,16 @@
 		listingType = $bindable('Undefined')
 	} = $props();
 
-  const values = [
-    {
-      id: "volunteer",
-      title: "Volunteer"
-    },
-    {
-      id: "full-time",
-      title: "Full Time"
-    },
-    {
-      id: "part-time",
-      title: "Part Time"
-    },
-    {
-      id: "internship",
-      title: "Internship"
-    }
-  ];
+  const values = {
+    "volunteer": "Volunteer",
+    "full-time":"Full Time",
+    "part-time": "Part Time",
+    "internship": "Internship"
+  };
 
   function present(listingType: string) {
-    return values.find(v => v.id === listingType)?.title ?? listingType;
+    return values[listingType] ?? listingType;
   }
 </script>
 
-<Badge variant="outline">{present(listingType)}</Badge>
+<Badge variant="outline">{listingType}</Badge>

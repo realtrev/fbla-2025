@@ -3,22 +3,19 @@
 	import { type ComponentType } from 'svelte';
 
 	import Saos from 'saos';
-	import {
-		type Icon,
-		ArrowRight,
-		Phone,
-		User,
-		CableCarIcon,
-		BikeIcon,
-		HandHelping
-	} from 'lucide-svelte';
+	import ArrowRight from 'lucide-svelte/icons/arrow-right';
+	import Phone from 'lucide-svelte/icons/phone';
+	import User from 'lucide-svelte/icons/user';
+	import CableCarIcon from 'lucide-svelte/icons/cable-car';
+	import BikeIcon from 'lucide-svelte/icons/bike';
+	import HandHelping from 'lucide-svelte/icons/hand-helping';
 
 	import mountainPic from '$lib/assets/deliciousmountain.png';
 	import placeholder from '$lib/assets/placeholder.png';
 
 	import Footer from '$lib/components/Footer.svelte';
 	import { Button } from '$lib/components/ui/button';
-	import Benefits from '$lib/components/Benefits.svelte';
+	import Benefits from './Benefits.svelte';
 	import FeatureCard from './FeatureCard.svelte';
 
 	const featureCards: {
@@ -164,7 +161,7 @@
 	<div class="absolute blurbox bg-primary/75 right -z-10" />
 	<div class="max-w-screen-xl px-8 py-32 mx-auto z-10">
 		<Saos once={true} animation={'slide-up 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
-			<h1 class="text-4xl md:text-6xl font-bold text-white md:w-1/2 lg:w-1/3 w-full text-center mx-auto">
+			<h1 class="text-4xl md:text-6xl font-bold text-white md:w-3/4 lg:w-2/3 w-full text-center mx-auto">
 				Build a platform that inspires progress.
 			</h1>
 		</Saos>
@@ -186,12 +183,12 @@
 	<div class="flex flex-col gap-4 md:w-1/2 min-w-[300px]">
 		<div class="relative">
 			<Saos once={true} animation={'slide-in 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
-				<h1 class="display-md bold z-40 shrink-0">
+				<h1 class="text-4xl md:text-6xl font-bold z-40 shrink-0">
 					Our values and
-					<span class="display-md bold -z-10 text-accent-5 relative">
+					<span class="display-md bold -z-10 text-primary relative">
 						goals
 						<svg
-							class="absolute inline-block -z-50 top-[43%] left-[40%] center"
+							class="text-primary/25 absolute inline-block -z-50 -top-[35%] -left-[35%] center"
 							width="250"
 							height="130"
 							viewBox="0 0 420 159"
@@ -200,7 +197,7 @@
 						>
 							<path
 								d="M192.014 0.946395L419.21 100.926L0.252206 158.557L192.014 0.946395Z"
-								fill="#EBFAF5"
+								fill="currentColor"
 							/>
 						</svg>
 					</span>
@@ -385,16 +382,12 @@
 </section>
 <Benefits theme="primary" />
 <section class="pt-36 pb-[24vh] max-w-screen-xl mx-auto">
-	<h1 class="display-md bold w-full text-center text-surface-10">Ready to get started?</h1>
+	<h1 class="text-4xl md:text-6xl font-bold w-full text-center text-surface-10">Ready to get started?</h1>
 	<Saos once={true} animation={'slide-up 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
 		<Button
-			class="glowing w-min mx-auto mt-24"
-			color="accent"
-			label="Join the team"
-			size="lg"
-			link="/jobs#top"
-			rightIcon={ArrowRight}
-		/>
+			class="shadow"
+			href="/login">
+				Get Started</Button>
 	</Saos>
 </section>
 <Footer />

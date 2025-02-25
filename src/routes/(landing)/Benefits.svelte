@@ -1,27 +1,27 @@
 <script lang="ts">
 	import Saos from 'saos';
-	import {
-		CircleDollarSignIcon,
-		Clock1Icon,
-		GraduationCapIcon,
-		HandHeartIcon,
-		HandshakeIcon,
-		type Icon,
-		Laptop,
-		PalmtreeIcon,
-		ScaleIcon
-	} from 'lucide-svelte';
+	import CircleDollarSignIcon from 'lucide-svelte/icons/circle-dollar-sign';
+	import Clock1Icon from 'lucide-svelte/icons/clock-1';
+	import GraduationCapIcon from 'lucide-svelte/icons/graduation-cap';
+	import HandHeartIcon from 'lucide-svelte/icons/hand-heart';
+	import HandshakeIcon from 'lucide-svelte/icons/handshake';
+	import ScaleIcon from 'lucide-svelte/icons/scale';
+	import PalmtreeIcon from 'lucide-svelte/icons/palmtree';
+	import Laptop from 'lucide-svelte/icons/laptop';
 	import type { ComponentType } from 'svelte';
-	export let theme: 'primary' | 'accent' = 'accent';
-	let className = '';
 
-	export { className as class };
+	let {
+		theme = 'primary',
+		class: className,
+	} : {
+		theme?: 'primary' | 'accent'
+	} = $props();
 
 	const benefits: {
 		title: string;
 		description: string;
 		icon: ComponentType<Icon>;
-	} = [
+	}[] = [
 		{
 			title: 'Flexible Work Schedule',
 			description:
@@ -64,8 +64,8 @@
 <section
 	class={`theme-${theme} overflow-hidden relative bg-color justify-center gap-24 -z-20 ${className}`}
 >
-	<div class="absolute blurbox bg-color-splotch left -z-10" />
-	<div class="absolute blurbox bg-color-splotch right -z-10" />
+	<div class="absolute blurbox bg-color-splotch left -z-10"></div>
+	<div class="absolute blurbox bg-color-splotch right -z-10"></div>
 	<div class="max-w-screen-xl px-8 py-32 mx-auto z-10">
 		<Saos once={true} animation={'slide-up 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
 			<h1 class="heading-2xl bold text-color-h w-1/2 text-center mx-auto">
@@ -96,43 +96,23 @@
 </section>
 
 <style>
-/*	.theme-primary.bg-color {*/
-/*		@apply bg-primary-1;*/
-/*	}*/
+	.theme-primary.bg-color {
+		@apply bg-primary/5;
+	}
 
-/*	.theme-accent.bg-color {*/
-/*		@apply bg-accent-1;*/
-/*	}*/
+	.theme-primary .bg-color-splotch {
+		@apply bg-primary/5;
+	}
 
-/*	.theme-primary .bg-color-splotch {*/
-/*		@apply bg-primary-2;*/
-/*	}*/
+	.theme-primary .text-color-h {
+		@apply text-foreground;
+	}
 
-/*	.theme-accent .bg-color-splotch {*/
-/*		@apply bg-accent-2;*/
-/*	}*/
+	.theme-primary .text-color-p {
+		@apply text-foreground/50;
+	}
 
-/*	.theme-primary .text-color-h {*/
-/*		@apply text-primary-10;*/
-/*	}*/
-
-/*	.theme-accent .text-color-h {*/
-/*		@apply text-accent-10;*/
-/*	}*/
-
-/*	.theme-primary .text-color-p {*/
-/*		@apply text-primary-9;*/
-/*	}*/
-
-/*	.theme-accent .text-color-p {*/
-/*		@apply text-accent-9;*/
-/*	}*/
-
-/*	.theme-primary .text-color-icon {*/
-/*		@apply text-primary-6;*/
-/*	}*/
-
-/*	.theme-accent .text-color-icon {*/
-/*		@apply text-accent-6;*/
-/*	}*/
+	.theme-primary .text-color-icon {
+		@apply text-primary;
+	}
 </style>
