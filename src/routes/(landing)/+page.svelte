@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { type Job } from '$lib/types';
 	import { type ComponentType } from 'svelte';
 
 	import Saos from 'saos';
