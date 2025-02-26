@@ -11,7 +11,7 @@ export const load = async ({ cookies, locals }) => {
     "title": "New Job Listing",
     "description": "New job description.",
     "organization": locals.user?.organization ?? "",
-    "location": "test",
+    "location": "",
     "type": "full-time",
     "applicationDeadline": "2022-01-01 10:00:00.123Z",
     "applicationLimit": 0,
@@ -20,5 +20,5 @@ export const load = async ({ cookies, locals }) => {
 
   console.log(value);
 
-  return redirect(303, '/admin/o/listings/edit/' + value.id);
+  return redirect(303, '/admin/o/listings/' + value.id);
 }

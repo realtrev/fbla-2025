@@ -2,6 +2,8 @@ import { type ServerLoadEvent, redirect, fail } from '@sveltejs/kit';
 import { zod } from 'sveltekit-superforms/adapters';
 import { message, superValidate, fail as formFail, setError } from 'sveltekit-superforms';
 import { editSchema } from './editListing';
+import type { ListingModel } from '../../../../../app';
+import { pb } from '$lib/database';
 
 export const load = async (event: ServerLoadEvent) => {
   const { cookies, locals, params } = event;
@@ -16,9 +18,18 @@ export const load = async (event: ServerLoadEvent) => {
     throw fail(400, { message: 'Listing ID is required' });
   }
 
+  const listing = await locals.pb.collection('listings').getOne(listingId);
+
+  const organizationId = locals.user?.organization;
+  const currentOrg = await pb.collection('organizations').getOne(organizationId, {
+    expand: "partnerSchools"
+  });
+
   return {
-    listing: await locals.pb.collection('listings').getOne(listingId),
-    form: await superValidate(zod(editSchema))
+    listing: listing,
+    organization: currentOrg,
+    form: await superValidate(zod(editSchema)),
+    availableSchools: currentOrg.expand?.partnerSchools ?? []
   };
 }
 
@@ -45,15 +56,17 @@ export const actions: Actions = {
       });
     }
 
-    const record = await locals.pb.collection('listings').update(listingId, {
-      title: formData.get("title"),
-      description: formData.get("description"),
-      type: formData.get("type")
-    })
-      .then((r) => {console.log(r); return true;})
-      .catch(e => false);
-
-    if (record === false) {
+    let record;
+    try {
+      record = await locals.pb.collection('listings').update(listingId, {
+        title: formData.get("title"),
+        description: formData.get("description"),
+        type: formData.get("type"),
+        location: formData.get("location"),
+      })
+        .then((r: ListingModel) => r);
+    } catch (e) {
+      console.error(e);
       return formFail(400, {
         message: 'Failed to save listing.',
         form,
@@ -61,7 +74,8 @@ export const actions: Actions = {
     }
 
     return {
-      form
+      form,
+      record
     }
   },
   deleteListing: async (event) => {
