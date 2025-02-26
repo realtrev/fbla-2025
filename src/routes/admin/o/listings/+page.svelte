@@ -17,6 +17,7 @@
   import { formatDate } from '$lib/utils';
 
   import Loading from '$lib/components/Loading.svelte';
+  import type { ListingModel } from '../../../../app';
 
   let {
     data
@@ -26,7 +27,7 @@
     }
   } = $props();
 
-  let page = $state(1);
+  let page = $state("all");
   let listings = $state([]) as ListingModel[];
   let totalCount = $state(0);
   let totalPages = $state(0);
@@ -57,11 +58,21 @@
         renderComponent(TableSortButton, {
           onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
           "aria-label": "Title"
-        })
-    },
-    {
-      accessorKey: "description",
-      header: "Description",
+        }),
+      cell: ({ row }) => {
+        const nameSnippet = createRawSnippet<[string]>((getTitle) => {
+          const title = getTitle();
+          return {
+            render: () => `<p class="hover:underline">${title}</p>`,
+          };
+        });
+
+        return renderSnippet(
+          nameSnippet,
+          row.getValue("title")
+        );
+      },
+      accessorFn: row => row.title
     },
     {
       accessorKey: "type",
@@ -81,7 +92,7 @@
       header: ({ column }) =>
         renderComponent(TableSortButton, {
           onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-          "aria-label": "Last Updated"
+          "aria-label": "Last Edited"
         }),
       cell: ({ row }) => {
         const nameSnippet = createRawSnippet<[string]>((getName) => {
@@ -99,9 +110,21 @@
       accessorFn: row => row.updated
     },
     {
+      accessorKey: "status",
+      header: ({ column }) =>
+        renderComponent(TableSortButton, {
+          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
+          "aria-label": "Status"
+        }),
+      cell: ({ row }) => {
+        return renderComponent(ListingTypes, { listingType: row.getValue("status") });
+      },
+      accessorFn: row => row.archived ? "Archived" : row.published ? "Published" : "Draft"
+    },
+    {
       id: "actions",
       cell: ({ row }) => {
-        return renderComponent(ListingActions, { id: row.id });
+        return renderComponent(ListingActions, { listing: row.original, updateTable: loadListings });
       },
       enableHiding: false,
     }
@@ -113,27 +136,63 @@
     totalCount = listings.length;
     listings = data.listings;
   });
+
+  let draftListings = $state(listings.filter((listing) => listing.published === false && listing.archived === false));
+  let publishedListings = $state(listings.filter((listing) => listing.published === true && listing.archived === false));
+  let archivedListings = $state(listings.filter((listing) => listing.archived === true));
+
+  $effect(() => {
+    draftListings = listings.filter((listing) => listing.published === false && listing.archived === false);
+    publishedListings = listings.filter((listing) => listing.published === true && listing.archived === false);
+    archivedListings = listings.filter((listing) => listing.archived === true);
+  });
+
+  const tabTitlesAndDescriptions = {
+    all: {
+      title: "All Listings",
+      description: "Everything in your organization."
+    },
+    drafts: {
+      title: "Drafts",
+      description: "Listings that are not yet published."
+    },
+    published: {
+      title: "Published",
+      description: "These are visible to students."
+    },
+    archived: {
+      title: "Archived",
+      description: "These cannot be viewed by students."
+    }
+  };
 </script>
 
 
-<Tabs.Root value="drafts" class="w-full">
+<Tabs.Root bind:value={page} class="w-full">
   <div class="flex justify-between">
-    <h1 class="text-lg md:text-2xl font-semibold">Listings</h1>
+    <div>
+      <h1 class="text-lg md:text-2xl font-semibold">
+        {tabTitlesAndDescriptions[page].title}
+      </h1>
+      <p class="text-muted-foreground mt-1">
+        {tabTitlesAndDescriptions[page].description}
+      </p>
+    </div>
     <Tabs.List>
+      <Tabs.Trigger value="all">All</Tabs.Trigger>
       <Tabs.Trigger value="drafts">Drafts</Tabs.Trigger>
       <Tabs.Trigger value="published">Published</Tabs.Trigger>
-      <Tabs.Trigger value="archived">Archive</Tabs.Trigger>
+      <Tabs.Trigger value="archived">Archived</Tabs.Trigger>
     </Tabs.List>
   </div>
-  <Tabs.Content value="drafts">
+  <Tabs.Content value="all">
     <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
       {#if !listings.length}
-      <div class="size-full flex items-center justify-center">
-        <Loading />
-      </div>
+        <div class="size-full flex items-center justify-center">
+          <Loading />
+        </div>
       {:else}
-
-        <Table bind:data={listings} {columns} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:count={totalCount} bind:currentPage={page} bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/edit/" + row.id)}>
+        <Table bind:data={listings} {columns} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
           {#snippet action()}
             <Button
               href="/admin/o/listings/create"
@@ -147,5 +206,49 @@
       {/if}
     </Card>
   </Tabs.Content>
-  <Tabs.Content value="password">Change your password here.</Tabs.Content>
+  <Tabs.Content value="drafts">
+    <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+      {#if !listings.length}
+      <div class="size-full flex items-center justify-center">
+        <Loading />
+      </div>
+      {:else}
+        <Table bind:data={draftListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
+          {#snippet action()}
+            <Button
+              href="/admin/o/listings/create"
+              class="ml-4"
+            >
+              <Plus class="h-5 w-5" />
+              Create
+            </Button>
+          {/snippet}
+        </Table>
+      {/if}
+    </Card>
+  </Tabs.Content>
+  <Tabs.Content value="published">
+    <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+      {#if !listings.length}
+        <div class="size-full flex items-center justify-center">
+          <Loading />
+        </div>
+      {:else}
+        <Table bind:data={publishedListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
+        </Table>
+      {/if}
+    </Card>
+  </Tabs.Content>
+  <Tabs.Content value="archived">
+    <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+      {#if !listings.length}
+        <div class="size-full flex items-center justify-center">
+          <Loading />
+        </div>
+      {:else}
+        <Table bind:data={archivedListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
+        </Table>
+      {/if}
+    </Card>
+  </Tabs.Content>
 </Tabs.Root>

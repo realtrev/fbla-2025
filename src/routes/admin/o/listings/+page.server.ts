@@ -7,6 +7,9 @@ export const load = async (event: ServerLoadEvent) => {
 	const authCookie = request.headers.get('cookie') ?? '';
 	pb.authStore.loadFromCookie(authCookie);
 
+	// get tab from url - listings?drafts
+	const tab = params.tab || 'all';
+
   return {
 		listings: await locals.pb.collection('listings').getFullList(),
   }

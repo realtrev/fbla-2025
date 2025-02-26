@@ -33,6 +33,8 @@
     perPage = $bindable(20),
     currentPage = $bindable(1),
 
+    columnVisibility = $bindable<VisibilityState>({}),
+
     columns = [],
     filterColumn,
     searchPlaceholder = "Search entries...",
@@ -49,6 +51,8 @@
     filterColumn?: string,
     searchPlaceholder?: string,
 
+    columnVisibility?: VisibilityState,
+
     class?: string,
     action: Snippet,
 
@@ -64,7 +68,6 @@
   let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: perPage });
   let sorting = $state<SortingState>(props.sorting ?? []);
   let columnFilters = $state<ColumnFiltersState>([]);
-  let columnVisibility = $state<VisibilityState>({});
 
   const table = createSvelteTable({
     get data() {

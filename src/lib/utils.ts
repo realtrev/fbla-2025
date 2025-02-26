@@ -19,7 +19,7 @@ export function postAction(path: string, options: {
 	let isSubmitting = writable(false);
 	let error = writable(null);
 
-	async function submit(event?: Event) {
+	async function submit(event?: Event, ...args: any[]) {
 		event?.preventDefault();
 		isSubmitting.set(true);
 		error.set(null);
@@ -33,7 +33,8 @@ export function postAction(path: string, options: {
 				cancel: () => {
 					cancelled = true;
 					isSubmitting.set(false);
-				}
+				},
+				...args,
 			});
 
 			if (cancelled) return;

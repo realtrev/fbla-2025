@@ -34,7 +34,7 @@
     },
     {
       value: 'Edit Listing',
-      href: '/admin/o/listings/edit'
+      href: '/admin/o/listings/'
     },
   ];
 
@@ -84,7 +84,7 @@
       return;
     }
 
-    if (url.startsWith('/admin/o/listings/edit')) {
+    if (url.startsWith('/admin/o/listings/')) {
       breadcrumbList = listings.slice();
       return;
     }

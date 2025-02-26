@@ -11,20 +11,14 @@
   import { Input } from '$lib/components/ui/input';
   import Sidebar from '$lib/components/navbar/Navbar.svelte';
   import { goto } from '$app/navigation';
-
   import Breadcrumb from './Breadcrumb.svelte';
-
-  import * as Tooltip from "$lib/components/ui/tooltip/index";
   import { Button } from "$lib/components/ui/button/index";
-
-  import { currentOrganization } from '$lib/pocketbase';
 
   let {
     children
   } = $props();
 
   let openSidebar = $state(false);
-  let breadcrumbList = $state([]) as {href: string, title: string, icon: any, badge?: string}[];
 
   let items = [
     {
