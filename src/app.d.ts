@@ -58,6 +58,8 @@ interface ListingModel extends RecordModel {
   applicationDeadline: string,
   applicationLimit: number,
   published: boolean,
+  archived: boolean,
+  thumbnail: string,
   created: string,
   updated: string
 }

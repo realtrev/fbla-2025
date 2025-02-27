@@ -6,8 +6,7 @@
 
   let {
     href = null,
-    iconColor = 'text-primary',
-    textColor = 'text-foreground',
+    variant = "small",
 		iconOnly = false,
 
     class: className = '',
@@ -17,6 +16,7 @@
     iconColor?: string,
     textColor?: string,
 		iconOnly?: boolean,
+    variant?: string,
 
     class?: string,
     onclick?: (e: MouseEvent) => void,
@@ -31,9 +31,19 @@
   };
 </script>
 
-<a {href} onclick={dispatch.onclick} class={cn(className, textColor + " transition-all ring-opacity-0")}>
-	<h1 class="text-lg font-semibold flex items-center gap-1">
-		<RollerCoaster class={iconColor} />
-		{#if !iconOnly}JobFair{/if}
-	</h1>
-</a>
+
+{#if variant === "small"}
+  <a {href} onclick={dispatch.onclick} class={cn(className)}>
+  	<h1 class="text-lg font-semibold flex items-center gap-1">
+  		<RollerCoaster class="text-primary" />
+  		{#if !iconOnly}JobFair{/if}
+  	</h1>
+  </a>
+{:else}
+  <a {href} onclick={dispatch.onclick} class={cn(className)}>
+  	<h1 class="text-2xl font-semibold flex items-center gap-1">
+  		<RollerCoaster class="text-primary size-8 stroke-[2]" />
+  		{#if !iconOnly}JobFair{/if}
+  	</h1>
+  </a>
+{/if}

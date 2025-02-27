@@ -137,9 +137,9 @@
     listings = data.listings;
   });
 
-  let draftListings = $state(listings.filter((listing) => listing.published === false && listing.archived === false));
-  let publishedListings = $state(listings.filter((listing) => listing.published === true && listing.archived === false));
-  let archivedListings = $state(listings.filter((listing) => listing.archived === true));
+  let draftListings = $state();
+  let publishedListings = $state();
+  let archivedListings = $state();
 
   $effect(() => {
     draftListings = listings.filter((listing) => listing.published === false && listing.archived === false);
@@ -178,13 +178,19 @@
         {tabTitlesAndDescriptions[page].description}
       </p>
     </div>
-    <Tabs.List>
+    <Tabs.List class="md:block hidden">
       <Tabs.Trigger value="all">All</Tabs.Trigger>
       <Tabs.Trigger value="drafts">Drafts</Tabs.Trigger>
       <Tabs.Trigger value="published">Published</Tabs.Trigger>
       <Tabs.Trigger value="archived">Archived</Tabs.Trigger>
     </Tabs.List>
   </div>
+  <Tabs.List class="md:hidden mt-6 grid grid-cols-4">
+    <Tabs.Trigger class="col-span-1" value="all">All</Tabs.Trigger>
+    <Tabs.Trigger class="col-span-1" value="drafts">Drafts</Tabs.Trigger>
+    <Tabs.Trigger class="col-span-1" value="published">Published</Tabs.Trigger>
+    <Tabs.Trigger class="col-span-1" value="archived">Archived</Tabs.Trigger>
+  </Tabs.List>
   <Tabs.Content value="all">
     <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
       {#if !listings.length}

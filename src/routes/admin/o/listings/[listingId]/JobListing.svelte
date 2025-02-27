@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type { ListingModel, OrganizationModel } from '../../../../../app';
-	import { MapPin } from 'lucide-svelte';
+	import MapPin from 'lucide-svelte/icons/map-pin';
 	import { Badge } from '$lib/components/ui/badge';
-	import { marked } from 'marked';
-	import DOMPurify from 'dompurify';
 	import Markdown from '$lib/components/Markdown.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	let {
 		listing,
@@ -20,16 +19,14 @@
 		"part-time": "Part Time",
 		"internship": "Internship"
 	};
-
-	let htmlContent = $derived(marked.parse(listing.description));
 </script>
 
 <div class="mt-6">
-	<h1 class="text-xl md:text-3xl font-bold">
+	<h1 class="text-4xl md:text-5xl font-bold">
 		{listing.title}
 	</h1>
-	<div class="mt-2 flex gap-6 items-center border-b pb-6">
-		<a href={`/organizations/${organization.id}`} class="text-muted-foreground font-semibold underline">
+	<div class="mt-2 flex gap-6 items-center flex-wrap">
+		<a href={`/organizations/${organization.id}`} class="text-muted-foreground hover:underline">
 			{organization.name}
 		</a>
 
@@ -39,9 +36,17 @@
 				{listing.location}
 			</p>
 		{/if}
-		<Badge variant="outline">{values[listing.type]}</Badge>
+		<Badge>{values[listing.type]}</Badge>
 	</div>
 	<div class="mt-6">
+		{#if listing.thumbnail}
+			<img src={listing.thumbnail} class="rounded-md shadow mb-6" />
+		{/if}
 		<Markdown	content={listing.description} />
+	</div>
+	<div class="w-full flex mt-6 items-center justify-center">
+		<Button class="shadow-lg shadow-primary/40">
+			Apply for this job
+		</Button>
 	</div>
 </div>

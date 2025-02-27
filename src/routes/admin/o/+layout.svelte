@@ -13,6 +13,7 @@
   import { goto } from '$app/navigation';
   import Breadcrumb from './Breadcrumb.svelte';
   import { Button } from "$lib/components/ui/button/index";
+  import Footer from  '$lib/components/Footer.svelte';
 
   let {
     children
@@ -51,7 +52,7 @@
 
 <Sidebar {items} bind:open={openSidebar} />
 <div class="min-h-screen flex flex-col pl-0 lg:pl-60">
-  <div class="flex-shrink-0 border-b flex justify-between px-6 h-16">
+  <div class="flex-shrink-0 border-b border-border flex justify-between px-6 h-16 sticky top-0 bg-background/75 backdrop-blur">
     <div class="flex items-center justify-start gap-4">
       <div class="lg:hidden block">
         <Button
@@ -66,7 +67,7 @@
     </div>
 
     <div class="flex items-center justify-end gap-4">
-      <Input class="grow w-max md:w-56 shadow" placeholder="Search..." />
+      <Input class="grow w-max md:w-56" placeholder="Search..." />
       <DropdownMenu.Root>
         <DropdownMenu.Trigger class="rounded-full">
           <Avatar.Root>
@@ -88,4 +89,6 @@
   <div class="flex flex-col flex-1 p-6 bg-muted/50">
     {@render children()}
   </div>
+
+  <Footer hideLogo={true} />
 </div>

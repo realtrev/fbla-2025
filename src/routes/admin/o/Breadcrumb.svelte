@@ -33,7 +33,7 @@
       href: '/admin/o/listings'
     },
     {
-      value: 'Edit Listing',
+      value: 'Manage Listing',
       href: '/admin/o/listings/'
     },
   ];
