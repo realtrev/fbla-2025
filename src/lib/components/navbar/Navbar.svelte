@@ -31,7 +31,7 @@
   </Sheet.Content>
 </Sheet.Root>
 
-<nav class={cn(className, "h-full max-h-screen fixed hidden lg:flex flex-col items-center justify-start col text-sm font-medium w-60 border-r grow")}>
+<nav class={cn(className, "h-full max-h-screen fixed hidden lg:flex flex-col items-center justify-start col text-sm font-medium w-60 border-r border-border grow")}>
   <div class="h-16 border-b w-full flex items-center px-6">
     <Logo />
   </div>

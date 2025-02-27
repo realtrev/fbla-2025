@@ -4,7 +4,7 @@ const schoolAdminOnlyRoutes = ['/admin/s/dashboard'];
 
 const organizationAdminOnlyRoutes = ['/admin/o/dashboard', '/admin/o/messages', '/admin/o/listings', '/admin/o/applications'];
 
-const anyAccess = ['/licenses'];
+const anyAccess = ['/licenses','/terms','/about','/privacy'];
 
 
 const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean, accountType?: string) => {

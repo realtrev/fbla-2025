@@ -63,6 +63,7 @@ export const actions: Actions = {
         description: formData.get("description"),
         type: formData.get("type"),
         location: formData.get("location"),
+        thumbnail: formData.get("thumbnail"),
       })
         .then((r: ListingModel) => r);
     } catch (e) {
