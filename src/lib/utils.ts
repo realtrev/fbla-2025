@@ -54,14 +54,16 @@ export function postAction(path: string, options: {
 
 			// Get JSON result
 			const data = await response.text();
-			console.log(data);
 			const action = deserialize(data);
 
 			// Call result handler
 			options.onResult?.({ action });
 		} catch (err) {
 			error.set(err instanceof Error ? err : new Error("Unknown error"));
-			options.onError?.(error);
+			if (options.onError) {
+				options.onError?.(error);
+			}
+			throw err;
 		} finally {
 			isSubmitting.set(false);
 		}

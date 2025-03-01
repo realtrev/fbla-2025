@@ -25,7 +25,7 @@
 	<h1 class="text-4xl md:text-5xl font-bold">
 		{listing.title}
 	</h1>
-	<div class="mt-2 flex gap-6 items-center flex-wrap">
+	<div class="mt-4 flex gap-6 items-center flex-wrap">
 		<a href={`/organizations/${organization.id}`} class="text-muted-foreground hover:underline">
 			{organization.name}
 		</a>
@@ -38,13 +38,13 @@
 		{/if}
 		<Badge>{values[listing.type]}</Badge>
 	</div>
-	<div class="mt-6">
+	<div class="my-6">
 		{#if listing.thumbnail}
 			<img src={listing.thumbnail} class="rounded-md shadow mb-6" />
 		{/if}
 		<Markdown	content={listing.description} />
 	</div>
-	<div class="w-full flex mt-6 items-center justify-center">
+	<div class="w-full flex my-12 items-center justify-center">
 		<Button class="shadow-lg shadow-primary/40">
 			Apply for this job
 		</Button>
