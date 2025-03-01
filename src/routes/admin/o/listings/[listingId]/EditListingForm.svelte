@@ -19,7 +19,7 @@
   import Loading from '$lib/components/Loading.svelte';
   import Combobox from '$lib/components/Combobox.svelte';
   import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-  import { buildDebouncer, postAction } from '$lib/utils';
+  import { buildDebouncer, postAction, formatDate } from '$lib/utils';
   import { goto } from '$app/navigation';
   import type { ListingModel, OrganizationModel, SchoolModel } from '../../../../../app';
   import ChevronLeft from 'lucide-svelte/icons/chevron-left';
@@ -28,7 +28,12 @@
   import Save from 'lucide-svelte/icons/save';
   import * as Tabs from "$lib/components/ui/tabs";
   import JobListing from './JobListing.svelte';
-  import { onMount } from 'svelte';
+  import { onMount, createRawSnippet } from 'svelte';
+  import ListingActions from './ListingActions.svelte';
+  import Table from '$lib/components/table/Table.svelte';
+  import TableSortButton from '$lib/components/table/TableSortButton.svelte';
+  import { renderComponent, renderSnippet } from '$lib/components/ui/data-table';
+  import * as Accordion from "$lib/components/ui/accordion";
 
   let {
     listing,
@@ -44,7 +49,18 @@
 
   let submitting = $state(false);
   let tab = $state("edit");
-  let loaded = $state(false);
+  let schoolOptions = $state("all");
+
+  if (listing.published) {
+    tab = "schools";
+  }
+
+  let confirmedSchools = $state([]) as SchoolModel[];
+
+  $effect(() => {
+    confirmedSchools = availableSchools.filter((s) => listing.confirmedSchools.includes(s.id));
+  })
+
   let cloudSync = $state(true);
   let formBody;
   let debounce: Function;
@@ -110,6 +126,24 @@
     }
   });
 
+  let publishingListing = $state(false);
+  const publishListing = postAction("??/publishListing", {
+    onSubmit: () => {
+      publishingListing = true;
+      publishAlertOpen = false;
+    },
+    onResult: ({ action }) => {
+      console.log(action);
+
+      if (action.type === "success") {
+        toast.success("Published listing.");
+        tab = "schools";
+        listing.published = true;
+      }
+      publishingListing = false;
+    }
+  });
+
   const { isSubmitting } = deleteListing;
 
   const { form: formData, enhance, isTainted, errors, tainted } = form;
@@ -134,6 +168,7 @@
   ];
 
   let deleteAlertOpen = $state(false);
+  let publishAlertOpen = $state(false);
 
   $formData.title = listing.title;
   $formData.description = listing.description;
@@ -151,6 +186,49 @@
   const triggerContent = $derived(
     options.find((f) => f.value === $formData.type)?.label ?? "Select a job type"
   );
+
+  const columns = [
+    {
+      accessorKey: "title",
+      header: ({ column }) =>
+        renderComponent(TableSortButton, {
+          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
+          "aria-label": "Title"
+        }),
+//      cell: ({ row }) => {
+//        const nameSnippet = createRawSnippet<[string]>((getTitle) => {
+//          const title = getTitle();
+//          return {
+//            render: () => `<p class="hover:underline">${name}</p>`,
+//          };
+//        });
+//
+//        return renderSnippet(
+//          nameSnippet,
+//          row.getValue("name")
+//        );
+//      },
+      accessorFn: row => row.name
+    },
+    {
+      accessorKey: "location",
+      header: ({ column }) =>
+        renderComponent(TableSortButton, {
+          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
+          "aria-label": "Location"
+        }),
+      accessorFn: row => row.location
+    },
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        return renderComponent(ListingActions, { listing, school: row.original, updateTable() {
+        	console.log("table updated");
+        }, });
+      },
+      enableHiding: false,
+    }
+  ];
 </script>
 
 <div class="flex justify-between items-center">
@@ -176,13 +254,32 @@
     </div>
     <Tabs.Root class="w-full sm:block hidden" bind:value={tab}>
       <Tabs.List>
-        <Tabs.Trigger value="edit">Edit</Tabs.Trigger>
+        {#if !listing.published}
+          <Tabs.Trigger value="edit">Edit</Tabs.Trigger>
+        {/if}
         <Tabs.Trigger value="preview">Preview</Tabs.Trigger>
+        {#if !listing.archived && listing.published}
+          <Tabs.Trigger value="schools">Schools</Tabs.Trigger>
+        {/if}
+        <Tabs.Trigger value="applications">Applications</Tabs.Trigger>
       </Tabs.List>
     </Tabs.Root>
-    <Button>
-      Publish
+    {#if !listing.published}
+      <Button disabled={publishingListing} onclick={() => publishAlertOpen = true}>
+        {#if publishingListing}
+          <Loading />
+        {/if}
+        Publish
+      </Button>
+    {/if}
+    {#if listing.published}
+    <Button variant="outline" disabled={publishingListing} onclick={() => publishAlertOpen = true}>
+      {#if publishingListing}
+        <Loading />
+      {/if}
+      Archive
     </Button>
+    {/if}
   </div>
 </div>
 
@@ -204,6 +301,21 @@
     <AlertDialog.Footer>
       <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
       <AlertDialog.Action onclick={deleteListing.submit}>Continue</AlertDialog.Action>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+</AlertDialog.Root>
+
+<AlertDialog.Root bind:open={publishAlertOpen}>
+  <AlertDialog.Content>
+    <AlertDialog.Header>
+      <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+      <AlertDialog.Description>
+        This action cannot be undone. You cannot edit a published listing. Make sure you have previewed your listing before publishing.
+      </AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Action onclick={publishListing.submit}>Publish</AlertDialog.Action>
     </AlertDialog.Footer>
   </AlertDialog.Content>
 </AlertDialog.Root>
@@ -302,6 +414,34 @@
       <div class="mb-6">
         <JobListing {listing} {organization} />
       </div>
+    </Tabs.Content>
+    <Tabs.Content value="schools">
+      <Card.Root class="mt-6">
+        <Card.Header>
+          <Card.Title>Select Schools</Card.Title>
+          <Card.Description>
+            Select the schools where this listing will be shown.
+          </Card.Description>
+        </Card.Header>
+        <Card.Content class="flex flex-col gap-4">
+          <Accordion.Root type="single" bind:value={schoolOptions}>
+            <Accordion.Item value="all">
+              <Accordion.Trigger class="font-semibold">All Schools</Accordion.Trigger>
+              <Accordion.Content>
+                <Table bind:data={availableSchools} {columns} columnVisibility={{status: false}} filterColumn="title" searchPlaceholder="Search titles..." perPage={10} class="hover:cursor-pointer">
+                </Table>
+              </Accordion.Content>
+            </Accordion.Item>
+            <Accordion.Item value="verified">
+              <Accordion.Trigger class="font-semibold">Accepted</Accordion.Trigger>
+              <Accordion.Content>
+                <Table bind:data={confirmedSchools} {columns} columnVisibility={{status: false}} filterColumn="title" searchPlaceholder="Search titles..." perPage={10} class="hover:cursor-pointer">
+                </Table>
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion.Root>
+        </Card.Content>
+      </Card.Root>
     </Tabs.Content>
   </Tabs.Root>
 </form>

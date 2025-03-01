@@ -192,7 +192,7 @@
     <Tabs.Trigger class="col-span-1" value="archived">Archived</Tabs.Trigger>
   </Tabs.List>
   <Tabs.Content value="all">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
       {#if !listings.length}
         <div class="size-full flex items-center justify-center">
           <Loading />
@@ -213,7 +213,7 @@
     </Card>
   </Tabs.Content>
   <Tabs.Content value="drafts">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
       {#if !listings.length}
       <div class="size-full flex items-center justify-center">
         <Loading />
@@ -234,7 +234,7 @@
     </Card>
   </Tabs.Content>
   <Tabs.Content value="published">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
       {#if !listings.length}
         <div class="size-full flex items-center justify-center">
           <Loading />
@@ -246,7 +246,7 @@
     </Card>
   </Tabs.Content>
   <Tabs.Content value="archived">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
+    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
       {#if !listings.length}
         <div class="size-full flex items-center justify-center">
           <Loading />

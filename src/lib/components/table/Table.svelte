@@ -137,7 +137,7 @@
   }
 </script>
 
-<div class="w-full px-6">
+<div class="w-full">
   <div class="w-full flex justify-between">
     <Input placeholder={searchPlaceholder} class="max-w-60 mb-6" oninput={(e) => {
              table.getColumn(filterColumn ?? "")?.setFilterValue(e.currentTarget.value);
@@ -207,7 +207,7 @@
       </Table.Body>
     </Table.Root>
   </div>
-    <div class="flex items-center justify-between space-x-4 py-4 px-2">
+    <div class="flex items-center justify-between space-x-4 pt-4 px-2">
       <div class="text-sm text-muted-foreground">
         {pagination.pageIndex * pagination.pageSize + 1}-{endOfPage}
         of
