@@ -14,15 +14,15 @@
 <nav class="grid h-min text-sm font-medium w-full py-3 px-2 gap-1">
   {#each items as Item}
     {#if page.url.pathname.startsWith(Item.href)}
-      <a href={Item.href} class="shadow bg-foreground text-background nav-item">
-        <Item.icon class="size-4 mr-1" />
+      <a href={Item.href} class="shadow shadow-primary/25 bg-primary text-background nav-item">
+        <Item.icon class="size-4 mr-1" /> 
         {Item.title}
         {#if Item.badge}
           <Badge variant="secondary" class="ml-auto font-semibold">{Item.badge}</Badge>
         {/if}
       </a>
     {:else}
-      <a href={Item.href} class="font-medium hover:bg-muted text-foreground nav-item">
+      <a href={Item.href} class="font-medium hover:bg-primary/5 text-foreground nav-item">
         <Item.icon class="size-4 mr-1" />
         {Item.title}
         {#if Item.badge}

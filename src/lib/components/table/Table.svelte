@@ -137,7 +137,7 @@
   }
 </script>
 
-<div class="w-full">
+<div class="w-full -z-1">
   <div class="w-full flex justify-between">
     <Input placeholder={searchPlaceholder} class="max-w-60 mb-6" oninput={(e) => {
              table.getColumn(filterColumn ?? "")?.setFilterValue(e.currentTarget.value);

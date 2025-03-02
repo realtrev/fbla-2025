@@ -26,6 +26,15 @@ interface FormResponse {
   location?: string;
 }
 
+interface UserModel extends RecordModel {
+  firstName: string,
+  lastName: string,
+  avatar: string,
+  school: string,
+  organization: string,
+  accountType: 'student' | 'schoolAdmin' | 'organizationAdmin'
+}
+
 interface Dictionary<T> {
   [key: string]: T
 }
@@ -65,4 +74,15 @@ interface ListingModel extends RecordModel {
   updated: string
 }
 
-export { FormResponse, Dictionary, OrganizationModel, SchoolModel, ListingModel };
+interface ApplicationModel extends RecordModel {
+  listing: string,
+  student: string,
+  resume: string,
+  attachedMessage: string,
+  status: 'submitted' | 'reviewed' | 'accepted' | 'rejected',
+  expand: {
+    student: StudentModel
+  }
+}
+
+export { FormResponse, Dictionary, OrganizationModel, SchoolModel, ListingModel, ApplicationModel };

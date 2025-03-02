@@ -101,7 +101,7 @@
           {#if runningAction}
             <Loading />
           {:else}
-            <Trash2 class="size-4" />
+            <Trash2 class="size-4 text-primary" />
           {/if}
           Remove
         </Button>
@@ -119,7 +119,7 @@
           {#if runningAction}
             <Loading />
           {:else}
-            <MailMinus class="size-4" />
+            <MailMinus class="size-4 text-primary" />
           {/if}
           Cancel
         </Button>
@@ -138,7 +138,7 @@
           {#if runningAction}
             <Loading />
           {:else}
-            <MailPlus class="size-4" />
+            <MailPlus class="size-4 text-primary" />
           {/if}
           Request
         </Button>

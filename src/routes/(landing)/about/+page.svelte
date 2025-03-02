@@ -1,7 +1,7 @@
 <script lang="ts">
   import Document from '$lib/components/Document.svelte';
 
-  import TERMS from '$lib/documents/TERMS.md?raw';
+  import README from '../../../../README.md?raw';
 </script>
 
-<Document content={TERMS} />
+<Document content={README} />

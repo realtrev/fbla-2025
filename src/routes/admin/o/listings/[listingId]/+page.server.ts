@@ -27,6 +27,11 @@ export const load = async (event: ServerLoadEvent) => {
     });
   }
 
+  const applications = await pb.collection('applications').getFullList({
+    filter: `listing = '${listingId}'`,
+    expand: 'student'
+  });
+
   const organizationId = locals.user?.organization;
   const currentOrg = await pb.collection('organizations').getOne(organizationId, {
     expand: "partnerSchools"
@@ -36,7 +41,8 @@ export const load = async (event: ServerLoadEvent) => {
     listing: listing,
     organization: currentOrg,
     form: await superValidate(zod(editSchema)),
-    availableSchools: currentOrg.expand?.partnerSchools ?? []
+    availableSchools: currentOrg.expand?.partnerSchools ?? [],
+    applications
   };
 }
 

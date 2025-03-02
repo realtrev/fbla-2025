@@ -10,20 +10,20 @@
 
   const values = [
     {
-      id: "volunteer",
-      title: "Volunteer"
+      id: "submitted",
+      title: "Submitted"
     },
     {
-      id: "full-time",
-      title: "Full Time"
+      id: "reviewed",
+      title: "Reviewed"
     },
     {
-      id: "part-time",
-      title: "Part Time"
+      id: "accepted",
+      title: "Accepted"
     },
     {
-      id: "internship",
-      title: "Internship"
+      id: "rejected",
+      title: "Rejected"
     }
   ];
 
