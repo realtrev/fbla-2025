@@ -16,12 +16,12 @@ export function postAction(path: string, options: {
 	}) => void;
 	onError?: (e: any) => void;
 }) {
-	let isSubmitting = writable(false);
+	let isDeleting = writable(false);
 	let error = writable(null);
 
 	async function submit(event?: Event, ...args: any[]) {
 		event?.preventDefault();
-		isSubmitting.set(true);
+		isDeleting.set(true);
 		error.set(null);
 
 		try {
@@ -32,7 +32,7 @@ export function postAction(path: string, options: {
 				formData,
 				cancel: () => {
 					cancelled = true;
-					isSubmitting.set(false);
+					isDeleting.set(false);
 				},
 				...args,
 			});
@@ -65,13 +65,13 @@ export function postAction(path: string, options: {
 			}
 			throw err;
 		} finally {
-			isSubmitting.set(false);
+			isDeleting.set(false);
 		}
 	}
 
 	return {
 		submit,
-		isSubmitting,
+		isSubmitting: isDeleting,
 		error,
 	};
 }

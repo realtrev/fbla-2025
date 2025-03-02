@@ -3,7 +3,11 @@
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
   import { Button } from "$lib/components/ui/button";
 
-  let { id }: { id: string } = $props();
+  let {
+    application
+   }: {
+     application: ApplicationModel
+   } = $props();
 </script>
 
 <DropdownMenu.Root>
@@ -29,6 +33,5 @@
     </DropdownMenu.Group>
     <DropdownMenu.Separator />
     <DropdownMenu.Item>View customer</DropdownMenu.Item>
-    <DropdownMenu.Item>View payment details</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

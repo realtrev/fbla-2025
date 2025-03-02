@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Document from '../Document.svelte';
+  import Document from '$lib/components/Document.svelte';
 
   import PRIVACY from '$lib/documents/PRIVACY.md?raw';
 </script>

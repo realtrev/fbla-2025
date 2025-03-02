@@ -8,16 +8,13 @@
 		listingType = $bindable('Undefined')
 	} = $props();
 
-  const values = {
-    "volunteer": "Volunteer",
-    "full-time":"Full Time",
-    "part-time": "Part Time",
-    "internship": "Internship"
-  };
-
   function present(listingType: string) {
     return values[listingType] ?? listingType;
   }
 </script>
 
-<Badge variant="outline">{listingType}</Badge>
+{#if listingType === "Published"}
+  <Badge class="bg-foreground text-background hover:bg-foreground">{listingType}</Badge>
+{:else}
+  <Badge variant="outline">{listingType}</Badge>
+{/if}

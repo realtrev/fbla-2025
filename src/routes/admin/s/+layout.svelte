@@ -23,29 +23,29 @@
 
   let items = [
     {
-      href: "/admin/o/dashboard",
+      href: "/admin/s/dashboard",
       title: "Dashboard",
       icon: House,
     },
     {
-      href: "/admin/o/listings",
-      title: "Listings",
+      href: "/admin/s/listings",
+      title: "Students",
       icon: ListCheck
     },
     {
-      href: "/admin/o/applications",
+      href: "/admin/s/applications",
       title: "Applications",
       icon: FileIcon
     },
     {
-      href: "/admin/o/messages",
-      title: "Messages",
+      href: "/admin/s/organizations",
+      title: "Organizations",
       icon: Send,
     },
     {
-      href: "/admin/o/schools",
-      title: "Schools",
-      icon: School
+      href: "/admin/s/messages",
+      title: "Messages",
+      icon: Send,
     }
   ];
 </script>

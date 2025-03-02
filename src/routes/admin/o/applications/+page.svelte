@@ -12,6 +12,8 @@
   import ListingActions from './ListingActions.svelte';
   import ListingTypes from './ListingTypes.svelte';
   import Plus from 'lucide-svelte/icons/plus';
+  import TableSortButton from '$lib/components/table/TableSortButton.svelte';
+  import { formatDate } from '$lib/utils';
 
   let {
     data
@@ -27,64 +29,47 @@
   let totalPages = $state(0);
   let pageSize = $state(10);
 
-  async function loadListings() {
-    const resultList = await pb.collection('applications').getFullList({
-      expand: 'listing,student',
-    })
-    .then((result) => {
-      applications = result as ListingModel[];
-      totalCount = applications.length;
-      console
-    })
-  }
-
   console.log(data.applications);
 
   const columns = [
     {
-      accessorKey: "student",
-      header: "Student",
+      accessorKey: "name",
+      header: "Name",
+      accessorFn: (row) => `${row.expand.student.firstName} ${row.expand.student.lastName}`
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
       cell: ({ row }) => {
-        const nameSnippet = createRawSnippet<[string]>((getName) => {
-          const name = getName();
-          return {
-            render: () => `<div>${name}</div>`,
-          };
-        });
-
-        return renderSnippet(
-          nameSnippet,
-          `${row.original.expand.student.firstName} ${row.original.expand.student.lastName}`
-        );
+        return renderComponent(ListingTypes, { listingType: row.getValue('status') });
       }
     },
     {
       accessorKey: "listing",
       header: "Listing",
+      accessorFn: (row) =>  row.expand.listing.title
+    },
+    {
+      accessorKey: "submitted",
+      header: ({ column }) =>
+        renderComponent(TableSortButton, {
+          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
+          "aria-label": "Last Edited"
+        }),
       cell: ({ row }) => {
         const nameSnippet = createRawSnippet<[string]>((getName) => {
           const name = getName();
           return {
-            render: () => `<div>${name}</div>`,
+            render: () => `<div class="grid"><p>${name.split("|")[0]}</p><p class="text-xs text-muted-foreground">${name.split("|")[1]}</p></div>`,
           };
         });
 
         return renderSnippet(
           nameSnippet,
-          `${row.original.expand.student.firstName} ${row.original.expand.student.lastName}`
+          formatDate(row.original.submitted, true)
         );
-      }
-    },
-    {
-      accessorKey: "type",
-      header: "Type",
-      cell: ({ row }) => {
-        return renderComponent(ListingTypes, { listingType: row.getValue('type') });
-      }
-    },
-    {
-      accessorKey: "updated",
-      header: "Last Updated",
+      },
+      accessorFn: row => row.submitted
     },
     {
       id: "actions",
@@ -95,16 +80,22 @@
     }
   ];
 
-  loadListings();
-
   onMount(() => {
     totalCount = applications.length;
     applications = data.applications;
   });
 </script>
 
-<h1 class="text-lg md:text-2xl font-semibold">Applications</h1>
-<Card class="size-full border border-dashed mt-6 grow flex flex-col pt-6">
-  <Table bind:data={applications} {columns} bind:count={totalCount} bind:currentPage={page} bind:perPage={pageSize} class="hover:cursor-pointer">
+
+<div>
+  <h1 class="text-lg md:text-2xl font-semibold">
+    Applications
+  </h1>
+  <p class="text-muted-foreground mt-1">
+    View applications from students.
+  </p>
+</div>
+<Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
+  <Table bind:data={applications} {columns} bind:count={totalCount} filterColumn="name" bind:currentPage={page} bind:perPage={pageSize} class="hover:cursor-pointer">
   </Table>
 </Card>

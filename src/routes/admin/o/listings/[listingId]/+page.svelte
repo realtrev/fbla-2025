@@ -16,7 +16,8 @@
       listing: ListingModel,
       availableSchools: SchoolModel[],
       form: FormSchema,
-      organization
+      organization,
+      applications
     }
   } = $props();
 
@@ -25,7 +26,6 @@
   let loading = $state(true);
 
   onMount(async() => {
-    console.log(listing.type);
     loading = false;
   });
 </script>
@@ -36,6 +36,6 @@
     <LoaderCircle class="animate-spin" />
   </div>
   {:else}
-    <EditListingForm form={data.form} {listing} {availableSchools} organization={data.organization} />
+    <EditListingForm form={data.form} {listing} {availableSchools} applications={data.applications} organization={data.organization} />
   {/if}
 </div>

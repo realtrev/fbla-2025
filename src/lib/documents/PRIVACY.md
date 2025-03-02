@@ -1,6 +1,6 @@
 # Privacy Policy for JobFair
 
-**Last Updated:** 2/26/2025
+**Last Updated:** February 26, 2025
 
 Thank you for using JobFair! This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform. By using JobFair, you agree to the terms outlined in this policy.
 

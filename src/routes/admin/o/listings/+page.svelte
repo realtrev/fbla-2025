@@ -88,6 +88,18 @@
         }),
     },
     {
+      accessorKey: "status",
+      header: ({ column }) =>
+        renderComponent(TableSortButton, {
+          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
+          "aria-label": "Status"
+        }),
+      cell: ({ row }) => {
+        return renderComponent(ListingTypes, { listingType: row.getValue("status") });
+      },
+      accessorFn: row => row.archived ? "Archived" : row.published ? "Published" : "Draft"
+    },
+    {
       accessorKey: "updated",
       header: ({ column }) =>
         renderComponent(TableSortButton, {
@@ -108,18 +120,6 @@
         );
       },
       accessorFn: row => row.updated
-    },
-    {
-      accessorKey: "status",
-      header: ({ column }) =>
-        renderComponent(TableSortButton, {
-          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-          "aria-label": "Status"
-        }),
-      cell: ({ row }) => {
-        return renderComponent(ListingTypes, { listingType: row.getValue("status") });
-      },
-      accessorFn: row => row.archived ? "Archived" : row.published ? "Published" : "Draft"
     },
     {
       id: "actions",
