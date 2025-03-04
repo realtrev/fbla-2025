@@ -85,4 +85,4 @@ interface ApplicationModel extends RecordModel {
   }
 }
 
-export { FormResponse, Dictionary, OrganizationModel, SchoolModel, ListingModel, ApplicationModel };
+export { UserModel, FormResponse, Dictionary, OrganizationModel, SchoolModel, ListingModel, ApplicationModel };

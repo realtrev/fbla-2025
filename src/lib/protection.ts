@@ -1,10 +1,12 @@
 const guestOnlyRoutes = ['/', '/login', '/register_student', '/register_business', '/login/school', '/login/organization', '/forgot_password'];
 
-const schoolAdminOnlyRoutes = ['/admin/s/dashboard'];
+const schoolAdminOnlyRoutes = ['/admin/s/dashboard', '/admin/s/messages', '/admin/s/students', '/admin/s/applications', '/admin/s/listings'];
 
 const organizationAdminOnlyRoutes = ['/admin/o/dashboard', '/admin/o/messages', '/admin/o/listings', '/admin/o/applications'];
 
-const anyAccess = ['/licenses','/terms','/about','/privacy'];
+const studentOnlyRoutes = ['/dashboard', '/dashboard/messages', '/dashboard/applications', '/jobs', '/messages'];
+
+const anyAccess = ['/licenses','/terms','/about','/privacy', '/cookies', '/contact'];
 
 
 const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean, accountType?: string) => {
@@ -29,6 +31,10 @@ const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean, acc
 
   if (targetRoute === '/api/logout') {
     return targetRoute;
+  }
+
+  if (!studentOnlyRoutes.map((route) => targetRoute.startsWith(route)).some((t) => t == true) && accountType === 'student') {
+    return '/dashboard';
   }
 
   if (!organizationAdminOnlyRoutes.map((route) => targetRoute.startsWith(route)).some((t) => t == true) && accountType === 'organizationAdmin') {

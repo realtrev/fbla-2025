@@ -87,6 +87,10 @@ export function formatDate(isoString, includeTime = false) {
         formattedDate += `|${date.toLocaleTimeString('en-US', timeOptions)}`;
     }
 
+		if (formattedDate.includes("Invalid Date")) {
+			return "N/A";
+		}
+
     return formattedDate;
 }
 
