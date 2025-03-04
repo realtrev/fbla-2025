@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ListingModel, OrganizationModel } from '../../../../../app';
+	import type { ListingModel, OrganizationModel } from '../../app';
 	import MapPin from 'lucide-svelte/icons/map-pin';
 	import { Badge } from '$lib/components/ui/badge';
 	import Markdown from '$lib/components/Markdown.svelte';
@@ -44,9 +44,9 @@
 		{/if}
 		<Markdown	content={listing.description} />
 	</div>
-	<div class="w-full flex my-12 items-center justify-center">
-		<Button class="shadow-lg shadow-primary/40">
-			Apply for this job
-		</Button>
-	</div>
+<!--	<div class="w-full flex my-12 items-center justify-center">-->
+<!--		<Button class="shadow-lg shadow-primary/40">-->
+<!--			Apply for this job-->
+<!--		</Button>-->
+<!--	</div>-->
 </div>

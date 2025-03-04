@@ -27,7 +27,7 @@
   import CloudUpload from 'lucide-svelte/icons/cloud-upload';
   import Save from 'lucide-svelte/icons/save';
   import * as Tabs from "$lib/components/ui/tabs";
-  import JobListing from './JobListing.svelte';
+  import JobListing from '$lib/components/JobListing.svelte';
   import SchoolTables from './SchoolTables.svelte';
   import ApplicationTable from './ApplicationTable.svelte';
 

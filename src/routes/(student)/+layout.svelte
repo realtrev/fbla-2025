@@ -12,8 +12,8 @@
   import Sidebar from '$lib/components/navbar/Navbar.svelte';
   import { goto } from '$app/navigation';
   import Breadcrumb from './Breadcrumb.svelte';
-  import { Button } from "$lib/components/ui/button/index";
-  import Footer from  '$lib/components/Footer.svelte';
+  import { Button } from "$lib/components/ui/button";
+  import Footer from '$lib/components/Footer.svelte';
 
   let {
     children
@@ -23,27 +23,17 @@
 
   let items = [
     {
-      href: "/admin/s/dashboard",
+      href: "/dashboard",
       title: "Dashboard",
       icon: House,
     },
     {
-      href: "/admin/s/students",
-      title: "Students",
-      icon: ListCheck
-    },
-    {
-      href: "/admin/s/listings",
-      title: "Listings",
+      href: "/jobs",
+      title: "Jobs",
       icon: FileIcon
     },
     {
-      href: "/admin/s/organizations",
-      title: "Organizations",
-      icon: Send,
-    },
-    {
-      href: "/admin/s/messages",
+      href: "/messages",
       title: "Messages",
       icon: Send,
     }
