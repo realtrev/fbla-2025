@@ -8,13 +8,13 @@
 - **Business Job Postings**: Businesses can post job openings, internships, or volunteer opportunities and target specific schools.
 - **Student Access**: Students can log in using their school email to view job listings, apply, and track their applications.
 - **Direct Messaging (Possibly)**: A built-in messaging system allows students to connect directly with businesses for inquiries.
-- **Bot Protection**: hCaptcha integration ensures secure and spam-free interactions.
+- **Bot Protection**: Cloudflare Turnstile integration ensures secure and spam-free interactions.
 
 ## Tech Stack
 
 - **Frontend**: SvelteKit
 - **Backend**: PocketBase
-- **Authentication**: PocketBase Auth with hCaptcha
+- **Authentication**: PocketBase Auth with Cloudflare Turnstile
 - **State Management**: Svelte stores with persistent data handling
 - **Real-Time Updates**: PocketBase subscriptions
 - **Styling**: Mainly Tailwind CSS with some custom styles
