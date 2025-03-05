@@ -36,6 +36,11 @@ export const actions: Actions = {
   approveListing: async (event) => {
     const { locals, request, params } = event;
 
+    let userType = locals?.user?.accountType;
+    if (userType !== 'schoolAdmin') {
+      error(401, { message: 'Unauthorized' });
+    }
+
     const formData = await request.formData();
 
     const schoolId = locals.school?.id;
