@@ -33,6 +33,11 @@
       icon: FileIcon
     },
     {
+      href: "/applications",
+      title: "Applications",
+      icon: FileIcon
+    },
+    {
       href: "/messages",
       title: "Messages",
       icon: Send,
