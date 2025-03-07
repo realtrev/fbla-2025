@@ -96,7 +96,7 @@
   </div>
 
   <div class="flex gap-4 items-center">
-    <Button>
+    <Button href={`/jobs/${listing.id}/apply`}>
       Apply
     </Button>
   </div>

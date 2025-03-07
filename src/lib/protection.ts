@@ -4,7 +4,7 @@ const schoolAdminOnlyRoutes = ['/admin/s/dashboard', '/admin/s/messages', '/admi
 
 const organizationAdminOnlyRoutes = ['/admin/o/dashboard', '/admin/o/messages', '/admin/o/listings', '/admin/o/applications'];
 
-const studentOnlyRoutes = ['/dashboard', '/dashboard/messages', '/dashboard/applications', '/jobs', '/messages'];
+const studentOnlyRoutes = ['/dashboard', '/dashboard/messages', '/dashboard/applications', '/jobs', '/messages', '/applications', '/profile'];
 
 const anyAccess = ['/licenses','/terms','/about','/privacy', '/cookies', '/contact'];
 

@@ -133,7 +133,6 @@ function dragAndDropFiles(htmlElement: HTMLElement, callback: (files: FileList) 
 		let dt = e.dataTransfer;
 		let files = dt?.files ?? new FileList();
 		onHoverChange(false);
-		console.log(files);
 		callback(files);
 	}
 
@@ -206,7 +205,7 @@ class BinarySize {
 
 	toString() {
 		const i = Math.floor(Math.log(this._bytes) / Math.log(1024));
-		return (this._bytes / Math.pow(1024, i)).toFixed(1) + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][i];
+		return (this._bytes / Math.pow(1024, i)).toFixed(1) + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 	}
 
 	constructor(bytes: number) {
@@ -239,28 +238,6 @@ class Cookie {
 	static eraseCookie(name) {
 		createCookie(name,"",-1);
 	}
-}
-
-export function createEnterKeyHandler(formElement, targetButton) {
-	function handleKeyDown(event) {
-		if (event.key === 'Enter') {
-			const focusedElement = document.activeElement;
-			const isButtonOrAnchor =
-				focusedElement.tagName === 'BUTTON' || focusedElement.tagName === 'A';
-			if (isButtonOrAnchor) return; // Do nothing if the focused element is a button or anchor
-
-			event.preventDefault(); // Prevent the default behavior
-			targetButton.click(); // Programmatically click the target button
-		}
-	}
-
-	// Attach the event listener
-	formElement.addEventListener('keydown', handleKeyDown);
-
-	// Return a cleanup function to remove the event listener
-	return () => {
-		formElement.removeEventListener('keydown', handleKeyDown);
-	};
 }
 
 export function cn(...inputs: ClassValue[]) {

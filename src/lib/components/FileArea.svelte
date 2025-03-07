@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+
 	import Check from 'lucide-svelte/icons/check';
-  import { Check, CircleAlert, PlusIcon, UploadIcon } from 'lucide-svelte/icons/check';
+	import PlusIcon from 'lucide-svelte/icons/plus';
+	import UploadIcon from 'lucide-svelte/icons/upload';
+	import CircleAlertIcon from 'lucide-svelte/icons/circle-alert';
+
 	import { scale } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';
 	import { BinarySize, dragAndDropFiles, ellipsisInTheMiddle } from '$lib/utils';
@@ -9,7 +13,7 @@
   let {
     multiple = false,
     files = $bindable([]),
-    file = $bindable(null),
+    file = $bindable(null) as File | null,
     label = '',
     placeholder = 'Upload a file',
     accept = '*',
@@ -52,6 +56,7 @@
     ondragleave?: (e: MouseEvent) => void;
     ondrop?: (e: MouseEvent) => void;
     onclick?: (e: MouseEvent) => void;
+		onchange?: (f: File) => void;
 
     class?: string;
   } = $props();
@@ -82,12 +87,16 @@
     },
 
     onclick: (e: MouseEvent) => {
+			console.log("yeah!");
+			input?.click();
+
       if (props.onclick) {
         props.onclick(e);
       }
     },
 
     onfocus: (e: FocusEvent) => {
+			console.log("test");
       focus = true;
 
       if (props.onfocus) {
@@ -101,7 +110,24 @@
       if (props.onblur) {
         props.onblur(e);
       }
-    }
+    },
+
+		onchange: (e: ChangeEvent) => {
+			const target = e.target as HTMLInputElement;
+			const files = target.files;
+			handleFileUpload(files);
+			transformUnfilteredFiles(unfilteredFiles);
+
+			if (autoValidate) {
+				checkValidity();
+			}
+
+			console.log(file);
+
+			if (props.onchange) {
+				props.onchange(file);
+			}
+		}
   }
 
 	// transform
@@ -195,10 +221,11 @@
 	}
 </script>
 
+
 <div
 	bind:this={dragOverArea}
 	class={`${props.class ?? ''} relative group`}
-	onclick={() => input?.focus()}
+	onclick={dispatch.onclick}
 >
 	<label for={label} class="label">
 		<input
@@ -206,14 +233,14 @@
 				id={label}
 				type="file"
         oninput={dispatch.oninput}
-        onclick={dispatch.onclick}
         onfocus={dispatch.onfocus}
         onblur={dispatch.onblur}
+				onchange={dispatch.onchange}
 
 				{accept}
 				{multiple}
         {disabled}
-				data-form-element="textinput"
+				data-form-element="fileinput"
 		/>
 		{#if label || props.rightLabel}
 			<div class="flex justify-between items-center mb-0.5">
@@ -267,7 +294,7 @@
       {/if}
       {#if displayedErrorMessage}
         <div class="flex items-center mt-0.5">
-          <CircleAlert class="text-red-500 h-5 w-5 mr-0.5" />
+          <CircleAlertIcon class="text-red-500 h-5 w-5 mr-0.5" />
           <span class="text-red-500 text-sm font-medium h-min translate-y-[0px]">{displayedErrorMessage}</span>
         </div>
       {/if}
@@ -277,12 +304,12 @@
 
 <style>
 	.area-style {
-		@apply overflow-hidden invalid:border-red-500 flex flex-col items-center font-medium border border-dashed border-surface-3 text-surface-10 text-sm rounded-lg ring-0 w-full p-8 transition-all;
+		@apply overflow-hidden invalid:border-red-500 flex flex-col items-center font-medium border border-dashed border-border text-muted-foreground text-sm rounded-lg ring-0 w-full p-8 transition-all;
 	}
 
-	.button-focus {
-		@apply ring-2 ring-accent-5 border-accent-5 ring-opacity-50;
-	}
+	/*.button-focus {*/
+	/*	@apply ring-2 ring-accent-5 border-accent-5 ring-opacity-50;*/
+	/*}*/
 
 	.area-error {
 		@apply border-red-300;
@@ -293,11 +320,11 @@
 	}
 
 	.button-error {
-		@apply bg-red-500 text-surface-0;
+		@apply bg-red-500;
 	}
 
 	.dragover {
-		@apply bg-accent-1 border-accent-5;
+		@apply bg-primary/25 border-primary/25;
 	}
 
 	input[type='file'] {

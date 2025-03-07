@@ -4,17 +4,17 @@ import { error, fail, type ServerLoadEvent } from '@sveltejs/kit';
 export const load = async (event: ServerLoadEvent) => {
   const { cookies, locals, request, params } = event;
 
-	let userType = locals?.user?.accountType;
-	if (userType !== 'organizationAdmin') {
-		error(401, { message: 'Unauthorized' });
-	}
-
 	const authCookie = request.headers.get('cookie') ?? '';
 	pb.authStore.loadFromCookie(authCookie);
 
+	let userType = locals?.user?.accountType;
+	if (userType !== 'student') {
+		error(401, { message: 'Unauthorized' });
+	}
+
   return {
 		applications: await locals.pb.collection('applications').getFullList({
-			expand: 'listing,student',
+			expand: 'listing,student,listing.organization',
 		}),
   }
 }
