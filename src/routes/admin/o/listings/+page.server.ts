@@ -11,6 +11,6 @@ export const load = async (event: ServerLoadEvent) => {
 	const tab = params.tab || 'all';
 
   return {
-		listings: await locals.pb.collection('listings').getFullList(),
+		listings: await pb.collection('listings').getFullList(),
   }
 }

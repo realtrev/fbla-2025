@@ -13,7 +13,7 @@ export const load = async (event: ServerLoadEvent) => {
 	pb.authStore.loadFromCookie(authCookie);
 
   return {
-		applications: await locals.pb.collection('applications').getFullList({
+		applications: await pb.collection('applications').getFullList({
 			expand: 'listing,student',
 		}),
   }
