@@ -4,6 +4,7 @@ import { message, superValidate, fail as formFail, setError } from 'sveltekit-su
 import { applicationSchema } from './applicationForm';
 import type { ListingModel } from '../../../../../app';
 import { pb } from '$lib/database';
+import { BinarySize } from '$lib/utils';
 
 export const load = async (event: ServerLoadEvent) => {
   const { cookies, locals, params } = event;
@@ -58,8 +59,8 @@ export const actions: Actions = {
 
     const resume = formData.get("resume");
     // check that size is less than 512KB
-    if (resume instanceof File && resume.size > 512 * 1024) {
-      setError(form, "resume", "Resume must be less than 512KB");
+    if (resume instanceof File && resume.size > BinarySize.fromMegabytes(5).bytes) {
+      setError(form, "resume", "Resume must be less than 5MB");
       return formFail(400, {
         form,
       });
