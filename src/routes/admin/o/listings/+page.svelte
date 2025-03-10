@@ -33,13 +33,19 @@
   let totalPages = $state(0);
   let pageSize = $state(10);
 
+//  if (data.listings) {
+//    listings = data.listings;
+//  }
+
   async function loadListings() {
     const resultList = await pb.collection('listings').getFullList({
 //      filter: 'someField1 != someField2',
     })
     .then((result) => {
-      listings = result as ListingModel[];
-      totalCount = listings.length;
+      if (result) {
+        listings = result as ListingModel[];
+        totalCount = listings.length;
+      }
     })
   }
 
@@ -131,11 +137,6 @@
   ];
 
   loadListings();
-
-  onMount(() => {
-    totalCount = listings.length;
-    listings = data.listings;
-  });
 
   let draftListings = $state();
   let publishedListings = $state();

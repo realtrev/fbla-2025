@@ -59,7 +59,7 @@
 </script>
 
 <Toaster position="bottom-center" />
-{#if ($currentUser.school && !currentSchool) || ($currentUser.organization && !currentOrganization)}
+{#if  ($currentUser && $currentUser.school && !currentSchool) || ($currentUser && $currentUser.organization && !currentOrganization)}
   Loading
 {:else}
   {@render children()}

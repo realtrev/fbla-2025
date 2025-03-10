@@ -73,10 +73,7 @@
 
   let breadcrumbList = $state([]) as {value: string, href: string}[];
 
-  $effect(() => {
-    console.log(page.url.pathname);
-    updateBreadCrumb(page.url.pathname);
-  });
+  updateBreadCrumb(page.url.pathname);
 
   function updateBreadCrumb(url: string) {
     if (url.startsWith('/admin/o/dashboard')) {
