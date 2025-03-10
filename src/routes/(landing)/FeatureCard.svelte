@@ -11,9 +11,9 @@
 </script>
 
 <div
-	class="p-12 max-h-full flex flex-col items-center col-span-1 bg-background/20 rounded-xl shadow-xl shadow-accent-2"
+	class="p-6 py-12 h-full md:h-[340px] flex flex-col items-center col-span-1 bg-background/75 border border-border rounded-xl shadow shadow-accent-2"
 >
-	<svelte:component this={icon} class="w-20 h-20 text-background" strokeWidth="1.5" />
-	<h1 class="text-lg font-semibold mt-5 text-center w-full text-background">{title}</h1>
-	<p class=" mt-5 text-center w-full text-background">{description}</p>
+	<svelte:component this={icon} class="w-20 h-20 text-primary" strokeWidth="1.5" />
+	<h1 class="text-xl font-semibold mt-6 text-center w-full text-foreground">{title}</h1>
+	<p class=" mt-3 text-center w-full text-muted-foreground">{description}</p>
 </div>

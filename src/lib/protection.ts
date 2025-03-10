@@ -11,7 +11,7 @@ const anyAccess = ['/licenses','/terms','/about','/privacy', '/cookies', '/conta
 
 const allowRouteAccess = (targetRoute: string, userIsAuthenticated: boolean, accountType?: string) => {
   // if target route starts with /app, check if user is authenticated
-  if (anyAccess.includes(targetRoute)) {
+  if (anyAccess.includes(targetRoute) || targetRoute === "/") {
     return targetRoute;
   }
 

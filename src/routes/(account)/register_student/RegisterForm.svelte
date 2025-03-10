@@ -157,7 +157,7 @@
         </Form.Button>
 
         <div class="mt-4 text-center text-sm text-muted-foreground">
-          Don't have an account?
+          Already have an account?
           <a href="/login" class="underline">Sign in</a>
         </div>
       </form>

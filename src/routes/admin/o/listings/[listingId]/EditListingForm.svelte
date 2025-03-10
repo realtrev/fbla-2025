@@ -52,6 +52,10 @@
     tab = "schools";
   }
 
+  if (listing.archived) {
+    tab = "preview";
+  }
+
   let cloudSync = $state(true);
   let formBody;
   let debounce: Function;
@@ -137,6 +141,20 @@
     }
   });
 
+  let archivingListing = $state(false);
+  async function archiveListing() {
+    archiveAlertOpen = false;
+    archivingListing = true;
+    await pb.collection('listings').update(listing.id, {
+      archived: true
+    })
+    .then(() => {
+      toast.success('Archived ' + listing.title);
+      listing.archived = true;
+      archivingListing = false;
+    })
+  }
+
   const { form: formData, enhance, isTainted, errors, tainted } = form;
 
   const options = [
@@ -160,6 +178,7 @@
 
   let deleteAlertOpen = $state(false);
   let publishAlertOpen = $state(false);
+  let archiveAlertOpen = $state(false);
 
   $formData.title = listing.title;
   $formData.description = listing.description;
@@ -192,12 +211,14 @@
 
   <div class="flex gap-4 items-center">
     <div class="text-sm flex gap-1 text-muted-foreground items-center">
-      {#if cloudSync === false}
-          <CloudUpload class="size-4" />
-          Saving...
-      {:else}
-          <Cloud class="size-4" />
-          Saved
+      {#if !listing.archived}
+        {#if cloudSync === false}
+            <CloudUpload class="size-4" />
+            Saving...
+        {:else}
+            <Cloud class="size-4" />
+            Saved
+        {/if}
       {/if}
     </div>
     <Tabs.Root class="w-full sm:block hidden" bind:value={tab}>
@@ -209,7 +230,9 @@
         {#if !listing.archived && listing.published}
           <Tabs.Trigger value="schools">Schools</Tabs.Trigger>
         {/if}
-        <Tabs.Trigger value="applications">Applications</Tabs.Trigger>
+        {#if listing.published}
+          <Tabs.Trigger value="applications">Applications</Tabs.Trigger>
+        {/if}
       </Tabs.List>
     </Tabs.Root>
     {#if !listing.published}
@@ -220,9 +243,9 @@
         Publish
       </Button>
     {/if}
-    {#if listing.published}
-    <Button disabled={publishingListing} onclick={() => publishAlertOpen = true}>
-      {#if publishingListing}
+    {#if listing.published && !listing.archived}
+    <Button disabled={archiveListing} onclick={() => archiveAlertOpen = true}>
+      {#if archivingListing}
         <Loading />
       {/if}
       Archive
@@ -264,6 +287,21 @@
     <AlertDialog.Footer>
       <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
       <AlertDialog.Action onclick={publishListing.submit}>Publish</AlertDialog.Action>
+    </AlertDialog.Footer>
+  </AlertDialog.Content>
+</AlertDialog.Root>
+
+<AlertDialog.Root bind:open={archiveAlertOpen}>
+  <AlertDialog.Content>
+    <AlertDialog.Header>
+      <AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+      <AlertDialog.Description>
+        This action cannot be undone. Archived listings are permanent and cannot be viewed by students or school admins.
+      </AlertDialog.Description>
+    </AlertDialog.Header>
+    <AlertDialog.Footer>
+      <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+      <AlertDialog.Action onclick={publishListing.submit}>Yes, archive this</AlertDialog.Action>
     </AlertDialog.Footer>
   </AlertDialog.Content>
 </AlertDialog.Root>

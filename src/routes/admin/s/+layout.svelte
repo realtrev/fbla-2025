@@ -6,7 +6,7 @@
   import Send from 'lucide-svelte/icons/send';
   import School from 'lucide-svelte/icons/school';
 
-  import * as Avatar from "$lib/components/ui/avatar";
+  import Avatar from "$lib/components/Avatar.svelte";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
   import { Input } from '$lib/components/ui/input';
   import Sidebar from '$lib/components/navbar/Navbar.svelte';
@@ -70,10 +70,7 @@
       <Input class="grow w-max md:w-56" placeholder="Search..." />
       <DropdownMenu.Root>
         <DropdownMenu.Trigger class="rounded-full">
-          <Avatar.Root>
-            <Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-            <Avatar.Fallback>CN</Avatar.Fallback>
-          </Avatar.Root>
+          <Avatar />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="end">
           <DropdownMenu.Label>My Account</DropdownMenu.Label>

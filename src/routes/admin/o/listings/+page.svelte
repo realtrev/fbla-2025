@@ -18,6 +18,7 @@
 
   import Loading from '$lib/components/Loading.svelte';
   import type { ListingModel } from '../../../../app';
+  import { getColumns } from './listingTableLayout';
 
   let {
     data
@@ -49,100 +50,17 @@
     })
   }
 
-  const listingTypes = {
-    "volunteer": "Volunteer",
-    "full-time":"Full Time",
-    "part-time": "Part Time",
-    "internship": "Internship"
-  };
-
-  const columns = [
-    {
-      accessorKey: "title",
-      header: "Title",
-      header: ({ column }) =>
-        renderComponent(TableSortButton, {
-          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-          "aria-label": "Title"
-        }),
-      cell: ({ row }) => {
-        const nameSnippet = createRawSnippet<[string]>((getTitle) => {
-          const title = getTitle();
-          return {
-            render: () => `<p class="hover:underline">${title}</p>`,
-          };
-        });
-
-        return renderSnippet(
-          nameSnippet,
-          row.getValue("title")
-        );
-      },
-      accessorFn: row => row.title
-    },
-    {
-      accessorKey: "type",
-      header: "Type",
-      cell: ({ row }) => {
-        return renderComponent(ListingTypes, { listingType: row.getValue("type") });
-      },
-      accessorFn: (row) => listingTypes[row.type],
-      header: ({ column }) =>
-        renderComponent(TableSortButton, {
-          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-          "aria-label": "Type"
-        }),
-    },
-    {
-      accessorKey: "status",
-      header: ({ column }) =>
-        renderComponent(TableSortButton, {
-          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-          "aria-label": "Status"
-        }),
-      cell: ({ row }) => {
-        return renderComponent(ListingTypes, { listingType: row.getValue("status") });
-      },
-      accessorFn: row => row.archived ? "Archived" : row.published ? "Published" : "Draft"
-    },
-    {
-      accessorKey: "updated",
-      header: ({ column }) =>
-        renderComponent(TableSortButton, {
-          onclick: () => column.toggleSorting(column.getIsSorted() === "asc"),
-          "aria-label": "Last Edited"
-        }),
-      cell: ({ row }) => {
-        const nameSnippet = createRawSnippet<[string]>((getName) => {
-          const name = getName();
-          return {
-            render: () => `<div class="grid"><p>${name.split("|")[0]}</p><p class="text-xs text-muted-foreground">${name.split("|")[1]}</p></div>`,
-          };
-        });
-
-        return renderSnippet(
-          nameSnippet,
-          formatDate(row.original.updated, true)
-        );
-      },
-      accessorFn: row => row.updated
-    },
-    {
-      id: "actions",
-      cell: ({ row }) => {
-        return renderComponent(ListingActions, { listing: row.original, updateTable: loadListings });
-      },
-      enableHiding: false,
-    }
-  ];
+  const columns = getColumns(loadListings);
 
   loadListings();
 
+  let allListings = $state([]);
   let draftListings = $state();
   let publishedListings = $state();
   let archivedListings = $state();
 
   $effect(() => {
+    allListings = listings.filter((listing) => listing.archived === false);
     draftListings = listings.filter((listing) => listing.published === false && listing.archived === false);
     publishedListings = listings.filter((listing) => listing.published === true && listing.archived === false);
     archivedListings = listings.filter((listing) => listing.archived === true);
@@ -194,12 +112,12 @@
   </Tabs.List>
   <Tabs.Content value="all">
     <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
-      {#if !listings.length}
+      {#if !allListings.length}
         <div class="size-full flex items-center justify-center">
           <Loading />
         </div>
       {:else}
-        <Table bind:data={listings} {columns} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
+        <Table bind:data={allListings} {columns} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
           {#snippet action()}
             <Button
               href="/admin/o/listings/create"
