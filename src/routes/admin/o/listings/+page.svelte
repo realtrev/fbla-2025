@@ -170,92 +170,92 @@
 
 
 <Tabs.Root bind:value={page} class="w-full">
-  <div class="flex justify-between">
-    <div>
-      <h1 class="text-lg md:text-2xl font-semibold">
-        {tabTitlesAndDescriptions[page].title}
-      </h1>
-      <p class="text-muted-foreground mt-1">
-        {tabTitlesAndDescriptions[page].description}
-      </p>
-    </div>
-    <Tabs.List class="md:block hidden">
-      <Tabs.Trigger value="all">All</Tabs.Trigger>
-      <Tabs.Trigger value="drafts">Drafts</Tabs.Trigger>
-      <Tabs.Trigger value="published">Published</Tabs.Trigger>
-      <Tabs.Trigger value="archived">Archived</Tabs.Trigger>
-    </Tabs.List>
-  </div>
-  <Tabs.List class="md:hidden mt-6 grid grid-cols-4">
-    <Tabs.Trigger class="col-span-1" value="all">All</Tabs.Trigger>
-    <Tabs.Trigger class="col-span-1" value="drafts">Drafts</Tabs.Trigger>
-    <Tabs.Trigger class="col-span-1" value="published">Published</Tabs.Trigger>
-    <Tabs.Trigger class="col-span-1" value="archived">Archived</Tabs.Trigger>
-  </Tabs.List>
-  <Tabs.Content value="all">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
-      {#if !listings.length}
-        <div class="size-full flex items-center justify-center">
-          <Loading />
-        </div>
-      {:else}
-        <Table bind:data={listings} {columns} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
-          {#snippet action()}
-            <Button
-              href="/admin/o/listings/create"
-              class="ml-4"
-            >
-              <Plus class="h-5 w-5" />
-              Create
-            </Button>
-          {/snippet}
-        </Table>
-      {/if}
-    </Card>
-  </Tabs.Content>
-  <Tabs.Content value="drafts">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
-      {#if !listings.length}
-      <div class="size-full flex items-center justify-center">
-        <Loading />
-      </div>
-      {:else}
-        <Table bind:data={draftListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
-          {#snippet action()}
-            <Button
-              href="/admin/o/listings/create"
-              class="ml-4"
-            >
-              <Plus class="h-5 w-5" />
-              Create
-            </Button>
-          {/snippet}
-        </Table>
-      {/if}
-    </Card>
-  </Tabs.Content>
-  <Tabs.Content value="published">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
-      {#if !listings.length}
-        <div class="size-full flex items-center justify-center">
-          <Loading />
-        </div>
-      {:else}
-        <Table bind:data={publishedListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
-        </Table>
-      {/if}
-    </Card>
-  </Tabs.Content>
-  <Tabs.Content value="archived">
-    <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">
-      {#if !listings.length}
-        <div class="size-full flex items-center justify-center">
-          <Loading />
-        </div>
-      {:else}
-        <Table bind:data={archivedListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>
-        </Table>
-      {/if}
-    </Card>
-  </Tabs.Content>
+  <!--<div class="flex justify-between">-->
+  <!--  <div>-->
+  <!--    <h1 class="text-lg md:text-2xl font-semibold">-->
+  <!--      {tabTitlesAndDescriptions[page].title}-->
+  <!--    </h1>-->
+  <!--    <p class="text-muted-foreground mt-1">-->
+  <!--      {tabTitlesAndDescriptions[page].description}-->
+  <!--    </p>-->
+  <!--  </div>-->
+  <!--  <Tabs.List class="md:block hidden">-->
+  <!--    <Tabs.Trigger value="all">All</Tabs.Trigger>-->
+  <!--    <Tabs.Trigger value="drafts">Drafts</Tabs.Trigger>-->
+  <!--    <Tabs.Trigger value="published">Published</Tabs.Trigger>-->
+  <!--    <Tabs.Trigger value="archived">Archived</Tabs.Trigger>-->
+  <!--  </Tabs.List>-->
+  <!--</div>-->
+  <!--<Tabs.List class="md:hidden mt-6 grid grid-cols-4">-->
+  <!--  <Tabs.Trigger class="col-span-1" value="all">All</Tabs.Trigger>-->
+  <!--  <Tabs.Trigger class="col-span-1" value="drafts">Drafts</Tabs.Trigger>-->
+  <!--  <Tabs.Trigger class="col-span-1" value="published">Published</Tabs.Trigger>-->
+  <!--  <Tabs.Trigger class="col-span-1" value="archived">Archived</Tabs.Trigger>-->
+  <!--</Tabs.List>-->
+  <!--<Tabs.Content value="all">-->
+  <!--  <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">-->
+  <!--    {#if !listings.length}-->
+  <!--      <div class="size-full flex items-center justify-center">-->
+  <!--        <Loading />-->
+  <!--      </div>-->
+  <!--    {:else}-->
+  <!--      <Table bind:data={listings} {columns} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>-->
+  <!--        {#snippet action()}-->
+  <!--          <Button-->
+  <!--            href="/admin/o/listings/create"-->
+  <!--            class="ml-4"-->
+  <!--          >-->
+  <!--            <Plus class="h-5 w-5" />-->
+  <!--            Create-->
+  <!--          </Button>-->
+  <!--        {/snippet}-->
+  <!--      </Table>-->
+  <!--    {/if}-->
+  <!--  </Card>-->
+  <!--</Tabs.Content>-->
+  <!--<Tabs.Content value="drafts">-->
+  <!--  <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">-->
+  <!--    {#if !listings.length}-->
+  <!--    <div class="size-full flex items-center justify-center">-->
+  <!--      <Loading />-->
+  <!--    </div>-->
+  <!--    {:else}-->
+  <!--      <Table bind:data={draftListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>-->
+  <!--        {#snippet action()}-->
+  <!--          <Button-->
+  <!--            href="/admin/o/listings/create"-->
+  <!--            class="ml-4"-->
+  <!--          >-->
+  <!--            <Plus class="h-5 w-5" />-->
+  <!--            Create-->
+  <!--          </Button>-->
+  <!--        {/snippet}-->
+  <!--      </Table>-->
+  <!--    {/if}-->
+  <!--  </Card>-->
+  <!--</Tabs.Content>-->
+  <!--<Tabs.Content value="published">-->
+  <!--  <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">-->
+  <!--    {#if !listings.length}-->
+  <!--      <div class="size-full flex items-center justify-center">-->
+  <!--        <Loading />-->
+  <!--      </div>-->
+  <!--    {:else}-->
+  <!--      <Table bind:data={publishedListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>-->
+  <!--      </Table>-->
+  <!--    {/if}-->
+  <!--  </Card>-->
+  <!--</Tabs.Content>-->
+  <!--<Tabs.Content value="archived">-->
+  <!--  <Card class="size-full border border-dashed mt-6 grow flex flex-col p-6">-->
+  <!--    {#if !listings.length}-->
+  <!--      <div class="size-full flex items-center justify-center">-->
+  <!--        <Loading />-->
+  <!--      </div>-->
+  <!--    {:else}-->
+  <!--      <Table bind:data={archivedListings} {columns} columnVisibility={{status: false}} sorting={[{id: 'updated', desc: true}]} filterColumn="title" searchPlaceholder="Search titles..." bind:perPage={pageSize} class="hover:cursor-pointer" onrowclick={(row) => goto("/admin/o/listings/" + row.id)}>-->
+  <!--      </Table>-->
+  <!--    {/if}-->
+  <!--  </Card>-->
+  <!--</Tabs.Content>-->
 </Tabs.Root>
