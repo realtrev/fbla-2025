@@ -62,6 +62,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   const targetUrl = new URL(event.url);
   const destRoute = allowRouteAccess(targetUrl.pathname, locals.pb.authStore.isValid, locals.pb.authStore.baseModel?.accountType ?? null);
 
+  console.log(targetUrl.pathname);
   if (destRoute !== targetUrl.pathname) {
     throw redirect(303, destRoute);
   }
