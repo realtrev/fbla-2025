@@ -68,7 +68,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   if (locals.user?.school) {
     try {
-      locals.school = await pb.collection('schools').getOne(locals.user?.school);
+      locals.school = await locals.pb.collection('schools').getOne(locals.user?.school);
     } catch(e) {
       console.log("School not received");
     }
@@ -76,7 +76,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
   if (locals.user?.organization) {
     try {
-      locals.organization = await pb.collection('organizations').getOne(locals.user?.organization);
+      locals.organization = await locals.pb.collection('organizations').getOne(locals.user?.organization);
     } catch(e) {
       console.log("Organization not received");
     }
