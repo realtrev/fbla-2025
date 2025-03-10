@@ -4,7 +4,7 @@ import { BinarySize } from '$lib/utils';
 export const applicationSchema = z.object({
 	message: z.string(),
 	resume: z.any({
-		message: "Resume is required",
+		message: "Resume or transcript is required",
 	})
 		.refine((file) => {
 			if (file instanceof File) {
@@ -17,7 +17,7 @@ export const applicationSchema = z.object({
 
 			return true;
 		}, {
-			message: "Resume is required",
+			message: "Resume or transcript is required",
 		})
 		.refine((file) => {
 			if (!(file instanceof File)) {
@@ -25,9 +25,9 @@ export const applicationSchema = z.object({
 			}
 
 			// check that it is less than 512KB
-			return file.size < BinarySize.fromKilobytes(512).bytes;
+			return file.size < BinarySize.fromMegabytes(5).bytes;
 		}, {
-			message: "Resume must be less than 512KB",
+			message: "Resume or transcript must be less than 5MB",
 		}),
 });
 

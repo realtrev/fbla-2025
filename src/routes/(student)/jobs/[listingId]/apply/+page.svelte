@@ -86,7 +86,7 @@
 					<Form.Control>
 						{#snippet children({ props })}
 							<div class="grid gap-1">
-								<Form.Label class="text-sm" for="password">Resume</Form.Label>
+								<Form.Label class="text-sm" for="password">Resume or Transcript</Form.Label>
 								<Input {...props} type="file" accept="application/pdf" onchange={(e) => console.log(e)} bind:value={$formData.resume} />
 <!--								<Textarea  id="description" class="w-full h-[300px]" bind:value={$formData.description} />-->
 								<Form.FieldErrors class="text-xs" />
