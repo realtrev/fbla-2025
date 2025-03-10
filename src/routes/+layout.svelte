@@ -35,7 +35,13 @@
 
 				if (e.record.verified && currentUser.verified !== e.record.verified) {
 					toast.success("Your email has been verified.");
-					goto("/api/logout");
+          if (currentUser.accountType === "schoolAdmin") {
+					 goto("/admin/s");
+          } else if (currentUser.accountType === "organizationAdmin") {
+					 goto("/admin/o");
+          } else {
+            goto("/dashboard");
+          }
 				}
 
         currentUser.set(e.record);
