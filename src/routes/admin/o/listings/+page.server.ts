@@ -4,6 +4,8 @@ import { fail, type ServerLoadEvent } from '@sveltejs/kit';
 export const load = async (event: ServerLoadEvent) => {
   const { cookies, locals, request, params } = event;
 
+  console.log("page server organization");
+
 	const authCookie = request.headers.get('cookie') ?? '';
 	pb.authStore.loadFromCookie(authCookie);
 
