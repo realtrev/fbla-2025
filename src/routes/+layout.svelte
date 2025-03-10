@@ -59,4 +59,8 @@
 </script>
 
 <Toaster position="bottom-center" />
-{@render children()}
+{#if ($currentUser.school && !currentSchool) || ($currentUser.organization && !currentOrganization)}
+  Loading
+{:else}
+  {@render children()}
+{/if}
