@@ -25,9 +25,9 @@ export const applicationSchema = z.object({
 			}
 
 			// check that it is less than 512KB
-			return file.size < BinarySize.fromMegabytes(5).bytes;
+			return file.size < BinarySize.fromKilobytes(512).bytes;
 		}, {
-			message: "Resume or transcript must be less than 5MB",
+			message: "Resume or transcript must be less than 512KB",
 		}),
 });
 

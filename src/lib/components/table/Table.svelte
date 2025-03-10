@@ -32,6 +32,7 @@
     count = $bindable(0),
     perPage = $bindable(20),
     currentPage = $bindable(1),
+    hideControls = $bindable(false),
 
     columnVisibility = $bindable<VisibilityState>({}),
 
@@ -50,6 +51,7 @@
     columns: ColumnDef<any, any>[],
     filterColumn?: string,
     searchPlaceholder?: string,
+    hideControls?: boolean,
 
     columnVisibility?: VisibilityState,
 
@@ -140,6 +142,7 @@
 
 {#if data !== undefined}
   <div class="w-full -z-1">
+    {#if !hideControls}
     <div class="w-full flex justify-between">
       <Input placeholder={searchPlaceholder} class="max-w-60 mb-6" oninput={(e) => {
                table.getColumn(filterColumn ?? "")?.setFilterValue(e.currentTarget.value);
@@ -169,6 +172,7 @@
       </DropdownMenu.Root>
       {@render action?.()}
     </div>
+    {/if}
     <div class="rounded-md border">
       <Table.Root>
         <Table.Header>

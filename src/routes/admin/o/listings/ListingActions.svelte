@@ -21,9 +21,22 @@
 
   async function deleteListing() {
     open = false;
-    await pb.collection('listings').delete(listing.id);
-    toast.success('Deleted ' + listing.title);
-    updateTable();
+    await pb.collection('listings').delete(listing.id)
+      .then(() => {
+        toast.success('Deleted ' + listing.title);
+        updateTable();
+      });
+  }
+
+  async function archiveListing() {
+    open = false;
+    await pb.collection('listings').update(listing.id, {
+      archived: true
+    })
+    .then(() => {
+      toast.success('Archived ' + listing.title);
+      updateTable();
+    })
   }
 </script>
 
@@ -39,7 +52,11 @@
     </AlertDialog.Header>
     <AlertDialog.Footer>
       <AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-      <AlertDialog.Action onclick={deleteListing}>Continue</AlertDialog.Action>
+      {#if listing.published}
+        <AlertDialog.Action onclick={archiveListing}>Archive</AlertDialog.Action>
+      {:else}
+        <AlertDialog.Action onclick={deleteListing}>Delete</AlertDialog.Action>
+      {/if}
     </AlertDialog.Footer>
   </AlertDialog.Content>
 </AlertDialog.Root>

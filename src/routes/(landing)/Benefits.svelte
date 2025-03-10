@@ -6,9 +6,9 @@
 	import HandHeartIcon from 'lucide-svelte/icons/hand-heart';
 	import HandshakeIcon from 'lucide-svelte/icons/handshake';
 	import ScaleIcon from 'lucide-svelte/icons/scale';
-	import PalmtreeIcon from 'lucide-svelte/icons/palmtree';
-	import Laptop from 'lucide-svelte/icons/laptop';
 	import type { ComponentType } from 'svelte';
+	import Search from 'lucide-svelte/icons/search';
+	import UserCheck from 'lucide-svelte/icons/user-check';
 
 	let {
 		theme = 'primary',
@@ -23,39 +23,39 @@
 		icon: ComponentType<Icon>;
 	}[] = [
 		{
-			title: 'Flexible Work Schedule',
+			title: 'Find Jobs Easily',
 			description:
-				'At Productify. we champion flexibility. Your schedule, your way. Strike the perfect balance between work and life. Join us and embrace a culture that values your time.',
-			icon: Clock1Icon
+				'Students can quickly browse and apply for local, school-approved jobs.',
+			icon: Search
 		},
 		{
-			title: 'Equity Potential',
+			title: 'School Connections',
 			description:
-				'Exceptional contributions, tangible rewards. Earn equity at Productify—a unique opportunity for select team members. Join us, excel, and shape our success story together.',
+				'Schools help connect students with trusted businesses for safe and reliable opportunities.',
 			icon: ScaleIcon
 		},
 		{
-			title: 'Growth Opportunities',
+			title: 'Hire Students Fast',
 			description:
-				'At Productify, we invest in your potential. Access workshops, training, and development programs to enhance your skills. Join us, embrace continuous learning, and propel your career forward.',
-			icon: GraduationCapIcon
+				'Businesses can easily find motivated student workers ready to learn and grow.',
+			icon: UserCheck
 		},
 		{
-			title: 'Paid Leave',
+			title: 'Easy to Use',
 			description:
-				'We offer generous PTO for rest and personal matters, and paid VTO for volunteer efforts. We value your well-being and satisfaction, and believe in giving back to the community.',
+				'A simple, user-friendly platform for both job searching and hiring.',
 			icon: CircleDollarSignIcon
 		},
 		{
-			title: 'Collaborative Atmosphere',
+			title: 'Gain Experience',
 			description:
-				'Our culture values open communication and teamwork. Experience a positive and inclusive environment where your ideas thrive.',
+				'Students build real-world skills and work experience for the future.',
 			icon: HandshakeIcon
 		},
 		{
-			title: 'Health and Wellness',
+			title: 'Stronger Community',
 			description:
-				'Enjoy health coverage, mental health resources, and more. Join us for a holistic approach to your professional and personal vitality. Your success begins with a healthy foundation.\n',
+				'Schools, businesses, and students work together to create more opportunities and local growth.',
 			icon: HandHeartIcon
 		}
 	];
@@ -68,7 +68,7 @@
 	<div class="absolute blurbox bg-color-splotch right -z-10"></div>
 	<div class="max-w-screen-xl px-8 py-32 mx-auto z-10">
 		<Saos once={true} animation={'slide-up 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
-			<h1 class="heading-2xl bold text-color-h w-1/2 text-center mx-auto">
+			<h1 class="text-2xl md:text-4xl font-bold w-full text-center text-surface-10">
 				Why work for Productify?
 			</h1>
 		</Saos>
@@ -82,10 +82,10 @@
 				>
 					<div class="col-span-1 text-color-icon">
 						<svelte:component this={benefit.icon} class="w-16 h-16 stroke-[1.5]" />
-						<h3 class="heading-md font-bold my-2 text-color-h">
+						<h3 class="text-lg text-foreground font-bold my-2">
 							{benefit.title}
 						</h3>
-						<p class="text-color-p line-clamp-6">
+						<p class="text-muted-foreground line-clamp-6">
 							{benefit.description}
 						</p>
 					</div>
