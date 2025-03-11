@@ -27,11 +27,11 @@
   <DropdownMenu.Content>
     <DropdownMenu.Group>
       <DropdownMenu.GroupHeading>Actions</DropdownMenu.GroupHeading>
-      <DropdownMenu.Item onclick={() => navigator.clipboard.writeText(id)}>
-        Copy payment ID
+      <DropdownMenu.Item onclick={() => navigator.clipboard.writeText(application.id)}>
+        Copy ID
       </DropdownMenu.Item>
     </DropdownMenu.Group>
     <DropdownMenu.Separator />
-    <DropdownMenu.Item>View customer</DropdownMenu.Item>
+    <DropdownMenu.Item onclick={() => window.open(`https://jobfair-fbla-2025.pockethost.io/api/files/${application.collectionId}/${application.id}/${application.resume}`, '_blank').focus()}>View resume</DropdownMenu.Item>
   </DropdownMenu.Content>
 </DropdownMenu.Root>

@@ -42,7 +42,7 @@ export const getColumns = () => {
     {
       id: "actions",
       cell: ({ row }) => {
-        return renderComponent(ListingActions, { id: row.id });
+        return renderComponent(ListingActions, { application: row.id });
       },
       enableHiding: false,
     }

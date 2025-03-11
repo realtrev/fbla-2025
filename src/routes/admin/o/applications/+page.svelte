@@ -50,6 +50,24 @@
       accessorFn: (row) =>  row.expand.listing.title
     },
     {
+      accessorKey: "attachedMessage",
+      header: "Message",
+      accessorFn: (row) =>  row.attachedMessage,
+      cell: ({ row }) => {
+        const nameSnippet = createRawSnippet<[string]>((getName) => {
+          const name = getName();
+          return {
+            render: () => `<p class="text-xs text-muted-foreground">${name}</p>`,
+          };
+        });
+
+        return renderSnippet(
+          nameSnippet,
+          row.attachedMessage ?? ""
+        );
+      },
+    },
+    {
       accessorKey: "submitted",
       header: ({ column }) =>
         renderComponent(TableSortButton, {
@@ -74,7 +92,7 @@
     {
       id: "actions",
       cell: ({ row }) => {
-        return renderComponent(ListingActions, { id: row.id });
+        return renderComponent(ListingActions, { application: row.original });
       },
       enableHiding: false,
     }

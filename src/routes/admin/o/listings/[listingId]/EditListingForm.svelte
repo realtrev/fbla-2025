@@ -244,7 +244,7 @@
       </Button>
     {/if}
     {#if listing.published && !listing.archived}
-    <Button disabled={archiveListing} onclick={() => archiveAlertOpen = true}>
+    <Button disabled={archivingListing} onclick={() => archiveAlertOpen = true}>
       {#if archivingListing}
         <Loading />
       {/if}
