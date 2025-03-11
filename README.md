@@ -18,3 +18,18 @@
 - **State Management**: Svelte stores with persistent data handling
 - **Real-Time Updates**: PocketBase subscriptions
 - **Styling**: Mainly Tailwind CSS with some custom styles
+
+## Resources
+These are resources we've used for
+- **Google Fonts**: https://fonts.google.com
+- **Visual Studio Code**: https://code.visualstudio.com/
+- **Unsplash**: https://unsplash.com/
+- **unDraw**: https://undraw.co/
+- **Lucide**: https://lucide.dev/
+- **Cloudflare Turnstile**: https://www.cloudflare.com/application-services/products/turnstile/
+- **SvelteKit**: https://svelte.dev/
+- **PocketBase**: https://pocketbase.io/
+- **Figma**: https://www.figma.com/
+- **TailwindCSS**: https://tailwindcss.com/
+- **Dribbble**: https://dribbble.com/
+- **MDN Web Docs**: https://developer.mozilla.org/en-US/

@@ -4,7 +4,7 @@
   import { Button } from '$lib/components/ui/button';
   import { goto } from '$app/navigation';
 
-  import { pb } from '$lib/pocketbase';
+  import { currentOrganization, pb } from '$lib/pocketbase';
   import { toast } from 'svelte-sonner';
   import Table from '$lib/components/table/Table.svelte';
   import * as Tabs from '$lib/components/ui/tabs';
@@ -40,14 +40,14 @@
 
   async function loadListings() {
     const resultList = await pb.collection('listings').getFullList({
-//      filter: 'someField1 != someField2',
+      filter: `organization = '${$currentOrganization.id}'`,
     })
     .then((result) => {
       if (result) {
         listings = result as ListingModel[];
         totalCount = listings.length;
       }
-    })
+    });
   }
 
   const columns = getColumns(loadListings);

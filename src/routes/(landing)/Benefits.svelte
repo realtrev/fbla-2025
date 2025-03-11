@@ -69,7 +69,7 @@
 	<div class="max-w-screen-xl px-8 py-32 mx-auto z-10">
 		<Saos once={true} animation={'slide-up 1s cubic-bezier(0.55, 0, 0.1, 1) both'}>
 			<h1 class="text-2xl md:text-4xl font-bold w-full text-center text-surface-10">
-				Why work for Productify?
+				Why use JobFair?
 			</h1>
 		</Saos>
 		<div

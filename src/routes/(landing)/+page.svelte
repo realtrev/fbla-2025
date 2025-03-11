@@ -81,7 +81,7 @@
 				Get started finding full-time, part-time, volunteer jobs, and more today.
 			</p>
 			<div class="flex gap-4 w-full flex-wrap">
-				<Button href="#about" >Learn more</Button>
+				<Button href="#about" variant="outline">Learn more</Button>
 				<Button href="/login">Log in</Button>
 			</div>
 		</div>
@@ -117,10 +117,8 @@
 				</h1>
 			</Saos>
 			<Saos once={true} animation={'slide-up 1s cubic-bezier(0.55, 0, 0.1, 1) both 0.2s'}>
-				<p class="mt-6 text-surface-8">
-					Productify is a productivity app that allows users to manage their tasks through a simple
-					interface. Productify allows friends to share their task with each other and uses positive
-					peer pressure to encourage improvement.
+				<p class="mt-6 text-muted-foreground">
+					JobFair helps students find local jobs through partnerships with their schools. Our easy-to-use platform makes job searching simple for students and hiring effortless for businesses. Students can explore and apply for jobs, while businesses can quickly post opportunities and connect with young, committed individuals.
 				</p>
 			</Saos>
 		</div>
