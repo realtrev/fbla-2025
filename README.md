@@ -27,7 +27,7 @@ These are resources we've used for
 - **unDraw**: https://undraw.co/
 - **Lucide**: https://lucide.dev/
 - **Cloudflare Turnstile**: https://www.cloudflare.com/application-services/products/turnstile/
-- **SvelteKit**: https://github.com/
+- **SvelteKit**: https://svelte.dev/
 - **PocketBase**: https://pocketbase.io/
 - **Figma**: https://www.figma.com/
 - **TailwindCSS**: https://tailwindcss.com/
