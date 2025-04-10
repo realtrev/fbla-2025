@@ -48,7 +48,7 @@
 		"@tanstack/table-core": "^8.21.2",
 		"marked": "^15.0.7",
 		"mode-watcher": "^0.5.1",
-		"sanitize-html": "^2.14.0",
+		"sanitize-html": "^2.15.0",
 		"svelte-headlessui": "^0.0.46",
 		"svelte-sonner": "^0.3.28",
 		"svelte-transition": "^0.0.17",
